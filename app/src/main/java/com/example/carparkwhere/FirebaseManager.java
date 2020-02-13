@@ -59,16 +59,23 @@ public class FirebaseManager {
         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                Map<String,Object> user = new HashMap<>();
-                user.put("displayName",email);
-                user.put("email",email);
-                FirebaseManager.insertToFirestore(CollectionsName.USERS.getCollectionName(), getCurrentUser().getUid(), user, new OnCompleteListener<Void>() {
+
+                getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        System.out.println("Registered Successfully, please check email for verification");
+                        //in future need to check whether this user is email verified before logging in
+                        Map<String,Object> user = new HashMap<>();
+                        user.put("displayName",email);
+                        user.put("email",email);
+                        FirebaseManager.insertToFirestore(CollectionsName.USERS.getCollectionName(), getCurrentUser().getUid(), user, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
 
+                            }
+                        });
                     }
                 });
-
             }
         });
     }

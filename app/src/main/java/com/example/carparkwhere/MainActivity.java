@@ -32,9 +32,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        UserDataManager.addNewReview("CZ3001",4.7,"This carpark is go good");
+        FirebaseManager.createNewUser(this, "kohsweesen99@hotmail.com", "123456", new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
 
-
+            }
+        });
 
     }
 
