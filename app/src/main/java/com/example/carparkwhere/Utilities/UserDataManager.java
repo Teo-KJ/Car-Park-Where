@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Utilities;
 
 import androidx.annotation.NonNull;
 
@@ -29,7 +29,7 @@ public class UserDataManager {
     }
 
     public static void addNewFavouriteCarpark(final String carparkId){
-        FirebaseManager.retrieveFromFirestore(FirebaseManager.CollectionsName.FAVOURITE_CARPARKS.getCollectionName(), FirebaseManager.getCurrentUser().getUid(), new OnCompleteListener<DocumentSnapshot>() {
+        FirebaseManager.retrieveFromFirestore(FirebaseManager.CollectionsName.FAVOURITE_CARPARKS.getString(), FirebaseManager.getCurrentUser().getUid(), new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Map<String,Object> carparkMap = new HashMap<>();
@@ -37,7 +37,7 @@ public class UserDataManager {
                 carparks = (ArrayList<String>) task.getResult().get("carparks");
                 if (!carparks.contains(carparkId)){carparks.add(carparkId);}
                 carparkMap.put("carparks",carparks);
-                FirebaseManager.updateFieldFirestore(FirebaseManager.CollectionsName.FAVOURITE_CARPARKS.getCollectionName(),FirebaseManager.getCurrentUser().getUid(),carparkMap);
+                FirebaseManager.updateFieldFirestore(FirebaseManager.CollectionsName.FAVOURITE_CARPARKS.getString(),FirebaseManager.getCurrentUser().getUid(),carparkMap);
             }
         });
     }
@@ -52,6 +52,6 @@ public class UserDataManager {
         reviews.add(reviewMap);
         reviewsMap.put("reviews",reviews);
 
-        FirebaseManager.updateFieldFirestore(FirebaseManager.CollectionsName.CARPARKREVIEWS.getCollectionName(),carparkID,reviewsMap);
+        FirebaseManager.updateFieldFirestore(FirebaseManager.CollectionsName.CARPARKREVIEWS.getString(),carparkID,reviewsMap);
     }
 }

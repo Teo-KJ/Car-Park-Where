@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Utilities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +13,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,7 +39,7 @@ public class FirebaseManager {
             this.collectionName = collectionName;
         }
 
-        public String getCollectionName() {
+        public String getString() {
             return this.collectionName;
         }
     }
@@ -52,6 +51,7 @@ public class FirebaseManager {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         return currentUser;
     }
+
 
     public static void createNewUser(Context context, final String email, String password, OnCompleteListener<AuthResult> handler){
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -68,7 +68,7 @@ public class FirebaseManager {
                         Map<String,Object> user = new HashMap<>();
                         user.put("displayName",email);
                         user.put("email",email);
-                        FirebaseManager.insertToFirestore(CollectionsName.USERS.getCollectionName(), getCurrentUser().getUid(), user, new OnCompleteListener<Void>() {
+                        FirebaseManager.insertToFirestore(CollectionsName.USERS.getString(), getCurrentUser().getUid(), user, new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
 
