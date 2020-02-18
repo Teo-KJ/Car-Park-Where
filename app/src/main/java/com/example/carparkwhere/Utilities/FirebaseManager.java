@@ -63,7 +63,6 @@ public class FirebaseManager {
                 getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        System.out.println("Registered Successfully, please check email for verification");
                         //in future need to check whether this user is email verified before logging in
                         Map<String,Object> user = new HashMap<>();
                         user.put("displayName",email);
