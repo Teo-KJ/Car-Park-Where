@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#202020"
+    tools:context=".AccountOptionsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/backAccountOptionsActivity_IMGBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#00353535"
+            android:tint="#FFC0C0C0"
+            app:srcCompat="@android:drawable/ic_menu_revert" />
+
+        <Button
+            android:id="@+id/viewUserBookmarks_BTN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="#353535"
+            android:text="Bookmarks"
+            android:textColor="#C0C0C0" />
+
+        <Button
+            android:id="@+id/viewUserReviews_BTN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="#353535"
+            android:text="Reviews"
+            android:textColor="#C0C0C0" />
+
+        <TextView
+            android:id="@+id/accountSettingsTitle_TV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#202020"
+            android:fontFamily="sans-serif-light"
+            android:text="Account Settings"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#C0C0C0" />
+
+        <TextView
+            android:id="@+id/accountEmailTitle_TV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="#202020"
+            android:fontFamily="sans-serif-light"
+            android:text="SIgned-in as someone@gmail.com"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#C0C0C0" />
+
+        <Button
+            android:id="@+id/signOutAccount_BTN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="#353535"
+            android:text="Sign Out"
+            android:textColor="#C0C0C0" />
+
+        <Button
+            android:id="@+id/viewResetPassword_BTN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="#353535"
+            android:text="Reset Password"
+            android:textColor="#C0C0C0" />
+
+        <Button
+            android:id="@+id/viewDeactivateAccount_BTN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="#353535"
+            android:text="Deactivate Account"
+            android:textColor="#C0C0C0" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
