@@ -18,7 +18,6 @@ import com.google.firebase.auth.AuthResult;
 
 
 public class SignInActivity extends AppCompatActivity {
-
     EditText emailAddressEditText;
     EditText passwordEditText;
     Button signInButton;
