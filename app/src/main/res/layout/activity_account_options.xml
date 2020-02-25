@@ -22,10 +22,10 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="1dp"
-            android:background="#FFFFFF"
+            android:layout_margin="8dp"
+            android:background="#202020"
             android:fontFamily="sans-serif-light"
-            android:text="Account Options"
+            android:text="Details"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#C0C0C0" />
@@ -49,10 +49,28 @@
             android:textColor="#C0C0C0" />
 
         <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#202020"
+            android:fontFamily="sans-serif-light"
+            android:text="Settings"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#C0C0C0" />
+
+        <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_marginBottom="4dp"
+            android:background="#202020"
+            android:fontFamily="sans-serif-light"
+            android:text="SIgned-in as someone@gmail.com"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#C0C0C0" />
 
         <Button
             android:id="@+id/signOutAccount_BTN"
@@ -61,7 +79,7 @@
             android:layout_margin="1dp"
             android:background="#353535"
             android:text="Sign Out"
-            android:textColor="#313435" />
+            android:textColor="#C0C0C0" />
 
         <Button
             android:id="@+id/viewResetPassword_BTN"
