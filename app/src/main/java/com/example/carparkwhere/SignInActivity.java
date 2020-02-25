@@ -67,7 +67,13 @@ public class SignInActivity extends AppCompatActivity {
 
         animationView.setAnimationFromUrl ("https://assets5.lottiefiles.com/packages/lf20_u3YlGl.json");
 
-
+        Button testBTN = findViewById(R.id.testBTN);
+        testBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this,AccountOptionsActivity.class));
+            }
+        });
 
 
     }

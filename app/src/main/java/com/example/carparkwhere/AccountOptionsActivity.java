@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class AccountOptionsActivity extends AppCompatActivity {
 
@@ -12,6 +13,14 @@ public class AccountOptionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_options);
+
+        ImageButton backAccountOptionsActivity_IMGBTN = findViewById(R.id.backAccountOptionsActivity_IMGBTN);
+        backAccountOptionsActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Button viewUserBookmarks_BTN = findViewById(R.id.viewUserBookmarks_BTN);
         viewUserBookmarks_BTN.setOnClickListener(new View.OnClickListener() {

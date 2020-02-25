@@ -18,18 +18,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/accountDetailsTitle_TV"
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/backAccountOptionsActivity_IMGBTN"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="#202020"
-            android:fontFamily="sans-serif-light"
-            android:text="Details"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#C0C0C0" />
+            android:background="#00353535"
+            android:tint="#FFC0C0C0"
+            app:srcCompat="@android:drawable/ic_menu_revert" />
 
         <Button
             android:id="@+id/viewUserBookmarks_BTN"
@@ -56,7 +53,7 @@
             android:layout_marginTop="8dp"
             android:background="#202020"
             android:fontFamily="sans-serif-light"
-            android:text="Settings"
+            android:text="Account Settings"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#C0C0C0" />
