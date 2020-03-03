@@ -67,14 +67,21 @@ public class SignInActivity extends AppCompatActivity {
 
         animationView.setAnimationFromUrl ("https://assets5.lottiefiles.com/packages/lf20_u3YlGl.json");
 
-        Button testBTN = findViewById(R.id.testBTN);
-        testBTN.setOnClickListener(new View.OnClickListener() {
+        Button testBTN1 = findViewById(R.id.testBTN1);
+        testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignInActivity.this,AccountOptionsActivity.class));
             }
         });
 
+        Button testBTN2 = findViewById(R.id.testBTN2);
+        testBTN2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this,MapsActivity.class));
+            }
+        });
 
     }
 
