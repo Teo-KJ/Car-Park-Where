@@ -20,13 +20,12 @@
 
         <ImageButton
             android:id="@+id/backAccountOptionsActivity_IMGBTN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="#00353535"
-            android:tint="#FFC0C0C0"
-            app:srcCompat="@android:drawable/ic_menu_revert" />
+            android:src="@drawable/back"
+            android:scaleType="centerInside" />
 
         <Button
             android:id="@+id/viewUserBookmarks_BTN"

@@ -96,8 +96,12 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-
-
+        Button testBTN3 = findViewById(R.id.testBTN3);
+        testBTN3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this, DetailCarparkActivity.class));
+            }
+        });
     }
-
 }
