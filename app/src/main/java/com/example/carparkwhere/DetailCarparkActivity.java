@@ -45,12 +45,14 @@ public class DetailCarparkActivity extends AppCompatActivity {
 
         mQueue = Volley.newRequestQueue(this);
 
-        submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                jsonParse();
-            }
-        });
+        jsonParse();
+
+//        submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                jsonParse();
+//            }
+//        });
 
         ImageButton bookmarkToggle_IMGBTN;
         RatingBar rating_RBAR;
