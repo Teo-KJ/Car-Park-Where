@@ -25,14 +25,14 @@ public class ServerInterfaceManager {
 //        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 //            Gson gson = new Gson();
 //            String responseBody = response.body().string();
-//            MapsActivity.this.carparks = gson.fromJson(responseBody, (new TypeToken<ArrayList<CarparkJson>>(){}.getType()));
+//            MapsActivity.this.carparks = gson.fromJson(responseBody, (new TypeToken<ArrayList<Carpark>>(){}.getType()));
 //
 //            MapsActivity.this.runOnUiThread(new Runnable() {
 //                @Override
 //                public void run() {
-//                    for (CarparkJson carparkJson:carparks){
-//                        LatLng carparkLocation = new LatLng(carparkJson.latitude, carparkJson.longitude);
-//                        mMap.addMarker(new MarkerOptions().position(carparkLocation).title(carparkJson.carparkName));
+//                    for (Carpark carpark:carparks){
+//                        LatLng carparkLocation = new LatLng(carpark.latitude, carpark.longitude);
+//                        mMap.addMarker(new MarkerOptions().position(carparkLocation).title(carpark.carparkName));
 //                    }
 //                }
 //            });
