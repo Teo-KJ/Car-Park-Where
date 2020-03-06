@@ -20,7 +20,7 @@ public class CarparkJson {
         public String vehicleType;
         public Integer capacity;
         public Integer liveAvailability;
-        public ArrayList<CarparkPriceJson> carparkPrices;
+        public ArrayList<CarparkPriceJson> prices;
         public ArrayList<PredictedAvailabilityJson> predictedAvailabilities;
 
     }
@@ -32,8 +32,6 @@ public class CarparkJson {
     public Boolean isURANotHDB;
     public String carparkName;
     public CarparkCarDetailsJson carDetails;
-
-
 
 
     public CarparkJson(String carparkNo, Double latitude, Double longitude, String parkingSystem, Boolean isURANotHDB, String carparkName, CarparkCarDetailsJson carDetails){
