@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailCarparkActivity">
+
+    <FrameLayout
+        android:id="@+id/blackBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/common_google_signin_btn_text_dark_focused">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/back"
+                android:scaleType="centerInside"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/carparkNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="C0148"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textSize="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    ></TextView>
+
+                <ImageButton
+                    android:id="@+id/BookmarkButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="200dp"
+                    app:srcCompat="@android:drawable/star_big_on"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="#00ffffff" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/averageRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:text="5.0"
+                    android:textColor="@color/common_google_signin_btn_text_dark"></TextView>
+
+                <RatingBar
+                    android:id="@+id/averageRatingInStars"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginTop="10dp"
+                    android:rating="@integer/google_play_services_version"
+                    ></RatingBar>
+
+                <TextView
+                    android:id="@+id/totalNumOfReviews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="0 review"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    ></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:id="@+id/directionsButton"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/signpost"
+                    android:scaleType="centerInside"
+                    ></ImageButton>
+
+                <ImageButton
+                    android:id="@+id/makeReviewButton"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/review"
+                    android:scaleType="centerInside"
+                    android:adjustViewBounds="true"
+                    ></ImageButton>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/blackBackground"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/pin"
+
+                    ></ImageView>
+
+                <TextView
+                    android:id="@+id/carparkAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="50 Nanyang Avenue"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    ></TextView>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="?android:attr/listDivider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/clock"
+                    ></ImageView>
+
+                <TextView
+                    android:id="@+id/openDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Open 24 hours"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    ></TextView>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="?android:attr/listDivider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/price"
+                    ></ImageView>
+
+                <TextView
+                    android:id="@+id/carparkPrices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MON-FRI Before 5PM\n$1.00/30 min from 7am to 5pm"
+                    android:textSize="20dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    ></TextView>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="?android:attr/listDivider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Popular Times"
+                    android:textSize="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    ></TextView>
+
+                <ImageButton
+                    android:id="@+id/tutorialButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="110dp"
+                    android:layout_marginTop="10dp"
+                    app:srcCompat="@android:drawable/ic_menu_help"
+                    android:background="#00ffffff"></ImageButton>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/visualisation"
+                android:layout_width="350dp"
+                android:layout_height="140dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                ></ImageView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

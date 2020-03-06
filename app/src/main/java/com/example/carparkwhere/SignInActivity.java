@@ -95,9 +95,5 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(new Intent(SignInActivity.this,MapsActivity.class));
             }
         });
-
-
-
     }
-
 }
