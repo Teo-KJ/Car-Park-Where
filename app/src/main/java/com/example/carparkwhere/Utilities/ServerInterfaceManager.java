@@ -1,13 +1,24 @@
 package com.example.carparkwhere.Utilities;
+import android.util.Pair;
+
+import com.example.carparkwhere.Models.CarparkJson;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+
+import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class ServerInterfaceManager {
 
-    public static void getAllCarparks(Callback handler){
+
+    public static void getCarparkDetailsByID(String carparkID,Callback handler){
         OkHttpClient client = new OkHttpClient();
-        String url = "http://3.14.70.180:3002/client/carparkdetails";
+        String url = "http://3.14.70.180:3002/client/carparkdetails/" + carparkID;
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(handler);
     }
