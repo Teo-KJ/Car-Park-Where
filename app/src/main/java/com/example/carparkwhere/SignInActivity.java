@@ -11,10 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.carparkwhere.Models.CarparkJson;
 import com.example.carparkwhere.Utilities.FirebaseManager;
+import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -67,13 +80,20 @@ public class SignInActivity extends AppCompatActivity {
 
         animationView.setAnimationFromUrl ("https://assets5.lottiefiles.com/packages/lf20_u3YlGl.json");
 
-        Button testBTN = findViewById(R.id.testBTN);
-        testBTN.setOnClickListener(new View.OnClickListener() {
+        Button testBTN1 = findViewById(R.id.testBTN1);
+        testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignInActivity.this,AccountOptionsActivity.class));
             }
         });
 
+        Button testBTN2 = findViewById(R.id.testBTN2);
+        testBTN2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignInActivity.this,MapsActivity.class));
+            }
+        });
     }
 }
