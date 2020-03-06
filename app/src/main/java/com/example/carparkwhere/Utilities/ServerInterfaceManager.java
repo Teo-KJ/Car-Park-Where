@@ -1,44 +1,69 @@
 package com.example.carparkwhere.Utilities;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import android.content.Context;
+import android.util.Pair;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.carparkwhere.Models.CarparkJson;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+//import okhttp3.Call;
+//import okhttp3.Callback;
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
 
 public class ServerInterfaceManager {
 
-    public static void getAllCarparks(Callback handler){
-        OkHttpClient client = new OkHttpClient();
-        String url = "http://3.14.70.180:3002/client/carparkdetails";
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(handler);
+
+    private static RequestQueue mQueue;
+
+
+    public static void getCarparkDetailsByID(Context context, String carparkID, Response.Listener successListener, Response.ErrorListener errorListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/carparkdetails/staticdetails/" + carparkID;
+        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        mQueue.add(request);
+    }
+
+    public static void getAllCarparkCoordinates(Context context,Response.Listener successListener, Response.ErrorListener errorListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/carparkdetails/brief";
+        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        mQueue.add(request);
+    }
+
+    public static void getCarparkWholeDayPredictedAvailability(Context context, String carparkID,Response.Listener successListener, Response.ErrorListener errorListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/carparkdetails/prediction/" + carparkID;
+        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        mQueue.add(request);
+    }
+
+    public static void getCarparkAvailabilityPredictionByDateTime(Context context, String carparkID,String year,String month, String day, String hour, String minute, Response.Listener successListener, Response.ErrorListener errorListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/carparkdetails/prediction/" + carparkID + "?date=" + year + "-" + ((month.length() == 1) ? "0"+month : month) + "-" + ((day.length() == 1) ? "0"+day : day) + "T" + ((hour.length() == 1) ? "0"+hour : hour) + ":" + ((minute.length() == 1) ? "0"+minute : minute);
+        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        mQueue.add(request);
+    }
+
+    public static void getCarparkLiveAvailability(Context context, String carparkID, Response.Listener successListener, Response.ErrorListener errorListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/carparkdetails/liveavailability/" + carparkID;
+        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        mQueue.add(request);
     }
 
 
-
-    //here is an example of how to call and use this function
-//    ServerInterfaceManager.getAllCarparks(new Callback() {
-//        @Override
-//        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        @Override
-//        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//            Gson gson = new Gson();
-//            String responseBody = response.body().string();
-//            MapsActivity.this.carparks = gson.fromJson(responseBody, (new TypeToken<ArrayList<Carpark>>(){}.getType()));
-//
-//            MapsActivity.this.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    for (Carpark carpark:carparks){
-//                        LatLng carparkLocation = new LatLng(carpark.latitude, carpark.longitude);
-//                        mMap.addMarker(new MarkerOptions().position(carparkLocation).title(carpark.carparkName));
-//                    }
-//                }
-//            });
-//
-//
-//        }
-//    });
 
 }
