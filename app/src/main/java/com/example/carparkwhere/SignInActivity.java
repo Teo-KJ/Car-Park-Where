@@ -11,10 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.carparkwhere.Models.CarparkJson;
 import com.example.carparkwhere.Utilities.FirebaseManager;
+import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -82,6 +95,8 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(new Intent(SignInActivity.this,MapsActivity.class));
             }
         });
+
+
 
     }
 
