@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.CarparkJson;
 import com.example.carparkwhere.Utilities.FirebaseManager;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
@@ -99,6 +101,20 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignInActivity.this, DetailCarparkActivity.class));
+            }
+        });
+
+        ServerInterfaceManager.getAllCarparkCoordinates(this, new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+                Gson gson = new Gson();
+                ArrayList<CarparkJson> carparks = gson.fromJson(response.toString(),new TypeToken<ArrayList<CarparkJson>>(){}.getType());
+                //carparks here, set the marker information here 
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
             }
         });
     }

@@ -39,7 +39,7 @@ public class ServerInterfaceManager {
     public static void getAllCarparkCoordinates(Context context,Response.Listener successListener, Response.ErrorListener errorListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/brief";
-        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        JsonArrayRequest request = new JsonArrayRequest(url,successListener,errorListener);
         mQueue.add(request);
     }
 
