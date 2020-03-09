@@ -96,26 +96,14 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        Button testBTN3 = findViewById(R.id.testBTN3);
-        testBTN3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, DetailCarparkActivity.class));
-            }
-        });
+        
+//        Button testBTN3 = findViewById(R.id.testBTN3);
+//        testBTN3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(SignInActivity.this, DetailCarparkActivity.class));
+//            }
+//        });
 
-        ServerInterfaceManager.getAllCarparkCoordinates(this, new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                Gson gson = new Gson();
-                ArrayList<CarparkJson> carparks = gson.fromJson(response.toString(),new TypeToken<ArrayList<CarparkJson>>(){}.getType());
-                //carparks here, set the marker information here 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println(error.getMessage());
-            }
-        });
     }
 }
