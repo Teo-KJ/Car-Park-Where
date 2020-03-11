@@ -53,7 +53,7 @@ public class FirebaseManager {
     }
 
 
-    public static void createNewUser(Context context, final String email, String password, OnCompleteListener<AuthResult> handler){
+    public static void createNewUser(Context context, final String email, String password, final String displayName, OnCompleteListener<AuthResult> handler){
         mAuth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener((Activity) context, handler)
         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -65,7 +65,7 @@ public class FirebaseManager {
                     public void onComplete(@NonNull Task<Void> task) {
                         //in future need to check whether this user is email verified before logging in
                         Map<String,Object> user = new HashMap<>();
-                        user.put("displayName",email);
+                        user.put("displayName",displayName);
                         user.put("email",email);
                         FirebaseManager.insertToFirestore(CollectionsName.USERS.getString(), getCurrentUser().getUid(), user, new OnCompleteListener<Void>() {
                             @Override
@@ -83,10 +83,6 @@ public class FirebaseManager {
         mAuth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener((Activity) context,handler);
     }
-
-
-
-
 
 
 

@@ -3,6 +3,7 @@ package com.example.carparkwhere;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,33 +19,61 @@ public class SignUpActivity extends AppCompatActivity {
 
     EditText emailAddressSignUpEditText;
     EditText passwordSignUpEditText;
+    EditText displayNameEditText;
     Button signUpButton;
+    ProgressDialog nDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        emailAddressSignUpEditText = findViewById(R.id.emailAddressSignUpEditText);
-        passwordSignUpEditText = findViewById(R.id.passwordSignUpEditText);
+        emailAddressSignUpEditText = findViewById(R.id.signUpActivity_emailAddressEditText);
+        passwordSignUpEditText = findViewById(R.id.signUpActivity_passwordEditText);
+        displayNameEditText = findViewById(R.id.signUpActivity_displayNameEditText);
         signUpButton = findViewById(R.id.signUpButton);
+
+        setupSignUpButton();
+
+    }
+
+    private void presentProgressDialog(String message){
+        nDialog = new ProgressDialog(SignUpActivity.this);
+        nDialog.setMessage("Loading..");
+        nDialog.setTitle(message);
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+        nDialog.show();
+    }
+
+    private void setupSignUpButton(){
+
+
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseManager.createNewUser(SignUpActivity.this, emailAddressSignUpEditText.getText().toString(), passwordSignUpEditText.getText().toString(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
 
-                            Toast.makeText(SignUpActivity.this,"Sign up successful! Please check your email to verify ur account", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }else{
-                            Toast.makeText(SignUpActivity.this,task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                if (emailAddressSignUpEditText.getText().toString().isEmpty() || passwordSignUpEditText.getText().toString().isEmpty() || displayNameEditText.getText().toString().isEmpty()){
+                    Toast.makeText(SignUpActivity.this,"Please fill up all the fields", Toast.LENGTH_SHORT).show();
+                }else{
+                    presentProgressDialog("Creating Account...");
+                    FirebaseManager.createNewUser(SignUpActivity.this, emailAddressSignUpEditText.getText().toString(), passwordSignUpEditText.getText().toString(), displayNameEditText.getText().toString(), new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            nDialog.dismiss();
+                            if (task.isSuccessful()){
+                                Toast.makeText(SignUpActivity.this,"Sign up successful! Please check your email to verify ur account", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }else{
+                                Toast.makeText(SignUpActivity.this,task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
                         }
+                    });
+                }
 
-                    }
-                });
+
             }
         });
     }
