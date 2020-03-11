@@ -38,4 +38,9 @@ public class SubmitReviewActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void processReviewSubmission(){
+        //JUST DO IT.
+    }
+
 }
