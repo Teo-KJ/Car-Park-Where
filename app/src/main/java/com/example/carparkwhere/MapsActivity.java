@@ -2,6 +2,8 @@ package com.example.carparkwhere;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +42,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     ArrayList<CarparkJson> carparks = new ArrayList<CarparkJson>();
+    int height = 40;
+    int width = 40;
+    Bitmap smallParking;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +53,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
 
+
     }
 
+    private void makeBitmap() {
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.parking);
+        Bitmap b = bitmapdraw.getBitmap();
+        smallParking = Bitmap.createScaledBitmap(b, width, height, false);
+    }
 
     private void fetchLocation() {
         if (ActivityCompat.checkSelfPermission(
@@ -74,7 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-
+        makeBitmap();
         ServerInterfaceManager.getAllCarparkCoordinates(this, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
@@ -84,7 +97,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for (int counter = 0; counter < carparks.size(); counter++) {
                     googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
-                            .title(carparks.get(counter).carparkName));
+                            .title(carparks.get(counter).carparkName).icon(BitmapDescriptorFactory.fromBitmap(smallParking)));
                 }
             }
         }, new Response.ErrorListener() {
@@ -97,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Current Location");
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         googleMap.addMarker(markerOptions);
 
     }
