@@ -55,12 +55,11 @@ public class SignInActivity extends AppCompatActivity {
         setupAnimationView();
         setupGuessModeButton();
 
-
         Button testBTN1 = findViewById(R.id.testBTN1);
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this,AccountOptionsActivity.class));
+                startActivity(new Intent(SignInActivity.this,DetailCarparkActivity.class));
             }
         });
 
