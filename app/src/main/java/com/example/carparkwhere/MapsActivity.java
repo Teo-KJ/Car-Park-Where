@@ -1,6 +1,7 @@
 package com.example.carparkwhere;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -38,6 +39,8 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -57,6 +60,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Bitmap smallParking;
     PlacesClient placesClient;
     String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
+    Map<String, String> mMarkerMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,9 +143,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (isSuccessful) {
                     carparks = (ArrayList<CarparkJson>) networkCallResult;
                     for (int counter = 0; counter < carparks.size(); counter++) {
-                        googleMap.addMarker(new MarkerOptions()
+                        Marker marker =googleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
-                                .title(carparks.get(counter).carparkName).icon(BitmapDescriptorFactory.fromBitmap(smallParking)));
+                                .icon(BitmapDescriptorFactory.fromBitmap(smallParking)));
+                        mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                     }
                 }else{
                     //deal with the error message, maybe toast or something
@@ -155,6 +160,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         googleMap.addMarker(markerOptions);
+
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                String carparkID = mMarkerMap.get(marker.getId());
+                Intent intent = new Intent(MapsActivity.this, DetailCarparkActivity.class);
+                intent.putExtra("CARPARK_ID", carparkID);
+                startActivity(intent);
+
+                return false;
+            }
+        });
 
     }
 
