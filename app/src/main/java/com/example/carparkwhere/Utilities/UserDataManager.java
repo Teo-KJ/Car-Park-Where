@@ -63,21 +63,6 @@ public class UserDataManager {
         }
     }
 
-    public static void addNewReview(String carparkID, Double rating,String review){
 
-        if (isLoggedIn()){
-            Map<String,Object> reviewsMap = new HashMap<>();
-            ArrayList<Map<String,Object>> reviews = new ArrayList<>();
-            Map<String,Object> reviewMap = new HashMap<>();
-            reviewMap.put("userId",FirebaseManager.getCurrentUser().getUid());
-            reviewMap.put("rating",rating);
-            reviewMap.put("review",review);
-            reviews.add(reviewMap);
-            reviewsMap.put("reviews",reviews);
-
-            FirebaseManager.updateFieldFirestore(FirebaseManager.CollectionsName.CARPARKREVIEWS.getString(),carparkID,reviewsMap);
-        }
-
-    }
 
 }

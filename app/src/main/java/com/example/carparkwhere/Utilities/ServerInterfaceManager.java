@@ -10,6 +10,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.Models.CarparkJson;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 
 import org.json.JSONArray;
@@ -17,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 //import okhttp3.Call;
 //import okhttp3.Callback;
@@ -29,17 +32,43 @@ public class ServerInterfaceManager {
     private static RequestQueue mQueue;
 
 
-    public static void getCarparkDetailsByID(Context context, String carparkID, Response.Listener successListener, Response.ErrorListener errorListener){
+    public static void getCarparkDetailsByID(Context context, String carparkID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/staticdetails/" + carparkID;
-        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+       // JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Gson gson = new Gson();
+                CarparkJson carparkJson = gson.fromJson(response.toString(),CarparkJson.class);
+                networkCallEventListener.onComplete(carparkJson,true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                networkCallEventListener.onComplete(null,false,error.getMessage());
+            }
+        });
         mQueue.add(request);
     }
 
-    public static void getAllCarparkCoordinates(Context context,Response.Listener successListener, Response.ErrorListener errorListener){
+    public static void getAllCarparkCoordinates(Context context, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/brief";
-        JsonArrayRequest request = new JsonArrayRequest(url,successListener,errorListener);
+        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Gson gson = new Gson();
+                ArrayList<CarparkJson> carparks = gson.fromJson(response.toString(),new TypeToken<ArrayList<CarparkJson>>(){}.getType());
+                networkCallEventListener.onComplete(carparks,true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
+                networkCallEventListener.onComplete(new ArrayList<CarparkJson>(),false,error.getMessage());
+            }
+        });
         mQueue.add(request);
     }
 
