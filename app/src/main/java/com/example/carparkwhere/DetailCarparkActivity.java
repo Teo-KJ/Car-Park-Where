@@ -2,6 +2,7 @@ package com.example.carparkwhere;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -66,8 +67,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         ImageButton bookmarkToggle_IMGBTN;
         RatingBar rating_RBAR;
         Button viewCarparkReviews_BTN;
-
-        ServerInterfaceManager.getCarparkDetailsByID(this, "A78", new NetworkCallEventListener() {
+        Intent intent = getIntent();
+        String str = intent.getStringExtra("CARPARK_ID");
+        ServerInterfaceManager.getCarparkDetailsByID(this, str, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 CarparkJson carparkJson = (CarparkJson) networkCallResult;
