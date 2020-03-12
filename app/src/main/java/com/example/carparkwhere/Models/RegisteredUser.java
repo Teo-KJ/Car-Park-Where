@@ -7,13 +7,11 @@ public class RegisteredUser {
     private String name;
     public String email;
     public Boolean isValidated;
-    public String password;
 
-    public RegisteredUser(String name, String email, Boolean isValidated, String password) {
+    public RegisteredUser(String name, String email, Boolean isValidated) {
         this.name = name;
         this.email = email;
         this.isValidated = isValidated;
-        this.password = password;
     }
 
     public void loadUserData(){
@@ -32,9 +30,6 @@ public class RegisteredUser {
         this.name = name;
     }
 
-    public void setPassword(String password){
-        this.password = password;
-    }
 
     public ArrayList<Review> getUserReviews(){
         ArrayList<Review> reviewList = new ArrayList<Review>();

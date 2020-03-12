@@ -15,6 +15,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.CarparkJson;
+import com.example.carparkwhere.Models.RegisteredUser;
 import com.example.carparkwhere.Models.Review;
 import com.example.carparkwhere.Utilities.CarparkReviewsDataManager;
 import com.example.carparkwhere.Utilities.FirebaseManager;
@@ -55,6 +56,7 @@ public class SignInActivity extends AppCompatActivity {
         setupAnimationView();
         setupGuessModeButton();
 
+
         Button testBTN1 = findViewById(R.id.testBTN1);
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +65,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-//        Button testBTN2 = findViewById(R.id.testBTN2);
-//        testBTN2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(SignInActivity.this,MapsActivity.class));
-//            }
-//        });
 
     }
 
@@ -121,6 +116,7 @@ public class SignInActivity extends AppCompatActivity {
                             nDialog.dismiss();
                             if (task.isSuccessful()){
                                 if (FirebaseManager.getCurrentUser().isEmailVerified()){
+
                                     Toast.makeText(SignInActivity.this,"Successfully signed in!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(SignInActivity.this, MapsActivity.class);
                                     SignInActivity.this.startActivity ( intent );

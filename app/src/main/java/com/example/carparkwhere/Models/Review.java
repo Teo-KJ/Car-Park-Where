@@ -4,32 +4,34 @@ import java.util.List;
 
 public class Review {
 
-    private RegisteredUser user;
-    public int userRating;
-    private Carpark carpark;
+    private String userDisplayName;
+    private Double userRating;
+    private String carparkId;
     private String userComments;
 
-    public Review(RegisteredUser user, int userRating, Carpark carpark, String userComments){
-        this.user = user;
+    public Review(String userDisplayName, Double userRating, String carparkId, String userComments){
+        this.userDisplayName = userDisplayName;
         this.userRating = userRating;
-        this.carpark = carpark;
+        this.carparkId = carparkId;
         this.userComments = userComments;
-
     }
 
-    public void loadReviewData(){
-
+    public String getUserDisplayName() {
+        return userDisplayName;
     }
 
-    public void saveReviewData(){
-
+    public Double getUserRating() {
+        return userRating;
     }
 
-    public List<Review> getCarparkReviews(){
-        List<Review> reviewList = null;
-
-        return reviewList;
+    public String getCarparkId() {
+        return carparkId;
     }
+
+    public String getUserComments() {
+        return userComments;
+    }
+
 
     public void setCarPark(String carparkID){
         //this.carpark = ...?
@@ -40,7 +42,7 @@ public class Review {
 
     }
 
-    public void setRating(int rating){
+    public void setRating(Double rating){
         this.userRating = rating;
     }
 
