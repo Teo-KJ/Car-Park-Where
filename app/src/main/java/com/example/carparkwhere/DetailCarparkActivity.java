@@ -23,7 +23,6 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class DetailCarparkActivity extends AppCompatActivity {
-    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV;
+    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN;
     private Button viewCarparkReviews_BTN;
     private ProgressDialog nDialog;
@@ -98,36 +97,56 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         barChart = findViewById(R.id.visualisation);
-        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                ArrayList<BarEntry> barEntries = new ArrayList<>();
-                JSONArray timeAndPredictedAvail = new JSONArray();
-                JSONObject timeJson;
-                ArrayList<String> allTimings = new ArrayList<String>();
-                ArrayList<Integer> allPredictedAvailability = new ArrayList<Integer>();
-                for (int i=0; i<timeAndPredictedAvail.length(); i++){
-                    timeJson = new JSONObject();
-                    try {
-                        String time = timeJson.getString("time");
-                        allTimings.add(time);
-                        int avail =  timeJson.getInt("predictedAvailability");
-                        barEntries.add(new BarEntry(avail, i));
-                        //allPredictedAvailability.add(avail);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                BarDataSet barDataSet = new BarDataSet(barEntries, "Time");
-                BarData theData = new BarData((IBarDataSet) allTimings, barDataSet);
-                barChart.setData(theData);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barEntries.add(new BarEntry(44f, 0));
+        barEntries.add(new BarEntry(68f, 1));
+        barEntries.add(new BarEntry(100f, 2));
+        BarDataSet dataSet = new BarDataSet(barEntries, "Time");
+
+        ArrayList<String> allTimings = new ArrayList<String>();
+        allTimings.add("01:00");
+        allTimings.add("13:00");
+        allTimings.add("20:00");
+
+        BarData data = new BarData(allTimings, dataSet);
+        barChart.setData(data);
+        barChart.setTouchEnabled(true);
+
+        testTV = findViewById(R.id.testBTN1);
+//        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
+//            @Override
+//            public void onResponse(Object response) {
+//
+//                ArrayList<BarEntry> barEntries = new ArrayList<>();
+//                JSONArray timeAndPredictedAvail = new JSONArray();
+//                JSONObject timeJson = ;
+//                ArrayList<String> allTimings = new ArrayList<String>();
+//                ArrayList<Integer> allPredictedAvailability = new ArrayList<Integer>();
+//                for (int i=0; i<timeAndPredictedAvail.length(); i++){
+//                    timeJson = new JSONObject();
+//                    try {
+//                        String time = timeJson.getString("time");
+//                        allTimings.add(time);
+//                        int avail =  timeJson.getInt("predictedAvailability");
+//                        barEntries.add(new BarEntry(avail, i));
+//                        //allPredictedAvailability.add(avail);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                for (int i=0; i<allTimings.size(); i++){
+//                    testTV.setText(allTimings.get(i));
+//                }
+//
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                error.printStackTrace();
+//            }
+//        });
 
     }
 
