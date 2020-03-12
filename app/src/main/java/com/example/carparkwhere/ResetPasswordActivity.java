@@ -47,7 +47,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         resetPasswordCancel_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ResetPasswordActivity.this, AccountOptionsActivity.class));
+                finish();
             }
         });
 
