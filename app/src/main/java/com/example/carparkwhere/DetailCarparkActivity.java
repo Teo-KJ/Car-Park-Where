@@ -19,6 +19,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.Models.CarparkJson;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,14 +32,30 @@ import java.util.ArrayList;
 
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV;
+    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN;
+    private Button viewCarparkReviews_BTN;
     private ProgressDialog nDialog;
+    private BarChart barChart;
+    //private
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_carpark);
+
+        parkingRates_TV = findViewById(R.id.carparkPrices);
+        carparkNumber_TV = findViewById(R.id.carparkNumber);
+        carparkAddress_TV = findViewById(R.id.carparkAddress);
+        bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
+        viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
+        //ImageButton bookmarkToggle_IMGBTN;
+        //Button ;
+
+        //  Dialogue bar
         presentProgressDialog("Loading Carpark...");
-        ImageButton backDetailCarparkActivity_IMGBTN = findViewById(R.id.back_button);
+
+        //  Back button to return to previous activity
+        backDetailCarparkActivity_IMGBTN = findViewById(R.id.back_button);
         backDetailCarparkActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,14 +63,16 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        parkingRates_TV = findViewById(R.id.carparkPrices);
-        carparkNumber_TV = findViewById(R.id.carparkNumber);
-        carparkAddress_TV = findViewById(R.id.carparkAddress);
-        ImageButton submitReview_IMGBTN = findViewById(R.id.makeReviewButton);
+        //  Make a review by selecting this button, which goes to SubmitReviewActivity
+        submitReview_IMGBTN = findViewById(R.id.makeReviewButton);
+        submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class));
+            }
+        });
 
-        ImageButton bookmarkToggle_IMGBTN;
-        RatingBar rating_RBAR;
-        Button viewCarparkReviews_BTN;
+        //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         String str = intent.getStringExtra("CARPARK_ID");
         ServerInterfaceManager.getCarparkDetailsByID(this, str, new NetworkCallEventListener() {
@@ -74,8 +97,41 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        barChart = findViewById(R.id.visualisation);
+        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+                ArrayList<BarEntry> barEntries = new ArrayList<>();
+                JSONArray timeAndPredictedAvail = new JSONArray();
+                JSONObject timeJson;
+                ArrayList<String> allTimings = new ArrayList<String>();
+                ArrayList<Integer> allPredictedAvailability = new ArrayList<Integer>();
+                for (int i=0; i<timeAndPredictedAvail.length(); i++){
+                    timeJson = new JSONObject();
+                    try {
+                        String time = timeJson.getString("time");
+                        allTimings.add(time);
+                        int avail =  timeJson.getInt("predictedAvailability");
+                        barEntries.add(new BarEntry(avail, i));
+                        //allPredictedAvailability.add(avail);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                BarDataSet barDataSet = new BarDataSet(barEntries, "Time");
+                BarData theData = new BarData((IBarDataSet) allTimings, barDataSet);
+                barChart.setData(theData);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
     }
 
+    //   Progress bar to load carpark detail
     private void presentProgressDialog(String message){
         nDialog = new ProgressDialog(DetailCarparkActivity.this);
         nDialog.setMessage("Loading..");
@@ -84,5 +140,4 @@ public class DetailCarparkActivity extends AppCompatActivity {
         nDialog.setCancelable(true);
         nDialog.show();
     }
-
 }
