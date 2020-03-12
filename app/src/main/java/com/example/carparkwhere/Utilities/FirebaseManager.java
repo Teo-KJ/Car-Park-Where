@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -95,6 +96,12 @@ public class FirebaseManager {
     public static void updateFieldFirestore(String collectionName, String documentName, Map<String,Object> data){
         db.collection(collectionName).document(documentName).set(data,SetOptions.merge());
     }
+
+    public static void updateFieldFirestoreArray(String collectionName, String documentName, Map<String,Object> data){
+        db.collection(collectionName).document(documentName).update(data);
+    }
+
+
 
     public static void retrieveFromFirestore(String collectionName, String documentName, OnCompleteListener<DocumentSnapshot> handler) {
         DocumentReference docRef = db.collection(collectionName).document(documentName);
