@@ -1,7 +1,7 @@
 package com.example.carparkwhere;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
@@ -10,36 +10,30 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-
 import com.android.volley.toolbox.Volley;
-
 import com.example.carparkwhere.Models.CarparkJson;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.gson.Gson;
-
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV;
-//    private RequestQueue mQueue;
+    private ProgressDialog nDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_carpark);
-
+        presentProgressDialog("Loading Carpark...");
         ImageButton backDetailCarparkActivity_IMGBTN = findViewById(R.id.back_button);
         backDetailCarparkActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,17 +47,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkAddress_TV = findViewById(R.id.carparkAddress);
         ImageButton submitReview_IMGBTN = findViewById(R.id.makeReviewButton);
 
-//        mQueue = Volley.newRequestQueue(this);
-
-//        jsonParse();
-
-//        submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                jsonParse();
-//            }
-//        });
-
         ImageButton bookmarkToggle_IMGBTN;
         RatingBar rating_RBAR;
         Button viewCarparkReviews_BTN;
@@ -72,6 +55,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         ServerInterfaceManager.getCarparkDetailsByID(this, str, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                nDialog.dismiss();
                 CarparkJson carparkJson = (CarparkJson) networkCallResult;
                 carparkNumber_TV.setText(carparkJson.carparkNo);
                 carparkAddress_TV.setText(carparkJson.carparkName);
@@ -90,56 +74,15 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
-//
-//    private void jsonParse() {
-//        String url = "http://3.14.70.180:3002/client/carparkdetails";
-//        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//                        try{
-//                            for (int j=0; j<response.length(); j++){
-//                                JSONObject carparkJson = response.getJSONObject(j);
-//                                String carparkNumber = carparkJson.getString("carparkNo");
-//                                if (carparkNumber.equalsIgnoreCase("D0004")){
-//                                    String address = carparkJson.getString("carparkName");
-//
-//                                    JSONArray allPrices = carparkJson.getJSONArray("prices");
-//                                    JSONObject prices = allPrices.getJSONObject(0);
-//                                    String description = prices.getString("description");
-//                                    String price = prices.getString("price");
-//                                    parkingRates_TV.setText(description + "\n" + price);
-//
-//                                    for (int i=1; i<allPrices.length(); i++){
-//                                        prices = allPrices.getJSONObject(i);
-//                                        description = prices.getString("description");
-//                                        price = prices.getString("price");
-//                                        parkingRates_TV.append("\n\n" + description + "\n" + price);
-//                                    }
-//
-//                                    carparkNumber_TV.setText(carparkNumber);
-//                                    carparkAddress_TV.setText(address);
-//                                }
-//                            }
-//
-//                        }
-//                        catch (JSONException e){
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        error.printStackTrace();
-//                    }
-//                }
-//        );
-//
-//        mQueue.add(request);
+
+    private void presentProgressDialog(String message){
+        nDialog = new ProgressDialog(DetailCarparkActivity.this);
+        nDialog.setMessage("Loading..");
+        nDialog.setTitle(message);
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+        nDialog.show();
     }
+
+}

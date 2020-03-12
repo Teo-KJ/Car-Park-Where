@@ -37,12 +37,10 @@
                     android:id="@+id/carparkNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="C0148"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:textSize="25dp"
                     android:layout_marginLeft="25dp"
                     android:textColor="@color/common_google_signin_btn_text_dark"
-                    ></TextView>
+                    android:textSize="25dp"
+                    app:layout_constraintEnd_toEndOf="parent"></TextView>
 
                 <ImageButton
                     android:id="@+id/BookmarkButton"
@@ -152,11 +150,9 @@
                     android:id="@+id/carparkAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50 Nanyang Avenue"
-                    android:textSize="20dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="10dp"
-                    ></TextView>
+                    android:textSize="20dp"></TextView>
             </LinearLayout>
 
             <ListView
@@ -164,30 +160,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
                 android:background="?android:attr/listDivider"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/clock"
-                    ></ImageView>
-
-                <TextView
-                    android:id="@+id/openDuration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Open 24 hours"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="10dp"
-                    ></TextView>
-            </LinearLayout>
 
             <ListView
                 android:id="@+id/divider2"
@@ -212,11 +184,9 @@
                     android:id="@+id/carparkPrices"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MON-FRI Before 5PM\n$1.00/30 min from 7am to 5pm"
-                    android:textSize="20dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="10dp"
-                    ></TextView>
+                    android:textSize="20dp"></TextView>
             </LinearLayout>
 
             <ListView

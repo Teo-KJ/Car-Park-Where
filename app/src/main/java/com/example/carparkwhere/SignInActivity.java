@@ -33,9 +33,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
-
-
 public class SignInActivity extends AppCompatActivity {
     EditText emailAddressEditText;
     EditText passwordEditText;
@@ -74,7 +71,6 @@ public class SignInActivity extends AppCompatActivity {
 //            }
 //        });
 
-
     }
 
     private void checkIfUserIsAlreadySignIn(){
@@ -105,7 +101,6 @@ public class SignInActivity extends AppCompatActivity {
         guessModeButton = findViewById(R.id.guessModeButton);
     }
 
-
     private void setupAnimationView(){
         animationView = findViewById(R.id.signInMainLottieAnimation);
         animationView.setAnimationFromUrl ("https://assets5.lottiefiles.com/packages/lf20_u3YlGl.json");
@@ -115,8 +110,6 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
 
                 if ((emailAddressEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty())){
                     Toast.makeText(SignInActivity.this,"Email and Password cannot be blank. Try again", Toast.LENGTH_SHORT).show();
@@ -142,8 +135,6 @@ public class SignInActivity extends AppCompatActivity {
                         }
                     });
                 }
-
-
             }
         });
     }
