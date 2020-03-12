@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.CarparkJson;
+import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,6 +35,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -41,7 +43,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-
+import io.grpc.Server;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -131,24 +133,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(final GoogleMap googleMap) {
         makeBitmap();
 
-        ServerInterfaceManager.getAllCarparkCoordinates(this, new Response.Listener() {
+        ServerInterfaceManager.getAllCarparkCoordinates(this, new NetworkCallEventListener() {
             @Override
-            public void onResponse(Object response) {
-                Gson gson = new Gson();
-                carparks = gson.fromJson(response.toString(),new TypeToken<ArrayList<CarparkJson>>(){}.getType());
-                //carparks here, set the marker information here
-                for (int counter = 0; counter < carparks.size(); counter++) {
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
-                            .title(carparks.get(counter).carparkName).icon(BitmapDescriptorFactory.fromBitmap(smallParking)));
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful) {
+                    carparks = (ArrayList<CarparkJson>) networkCallResult;
+                    for (int counter = 0; counter < carparks.size(); counter++) {
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                .title(carparks.get(counter).carparkName).icon(BitmapDescriptorFactory.fromBitmap(smallParking)));
+                    }
+                }else{
+                    //deal with the error message, maybe toast or something
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println(error.getMessage());
-            }
         });
+
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Current Location");
 

@@ -5,7 +5,7 @@ import java.util.List;
 public class Review {
 
     private RegisteredUser user;
-    private int userRating;
+    public int userRating;
     private Carpark carpark;
     private String userComments;
 

@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.example.carparkwhere.Models.CarparkJson;
+import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.gson.Gson;
 
@@ -66,11 +67,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
         RatingBar rating_RBAR;
         Button viewCarparkReviews_BTN;
 
-        ServerInterfaceManager.getCarparkDetailsByID(this,"A78", new Response.Listener() {
+        ServerInterfaceManager.getCarparkDetailsByID(this, "A78", new NetworkCallEventListener() {
             @Override
-            public void onResponse(Object response) {
-                Gson gson = new Gson();
-                CarparkJson carparkJson = gson.fromJson(response.toString(),CarparkJson.class);
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                CarparkJson carparkJson = (CarparkJson) networkCallResult;
                 carparkNumber_TV.setText(carparkJson.carparkNo);
                 carparkAddress_TV.setText(carparkJson.carparkName);
                 ArrayList<CarparkJson.CarparkCarDetailsJson.CarparkPriceJson> allPrices = carparkJson.carDetails.prices;
@@ -86,12 +86,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
                     parkingRates_TV.append("\n\n" + description + "\n" + price);
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
         });
+
 
 
 
