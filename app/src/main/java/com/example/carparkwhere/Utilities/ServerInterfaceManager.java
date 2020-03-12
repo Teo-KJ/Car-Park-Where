@@ -27,10 +27,7 @@ import java.util.ArrayList;
 //import okhttp3.Request;
 
 public class ServerInterfaceManager {
-
-
     private static RequestQueue mQueue;
-
 
     public static void getCarparkDetailsByID(Context context, String carparkID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
@@ -72,7 +69,7 @@ public class ServerInterfaceManager {
         mQueue.add(request);
     }
 
-    public static void getCarparkWholeDayPredictedAvailability(Context context, String carparkID,Response.Listener successListener, Response.ErrorListener errorListener){
+    public static void getCarparkWholeDayPredictedAvailability(Context context, String carparkID, Response.Listener successListener, Response.ErrorListener errorListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/prediction/" + carparkID;
         JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);

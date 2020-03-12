@@ -77,15 +77,17 @@
                     android:rating="@integer/google_play_services_version"
                     ></RatingBar>
 
-                <TextView
+                <Button
                     android:id="@+id/totalNumOfReviews"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="0 review"
+                    android:textAllCaps="false"
                     android:layout_marginLeft="9dp"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/common_google_signin_btn_text_dark"
-                    ></TextView>
+                    android:background="@null"
+                    ></Button>
             </LinearLayout>
 
             <LinearLayout
@@ -219,13 +221,13 @@
                     android:background="#00ffffff"></ImageButton>
             </LinearLayout>
 
-            <ImageView
+            <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/visualisation"
-                android:layout_width="350dp"
-                android:layout_height="140dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                ></ImageView>
+                android:layout_marginRight="25dp"
+                ></com.github.mikephil.charting.charts.BarChart>
 
         </LinearLayout>
 
