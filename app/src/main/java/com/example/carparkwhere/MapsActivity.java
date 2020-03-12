@@ -17,6 +17,7 @@ import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -52,6 +53,7 @@ import io.grpc.Server;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     Location currentLocation;
+    private GoogleMap googleMap;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     ArrayList<CarparkJson> carparks = new ArrayList<CarparkJson>();
@@ -61,6 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     PlacesClient placesClient;
     String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
     Map<String, String> mMarkerMap = new HashMap<>();
+    Marker currentMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +82,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         autocompleteSupportFragment.setCountry("SG");
 
         autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID,  Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
-
+        autocompleteSupportFragment.setCountry("SG");
         autocompleteSupportFragment.setOnPlaceSelectedListener(
                 new PlaceSelectionListener() {
                     @Override
                     public void onPlaceSelected(Place place) {
-                        final LatLng latLng = place.getLatLng();
+                        LatLng latLng = place.getLatLng();
+                        if(currentMarker!=null)
+                        {
+                            currentMarker.remove();
+                        }
+
+                        MarkerOptions markerOption= new MarkerOptions();
+                        markerOption.position(latLng);
+                        markerOption.title(place.getName());
+                        currentMarker= googleMap.addMarker(markerOption);
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                         Toast.makeText(MapsActivity.this, ""+latLng.latitude, Toast.LENGTH_SHORT).show();
 
@@ -104,6 +118,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
 
     private void makeBitmap() {
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.parking);
@@ -136,7 +151,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMaps) {
+       googleMap=googleMaps;
         makeBitmap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
