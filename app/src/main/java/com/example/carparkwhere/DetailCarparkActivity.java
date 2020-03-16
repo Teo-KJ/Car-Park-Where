@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.Models.CarparkJson;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
@@ -35,10 +36,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private Button viewCarparkReviews_BTN;
     private ProgressDialog nDialog;
     private BarChart barChart;
-    //private
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_carpark);
 
@@ -97,6 +98,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         barChart = findViewById(R.id.visualisation);
+
         ArrayList<BarEntry> barEntries = new ArrayList<>();
         barEntries.add(new BarEntry(44f, 0));
         barEntries.add(new BarEntry(68f, 1));
@@ -112,41 +114,39 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.setData(data);
         barChart.setTouchEnabled(true);
 
-        testTV = findViewById(R.id.testBTN1);
-//        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
-//            @Override
-//            public void onResponse(Object response) {
-//
-//                ArrayList<BarEntry> barEntries = new ArrayList<>();
-//                JSONArray timeAndPredictedAvail = new JSONArray();
-//                JSONObject timeJson = ;
-//                ArrayList<String> allTimings = new ArrayList<String>();
-//                ArrayList<Integer> allPredictedAvailability = new ArrayList<Integer>();
-//                for (int i=0; i<timeAndPredictedAvail.length(); i++){
-//                    timeJson = new JSONObject();
-//                    try {
-//                        String time = timeJson.getString("time");
-//                        allTimings.add(time);
-//                        int avail =  timeJson.getInt("predictedAvailability");
-//                        barEntries.add(new BarEntry(avail, i));
-//                        //allPredictedAvailability.add(avail);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                for (int i=0; i<allTimings.size(); i++){
-//                    testTV.setText(allTimings.get(i));
-//                }
-//
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                error.printStackTrace();
-//            }
-//        });
+        testTV = findViewById(R.id.test_Text);
+        testTV.setText("Predicted Availability");
+
+        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
+            @Override
+            public void onResponse(Object response){
+                JSONArray jsonArray = (JSONArray) response;
+                for (int j=0; j<jsonArray.length(); j++){
+                    try {
+                        JSONObject predictions = jsonArray.getJSONObject(j);
+                        System.out.println(predictions);
+                        String time = predictions.getString("time");
+                        int carparkPrediction = predictions.getInt("predictedAvailability");
+
+                        //allTimings.add(time);
+                        //allPredictedAvailability.add(carparkPrediction);
+                        testTV.append("\n" + time + " " + carparkPrediction);
+
+                        //barEntries.add(new BarEntry(carparkPrediction, j));
+                        //barEntries.add(new BarEntry(100f, j));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
 
     }
 
@@ -159,4 +159,5 @@ public class DetailCarparkActivity extends AppCompatActivity {
         nDialog.setCancelable(true);
         nDialog.show();
     }
+
 }
