@@ -72,7 +72,7 @@ public class ServerInterfaceManager {
     public static void getCarparkWholeDayPredictedAvailability(Context context, String carparkID, Response.Listener successListener, Response.ErrorListener errorListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/prediction/" + carparkID;
-        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        JsonArrayRequest request = new JsonArrayRequest(url, successListener, errorListener);
         mQueue.add(request);
     }
 
