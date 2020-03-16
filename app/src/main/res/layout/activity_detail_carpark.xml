@@ -138,8 +138,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:orientation="horizontal">
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -173,8 +172,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:orientation="horizontal">
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
@@ -201,8 +199,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -227,15 +224,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 ></com.github.mikephil.charting.charts.BarChart>
-
-            <TextView
-                android:id="@+id/test_Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="25dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
-                ></TextView>
 
         </LinearLayout>
 

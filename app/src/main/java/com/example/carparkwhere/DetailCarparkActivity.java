@@ -98,47 +98,37 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         barChart = findViewById(R.id.visualisation);
+        barChart.setNoDataText("Loading the data...");
+        barChart.getAxisLeft().setDrawLabels(false);
+        barChart.getAxisRight().setDrawLabels(false);
 
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        barEntries.add(new BarEntry(44f, 0));
-        barEntries.add(new BarEntry(68f, 1));
-        barEntries.add(new BarEntry(100f, 2));
-        BarDataSet dataSet = new BarDataSet(barEntries, "Time");
-
-        ArrayList<String> allTimings = new ArrayList<String>();
-        allTimings.add("01:00");
-        allTimings.add("13:00");
-        allTimings.add("20:00");
-
-        BarData data = new BarData(allTimings, dataSet);
-        barChart.setData(data);
-        barChart.setTouchEnabled(true);
-
-        testTV = findViewById(R.id.test_Text);
-        testTV.setText("Predicted Availability");
-
+        // With ServerInterfaceManager, get the predicted number of carpark lots.
         ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
             @Override
             public void onResponse(Object response){
                 JSONArray jsonArray = (JSONArray) response;
+                ArrayList<BarEntry> barEntries = new ArrayList<>();
+                ArrayList<String> allTimings = new ArrayList<String>();
+
                 for (int j=0; j<jsonArray.length(); j++){
                     try {
                         JSONObject predictions = jsonArray.getJSONObject(j);
-                        System.out.println(predictions);
                         String time = predictions.getString("time");
-                        int carparkPrediction = predictions.getInt("predictedAvailability");
-
-                        //allTimings.add(time);
-                        //allPredictedAvailability.add(carparkPrediction);
-                        testTV.append("\n" + time + " " + carparkPrediction);
-
-                        //barEntries.add(new BarEntry(carparkPrediction, j));
-                        //barEntries.add(new BarEntry(100f, j));
-
+                        float carparkPrediction = predictions.getInt("predictedAvailability");
+                        barEntries.add(new BarEntry(carparkPrediction, j));
+                        allTimings.add(time);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+
+                BarDataSet dataSet = new BarDataSet(barEntries, "Time");
+                BarData data = new BarData(allTimings, dataSet);
+                barChart.setData(data);
+                barChart.setTouchEnabled(true);
+                barChart.invalidate();
+                barChart.refreshDrawableState();
+
             }
 
         }, new Response.ErrorListener() {

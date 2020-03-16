@@ -97,7 +97,7 @@
         android:id="@+id/guessModeButton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Guess Mode"
+        android:text="Guest Mode"
         android:textColor="@color/quantum_white_100"
         android:textSize="16dp"
         android:background="@drawable/guesslogin_button_background"
