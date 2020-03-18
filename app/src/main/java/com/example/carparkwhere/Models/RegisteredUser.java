@@ -42,7 +42,7 @@ public class RegisteredUser {
     public void setIsValidated(boolean isValidated){
         this.isValidated = isValidated;
     }
-    
+
     public void setPassword(String password){
         this.password = password;
     }
