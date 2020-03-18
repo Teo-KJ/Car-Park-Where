@@ -64,5 +64,21 @@ public class CarparkReviewsDataManager {
         });
     }
 
-    
+    //only for reviews of the current registered signed in user
+    public static void editReviewOfCarpark(Review oldReview,Review newReview,String carparkID){
+        Map<String,Object> reviewsMap = new HashMap<>();
+        Map<String,Map<String,Object>> reviews = new HashMap<>();
+
+        Map<String,Object> reviewMap = new HashMap<>();
+        reviewMap.put("userId",FirebaseManager.getCurrentUser().getUid());
+        reviewMap.put("rating",oldReview.getUserRating());
+        reviewMap.put("review",oldReview.getUserComments());
+        reviewMap.put("displayName",oldReview.getUserDisplayName());
+        reviewsMap.put("reviews", FieldValue.arrayRemove(reviewMap));
+        FirebaseManager.updateFieldFirestoreArray(FirebaseManager.CollectionsName.CARPARKREVIEWS.getString(),carparkID,reviewsMap);
+
+        addNewReview(newReview.getCarparkId(),newReview.getUserRating(),newReview.getUserComments());
+    }
+
+
 }
