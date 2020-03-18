@@ -7,12 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.example.carparkwhere.Models.CarparkJson;
+import com.example.carparkwhere.Models.Carpark;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.android.gms.common.api.Status;
@@ -34,10 +31,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,8 +41,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import io.grpc.Server;
-
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -56,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap googleMap;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
-    ArrayList<CarparkJson> carparks = new ArrayList<CarparkJson>();
+    ArrayList<Carpark> carparks = new ArrayList<Carpark>();
     int height = 40;
     int width = 40;
     Bitmap smallParking;
@@ -160,7 +152,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful) {
-                    carparks = (ArrayList<CarparkJson>) networkCallResult;
+                    carparks = (ArrayList<Carpark>) networkCallResult;
                     for (int counter = 0; counter < carparks.size(); counter++) {
                         Marker marker =googleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
