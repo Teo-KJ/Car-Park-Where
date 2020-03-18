@@ -1,24 +1,20 @@
 package com.example.carparkwhere.Utilities;
 import android.content.Context;
-import android.util.Pair;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.carparkwhere.Models.CarparkJson;
+import com.example.carparkwhere.Models.Carpark;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 //import okhttp3.Call;
@@ -37,8 +33,8 @@ public class ServerInterfaceManager {
             @Override
             public void onResponse(JSONObject response) {
                 Gson gson = new Gson();
-                CarparkJson carparkJson = gson.fromJson(response.toString(),CarparkJson.class);
-                networkCallEventListener.onComplete(carparkJson,true,null);
+                Carpark carpark = gson.fromJson(response.toString(), Carpark.class);
+                networkCallEventListener.onComplete(carpark,true,null);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -56,14 +52,14 @@ public class ServerInterfaceManager {
             @Override
             public void onResponse(JSONArray response) {
                 Gson gson = new Gson();
-                ArrayList<CarparkJson> carparks = gson.fromJson(response.toString(),new TypeToken<ArrayList<CarparkJson>>(){}.getType());
+                ArrayList<Carpark> carparks = gson.fromJson(response.toString(),new TypeToken<ArrayList<Carpark>>(){}.getType());
                 networkCallEventListener.onComplete(carparks,true,null);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println(error.getMessage());
-                networkCallEventListener.onComplete(new ArrayList<CarparkJson>(),false,error.getMessage());
+                networkCallEventListener.onComplete(new ArrayList<Carpark>(),false,error.getMessage());
             }
         });
         mQueue.add(request);

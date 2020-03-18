@@ -3,28 +3,22 @@ package com.example.carparkwhere;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.carparkwhere.Models.CarparkJson;
+import com.example.carparkwhere.Models.Carpark;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,11 +73,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 nDialog.dismiss();
-                CarparkJson carparkJson = (CarparkJson) networkCallResult;
-                carparkNumber_TV.setText(carparkJson.carparkNo);
-                carparkAddress_TV.setText(carparkJson.carparkName);
-                ArrayList<CarparkJson.CarparkCarDetailsJson.CarparkPriceJson> allPrices = carparkJson.carDetails.prices;
-                CarparkJson.CarparkCarDetailsJson.CarparkPriceJson prices = allPrices.get(0);
+                Carpark carpark = (Carpark) networkCallResult;
+                carparkNumber_TV.setText(carpark.carparkNo);
+                carparkAddress_TV.setText(carpark.carparkName);
+                ArrayList<Carpark.CarparkCarDetails.CarparkPriceJson> allPrices = carpark.carDetails.prices;
+                Carpark.CarparkCarDetails.CarparkPriceJson prices = allPrices.get(0);
                 String description = prices.description;
                 String price = prices.price;
                 parkingRates_TV.setText(description + "\n" + price);

@@ -12,26 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+<<<<<<< Updated upstream
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.CarparkJson;
 import com.example.carparkwhere.Models.Review;
 import com.example.carparkwhere.Utilities.CarparkReviewsDataManager;
+=======
+>>>>>>> Stashed changes
 import com.example.carparkwhere.Utilities.FirebaseManager;
-import com.example.carparkwhere.Utilities.NetworkCallEventListener;
-import com.example.carparkwhere.Utilities.ServerInterfaceManager;
-import com.example.carparkwhere.Utilities.UserDataManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class SignInActivity extends AppCompatActivity {
     EditText emailAddressEditText;
