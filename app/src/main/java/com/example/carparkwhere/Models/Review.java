@@ -17,31 +17,33 @@ public class Review {
 
     }
 
-    public void loadReviewData(){
-
+    //getters setters
+    public Carpark getCarPark(){
+        return this.carpark;
+    }
+    public RegisteredUser getUser(){
+        return this.user;
     }
 
-    public void saveReviewData(){
-
+    public int getRating(){
+        return this.userRating;
     }
 
-    public List<Review> getCarparkReviews(){
-        List<Review> reviewList = null;
-
-        return reviewList;
+    public String getComments(){
+        return this.userComments;
     }
 
-    public void setCarPark(String carparkID){
-        //this.carpark = ...?
-
+    public void setCarPark(Carpark carpark){
+        this.carpark = carpark;
     }
-
-    public void setUser(String userEmail){
-
+    public void setUser(RegisteredUser user){
+        this.user = user;
     }
-
     public void setRating(int rating){
         this.userRating = rating;
+    }
+    public void setComments(String comments){
+        this.userComments = comments;
     }
 
 }
