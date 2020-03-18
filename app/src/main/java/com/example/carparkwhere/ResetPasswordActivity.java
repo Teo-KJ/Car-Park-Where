@@ -26,6 +26,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         resetPasswordCancel_BTN = findViewById(R.id.cancelButton);
         resetPasswordSubmit_BTN = findViewById(R.id.submitButton);
 
+        // Submit button to confirm reset
         resetPasswordSubmit_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,14 +41,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 }
                 else {
                     checkPassword_TV.setText("");
+                    //reset password via Firebase
                 }
             }
         });
 
+        // Cancel button
         resetPasswordCancel_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ResetPasswordActivity.this, AccountOptionsActivity.class));
+                finish();
             }
         });
 

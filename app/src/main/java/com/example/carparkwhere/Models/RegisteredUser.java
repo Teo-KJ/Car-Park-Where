@@ -8,12 +8,13 @@ public class RegisteredUser {
     private String email;
     private Boolean isValidated;
     private String password;
+    public String email;
+    public Boolean isValidated;
 
-    public RegisteredUser(String name, String email, Boolean isValidated, String password) {
+    public RegisteredUser(String name, String email, Boolean isValidated) {
         this.name = name;
         this.email = email;
         this.isValidated = isValidated;
-        this.password = password;
     }
 
     public String getName(){
@@ -34,7 +35,6 @@ public class RegisteredUser {
     public void setName(String name){
         this.name = name;
     }
-
     public void setEmail(String email){
         this.email = email;
     }
