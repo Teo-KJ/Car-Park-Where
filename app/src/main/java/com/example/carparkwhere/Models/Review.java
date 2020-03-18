@@ -4,46 +4,46 @@ import java.util.List;
 
 public class Review {
 
-    private String userDisplayName;
-    private Double userRating;
-    private String carparkId;
+    private RegisteredUser user;
+    private int userRating;
+    private Carpark carpark;
     private String userComments;
 
-    public Review(String userDisplayName, Double userRating, String carparkId, String userComments){
-        this.userDisplayName = userDisplayName;
+    public Review(RegisteredUser user, int userRating, Carpark carpark, String userComments){
+        this.user = user;
         this.userRating = userRating;
-        this.carparkId = carparkId;
+        this.carpark = carpark;
         this.userComments = userComments;
-    }
-
-    public String getUserDisplayName() {
-        return userDisplayName;
-    }
-
-    public Double getUserRating() {
-        return userRating;
-    }
-
-    public String getCarparkId() {
-        return carparkId;
-    }
-
-    public String getUserComments() {
-        return userComments;
-    }
-
-
-    public void setCarPark(String carparkID){
-        //this.carpark = ...?
 
     }
 
-    public void setUser(String userEmail){
-
+    //getters setters
+    public Carpark getCarPark(){
+        return this.carpark;
+    }
+    public RegisteredUser getUser(){
+        return this.user;
     }
 
-    public void setRating(Double rating){
+    public int getRating(){
+        return this.userRating;
+    }
+
+    public String getComments(){
+        return this.userComments;
+    }
+
+    public void setCarPark(Carpark carpark){
+        this.carpark = carpark;
+    }
+    public void setUser(RegisteredUser user){
+        this.user = user;
+    }
+    public void setRating(int rating){
         this.userRating = rating;
+    }
+    public void setComments(String comments){
+        this.userComments = comments;
     }
 
 }
