@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/image1"
+        android:src="@android:drawable/btn_star"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ></ImageView>
+
+    <TextView
+        android:id="@+id/guide1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image1"
+        android:textSize="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Bookmark your carpark\nPress the corner star button to bookmark your carpark."/>
+
+    <ImageView
+        android:id="@+id/image2"
+        android:src="@drawable/diagonal"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/guide1"
+        android:scaleType="centerInside"
+        ></ImageView>
+
+    <TextView
+        android:id="@+id/guide2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image2"
+        android:layout_alignParentStart="true"
+        android:textSize="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Get directions\nGet to the carpark from your current location"/>
+
+    <ImageView
+        android:id="@+id/image3"
+        android:src="@drawable/review"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/guide2"
+        android:scaleType="centerInside"
+        ></ImageView>
+
+    <TextView
+        android:id="@+id/guide3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image3"
+        android:layout_alignParentStart="true"
+        android:textSize="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Review this carpark\nRate your experience parking at this carpark now!"/>
+
+    <ImageView
+        android:id="@+id/image4"
+        android:src="@drawable/graph"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/guide3"
+        android:scaleType="centerInside"
+        ></ImageView>
+
+    <TextView
+        android:id="@+id/guide4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image4"
+        android:layout_alignParentStart="true"
+        android:textSize="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Popular times\nKnow which time of the day this carpark is available. If there is no data means we do not have the record for it."/>
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/guide4"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:text="OK"
+        ></Button>
+
+</RelativeLayout>

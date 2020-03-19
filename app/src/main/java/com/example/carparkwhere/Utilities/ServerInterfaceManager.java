@@ -1,6 +1,11 @@
 package com.example.carparkwhere.Utilities;
 import android.content.Context;
+<<<<<<< Updated upstream
 
+=======
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+>>>>>>> Stashed changes
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -10,17 +15,26 @@ import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.Models.Carpark;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+<<<<<<< Updated upstream
 
 
+=======
+import com.google.gson.JsonObject;
+>>>>>>> Stashed changes
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
+<<<<<<< Updated upstream
 
 //import okhttp3.Call;
 //import okhttp3.Callback;
 //import okhttp3.OkHttpClient;
 //import okhttp3.Request;
+=======
+import java.util.HashMap;
+import java.util.Map;
+
+>>>>>>> Stashed changes
 
 public class ServerInterfaceManager {
     private static RequestQueue mQueue;
