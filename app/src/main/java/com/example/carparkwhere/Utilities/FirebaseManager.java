@@ -87,7 +87,7 @@ public class FirebaseManager {
 
 
 
-    public static void insertToFirestore(String collectionName, String documentName, Map<String,Object> data, OnCompleteListener<Void> handler){
+    public static void insertToFirestore(String collectionName, String documentName, Object data, OnCompleteListener<Void> handler){
         db.collection(collectionName).document(documentName)
                 .set(data)
                 .addOnCompleteListener(handler);

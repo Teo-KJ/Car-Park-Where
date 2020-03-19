@@ -62,7 +62,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class));
+                Intent intent = new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
             }
         });
 
