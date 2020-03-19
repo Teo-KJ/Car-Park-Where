@@ -229,6 +229,7 @@ public class ServerInterfaceManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
                 networkCallEventListener.onComplete("failure",false,error.getMessage());
             }
         });
