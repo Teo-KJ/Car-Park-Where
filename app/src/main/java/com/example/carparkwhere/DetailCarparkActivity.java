@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.Carpark;
+import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.example.carparkwhere.Utilities.UserDataManager;
@@ -41,6 +42,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN;
     private Button viewCarparkReviews_BTN;
+
+    //testing
+    private Button seeCarparkReviews_BTN;
+
+
     private ProgressDialog nDialog;
     private BarChart barChart;
     private Spinner spinner;
@@ -59,6 +65,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
+        seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
+        //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
         //  Dialogue bar
@@ -86,7 +94,18 @@ public class DetailCarparkActivity extends AppCompatActivity {
         submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class));
+                Intent intent = new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
+            }
+        });
+
+        seeCarparkReviews_BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
             }
         });
 
