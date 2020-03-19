@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.icu.text.SymbolTable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +41,7 @@ import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
-    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN;
+    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN;
     private Button viewCarparkReviews_BTN;
 
     //testing
@@ -66,6 +67,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
+        detailDirection_IMGBTN = findViewById(R.id.directionsButton);
         //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
@@ -109,6 +111,18 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                double latitude = intent.getDoubleExtra("Lat", 0.0);
+                double longitude = intent.getDoubleExtra("Lng", 0.0);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         final String str = intent.getStringExtra("CARPARK_ID"); // Get the carpark number
