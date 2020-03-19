@@ -63,9 +63,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
         detailDirection_IMGBTN = findViewById(R.id.directionsButton);
-        averageRating = findViewById(R.id.averageRating);
+        averageRating_TV = findViewById(R.id.averageRating);
         averageRatingInStars = findViewById(R.id.averageRatingInStars);
-        totalNumOfReviews = findViewById(R.id.totalNumOfReviews);
+        totalReviews_TV = findViewById(R.id.totalNumOfReviews);
         //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
@@ -131,10 +131,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 if (isSuccessful){
                     Double rating = (Double) networkCallResult;
                     averageRatingInStars.setRating(rating.floatValue());
-                    averageRating.setText(String.valueOf((Math.round(rating*100.0))/100.0));
+                    averageRating_TV.setText(String.valueOf((Math.round(rating*100.0))/100.0));
                 }else{
                     averageRatingInStars.setRating(0);
-                    averageRating.setText("0.0");
+                    averageRating_TV.setText("0.0");
                 }
             }
         });
@@ -158,9 +158,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
-                    totalNumOfReviews.setText(((Integer) networkCallResult) + " review" + (((Integer) networkCallResult) > 1 ? "s" : ""));
+                    totalReviews_TV.setText(((Integer) networkCallResult) + " review" + (((Integer) networkCallResult) > 1 ? "s" : ""));
                 }else{
-                    totalNumOfReviews.setText("0 review");
+                    totalReviews_TV.setText("0 review");
                 }
             }
         });
