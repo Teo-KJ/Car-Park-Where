@@ -19,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.Carpark;
@@ -32,7 +31,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.firebase.firestore.auth.User;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,16 +39,11 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
-    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
-    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN;
-    private Button viewCarparkReviews_BTN;
-    public RatingBar averageRatingInStars;
-    public TextView averageRating,totalNumOfReviews;
-
+    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV, averageRating_TV, totalReviews_TV;
+    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
+                        seeCarparkReviews_BTN;
     //testing
-    private Button seeCarparkReviews_BTN;
-
-
+    public RatingBar averageRatingInStars;
     private ProgressDialog nDialog;
     private BarChart barChart;
     private Spinner spinner;
@@ -67,7 +60,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkNumber_TV = findViewById(R.id.carparkNumber);
         carparkAddress_TV = findViewById(R.id.carparkAddress);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
-        viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
         detailDirection_IMGBTN = findViewById(R.id.directionsButton);
@@ -147,6 +139,21 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        // Get the directions to the carpark from the current location
+        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                double latitude = intent.getDoubleExtra("Lat", 0.0);
+                double longitude = intent.getDoubleExtra("Lng", 0.0);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+      
+        // Get the number of reviews for the specific carpark
         ServerInterfaceManager.getCarparkReviewsCount(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -157,7 +164,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
@@ -183,6 +189,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //averageRating_TV.setText("");
 
         /*bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
@@ -291,18 +299,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
         return calendar.get(Calendar.DAY_OF_WEEK) % 7-2;
     }
 
+    // Help dialogue
     public void openDialog() {
         Dialog help = new Dialog(DetailCarparkActivity.this);
-        Button okButton = findViewById(R.id.okButton);
         help.requestWindowFeature(Window.FEATURE_NO_TITLE);
         help.setContentView(R.layout.detail_carpark_tutorial);
         help.show();
-        /*okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });*/
     }
 
 }
