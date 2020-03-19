@@ -253,6 +253,30 @@ public class ServerInterfaceManager {
         mQueue.add(request);
     }
 
+    //Return Type: Integer
+    public static void getCarparkReviewsCount(Context context,String carparkID, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/reviews/totalrating/" + carparkID;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    Integer totalCount = response.getInt("sum");
+                    networkCallEventListener.onComplete(totalCount,true,null);
+                }catch (Exception e){
+                    networkCallEventListener.onComplete(null,false,null);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                networkCallEventListener.onComplete("failure",false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
+
 
 
 
