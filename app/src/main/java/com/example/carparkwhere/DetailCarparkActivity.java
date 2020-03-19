@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN;
     private Button viewCarparkReviews_BTN;
+    public RatingBar averageRatingInStars;
+    public TextView averageRating;
 
     //testing
     private Button seeCarparkReviews_BTN;
@@ -66,6 +69,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
         viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
+        averageRatingInStars = findViewById(R.id.averageRatingInStars);
+        averageRating = findViewById(R.id.averageRating);
         //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
@@ -108,6 +113,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();

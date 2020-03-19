@@ -22,12 +22,14 @@ import com.example.carparkwhere.Utilities.CarparkReviewsDataManager;
 import com.example.carparkwhere.Utilities.FirebaseManager;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
+import com.example.carparkwhere.Utilities.UserDataManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import io.grpc.Server;
 
@@ -53,6 +55,15 @@ public class SignInActivity extends AppCompatActivity {
         setupAnimationView();
         setupGuessModeButton();
 
+//        UserDataManager.getFavouriteCarparksId(new OnCompleteListener() {
+//            @Override
+//            public void onComplete(@NonNull Task task) {
+//                System.out.println("hehe");
+//                Map<String,ArrayList<String>> listOfKeysMap = (Map<String,ArrayList<String>>) task.getResult();
+//                ArrayList<String> listOfKeys = listOfKeysMap.get("carparks");
+//                System.out.println(listOfKeys);
+//            }
+//        });
 
         Button testBTN1 = findViewById(R.id.testBTN1);
         testBTN1.setOnClickListener(new View.OnClickListener() {
