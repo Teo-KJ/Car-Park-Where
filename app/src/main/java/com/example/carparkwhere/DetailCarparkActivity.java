@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.Carpark;
+import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.github.mikephil.charting.charts.BarChart;
@@ -28,6 +29,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN;
     private Button viewCarparkReviews_BTN;
+
+    //testing
+    private Button seeCarparkReviews_BTN;
+
+
     private ProgressDialog nDialog;
     private BarChart barChart;
 
@@ -42,6 +48,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkAddress_TV = findViewById(R.id.carparkAddress);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
+        seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
         //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
@@ -63,6 +70,15 @@ public class DetailCarparkActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
+            }
+        });
+
+        seeCarparkReviews_BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
                 intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
                 startActivity(intent);
             }
