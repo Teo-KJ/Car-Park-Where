@@ -70,9 +70,9 @@ public class ServerInterfaceManager {
         mQueue.add(request);
     }
 
-    public static void getCarparkWholeDayPredictedAvailability(Context context, String carparkID, Response.Listener successListener, Response.ErrorListener errorListener){
+    public static void getCarparkWholeDayPredictedAvailability(Context context, String carparkID, Integer increment, Response.Listener successListener, Response.ErrorListener errorListener){
         mQueue = Volley.newRequestQueue(context);
-        String url = "http://3.14.70.180:3002/client/carparkdetails/prediction/" + carparkID;
+        String url = "http://3.14.70.180:3002/client/carparkdetails/prediction/" + carparkID + "/" + String.valueOf(increment);
         JsonArrayRequest request = new JsonArrayRequest(url, successListener, errorListener);
         mQueue.add(request);
     }

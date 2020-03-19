@@ -202,7 +202,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.getAxisRight().setDrawLabels(false);
 
         // With ServerInterfaceManager, get the predicted number of carpark lots.
-        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
+        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, "2",new Response.Listener() {
             @Override
             public void onResponse(Object response){
                 JSONArray jsonArray = (JSONArray) response;
