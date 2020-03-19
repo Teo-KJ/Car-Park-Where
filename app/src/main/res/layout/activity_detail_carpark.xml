@@ -116,8 +116,6 @@
                     android:scaleType="centerInside"
                     android:adjustViewBounds="true"
                     ></ImageButton>
-<<<<<<< Updated upstream
-=======
 
                 <ImageButton
                     android:id="@+id/SeeReviewButton"
@@ -125,13 +123,9 @@
                     android:layout_height="55dp"
                     android:layout_marginLeft="9dp"
                     android:layout_marginTop="10dp"
-<<<<<<< Updated upstream
-                    android:text="See Reviews" />
->>>>>>> Stashed changes
-=======
                     android:scaleType="centerInside"
                     android:src="@drawable/see_all_reviews"></ImageButton>
->>>>>>> Stashed changes
+              
             </LinearLayout>
 
         </LinearLayout>

@@ -14,6 +14,7 @@ import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -44,6 +45,7 @@ import androidx.fragment.app.FragmentActivity;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     Location currentLocation;
+    private GoogleMap googleMap;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     ArrayList<Carpark> carparks = new ArrayList<Carpark>();
@@ -53,6 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     PlacesClient placesClient;
     String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
     Map<String, String> mMarkerMap = new HashMap<>();
+    Marker currentMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +71,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final AutocompleteSupportFragment autocompleteSupportFragment =
                 (AutocompleteSupportFragment)
                         getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteSupportFragment.setCountry("SG");
 
         autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID,  Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
-
+        autocompleteSupportFragment.setCountry("SG");
         autocompleteSupportFragment.setOnPlaceSelectedListener(
                 new PlaceSelectionListener() {
                     @Override
                     public void onPlaceSelected(Place place) {
-                        final LatLng latLng = place.getLatLng();
+                        LatLng latLng = place.getLatLng();
+                        if(currentMarker!=null)
+                        {
+                            currentMarker.remove();
+                        }
+
+                        MarkerOptions markerOption= new MarkerOptions();
+                        markerOption.position(latLng);
+                        markerOption.title(place.getName());
+                        currentMarker= googleMap.addMarker(markerOption);
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                         Toast.makeText(MapsActivity.this, ""+latLng.latitude, Toast.LENGTH_SHORT).show();
 
@@ -95,6 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
 
     private void makeBitmap() {
         BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.parking);
@@ -119,6 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(MapsActivity.this);
+
                 }
             }
         });
@@ -126,9 +143,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMaps) {
+       googleMap=googleMaps;
         makeBitmap();
-
+        googleMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         ServerInterfaceManager.getAllCarparkCoordinates(this, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -157,8 +176,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 String carparkID = mMarkerMap.get(marker.getId());
+                LatLng latLng = marker.getPosition();
+                double longnitude =  latLng.longitude;
+                double latitude =  latLng.latitude;
                 Intent intent = new Intent(MapsActivity.this, DetailCarparkActivity.class);
                 intent.putExtra("CARPARK_ID", carparkID);
+                intent.putExtra("Lat", latitude);
+                intent.putExtra("Lng", longnitude);
                 startActivity(intent);
 
                 return false;

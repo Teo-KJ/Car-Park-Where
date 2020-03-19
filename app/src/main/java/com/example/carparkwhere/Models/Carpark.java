@@ -37,7 +37,6 @@ public class Carpark {
 
     public Carpark(String carparkNo, Double latitude, Double longitude, String parkingSystem, Boolean isURANotHDB, String carparkName,
                    CarparkCarDetails carDetails){
-
         this.carparkNo = carparkNo;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -45,5 +44,9 @@ public class Carpark {
         this.isURANotHDB = isURANotHDB;
         this.carparkName = carparkName;
         this.carDetails = carDetails;
+    }
+
+    public String getCarparkName() {
+        return carparkName;
     }
 }

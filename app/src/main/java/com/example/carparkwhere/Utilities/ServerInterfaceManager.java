@@ -1,11 +1,10 @@
 package com.example.carparkwhere.Utilities;
+import android.app.DownloadManager;
 import android.content.Context;
-<<<<<<< Updated upstream
-
-=======
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
->>>>>>> Stashed changes
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -13,32 +12,22 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.Models.Carpark;
+import com.example.carparkwhere.Models.Review;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-<<<<<<< Updated upstream
-
-
-=======
 import com.google.gson.JsonObject;
->>>>>>> Stashed changes
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
-<<<<<<< Updated upstream
-
-//import okhttp3.Call;
-//import okhttp3.Callback;
-//import okhttp3.OkHttpClient;
-//import okhttp3.Request;
-=======
+import java.util.HashMap;
 import java.util.HashMap;
 import java.util.Map;
 
->>>>>>> Stashed changes
 
 public class ServerInterfaceManager {
     private static RequestQueue mQueue;
 
+    //return type: Carpark
     public static void getCarparkDetailsByID(Context context, String carparkID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/staticdetails/" + carparkID;
@@ -59,6 +48,8 @@ public class ServerInterfaceManager {
         mQueue.add(request);
     }
 
+
+    //return type: ArrayList<Carpark>
     public static void getAllCarparkCoordinates(Context context, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/brief";
@@ -99,5 +90,194 @@ public class ServerInterfaceManager {
         JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
         mQueue.add(request);
     }
+
+
+    //return type: ArrayList<Review>
+    //note that empty array is still considered as success
+    public static void getCarparkReviewsByCarparkID(Context context,String carparkID, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/reviews/bycarpark/" + carparkID;
+        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Gson gson = new Gson();
+                ArrayList<Review> reviews = gson.fromJson(response.toString(),new TypeToken<ArrayList<Review>>(){}.getType());
+                networkCallEventListener.onComplete(reviews,true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
+                networkCallEventListener.onComplete(new ArrayList<Review>(),false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
+
+    //Return type: ArrayList<Review>
+    public static void getCarparkReviewsByUserEmail(Context context,String userEmail, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/reviews/byuser/" + userEmail;
+        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Gson gson = new Gson();
+                ArrayList<Review> reviews = gson.fromJson(response.toString(),new TypeToken<ArrayList<Review>>(){}.getType());
+                networkCallEventListener.onComplete(reviews,true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
+                networkCallEventListener.onComplete(new ArrayList<Review>(),false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
+
+
+
+    public static void saveNewCarparkReview(Context context, Review review, final NetworkCallEventListener networkCallEventListener){
+
+        String URL = "http://3.14.70.180:3002/client/reviews/save/";
+        JSONObject jsonBody = new JSONObject();
+        mQueue = Volley.newRequestQueue(context);
+
+        try{
+            jsonBody.put("rating", review.getRating());
+            jsonBody.put("email", review.getUserEmail());
+            jsonBody.put("displayName", review.getUserDisplayName());
+            jsonBody.put("carparkId", review.getCarparkId());
+            jsonBody.put("comment", review.getComment());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                networkCallEventListener.onComplete("Success",true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                networkCallEventListener.onComplete("Failure",false,error.getMessage());
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                final Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
+        };
+        mQueue.add(request);
+    }
+
+
+    public static void updateCarparkReviewWithNewValues(Context context,String oldReviewID ,Review newReview, final NetworkCallEventListener networkCallEventListener){
+
+        String URL = "http://3.14.70.180:3002/client/reviews/" + oldReviewID;
+        JSONObject jsonBody = new JSONObject();
+        mQueue = Volley.newRequestQueue(context);
+
+        try{
+            jsonBody.put("newRating", newReview.getRating());
+            jsonBody.put("newDisplayName", newReview.getUserDisplayName());
+            jsonBody.put("newComment", newReview.getComment());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, URL, jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                networkCallEventListener.onComplete("Success",true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                networkCallEventListener.onComplete("Failure",false,error.getMessage());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                final Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
+        };
+        mQueue.add(request);
+    }
+
+    public static void deleteCarparkReviewByReviewID(Context context,String reviewID, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/reviews/" + reviewID;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                networkCallEventListener.onComplete("success",true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
+                networkCallEventListener.onComplete("failure",false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
+
+
+    //Return Type: Double
+    public static void getCarparkAverageRating(Context context,String carparkID, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/reviews/averagerating/" + carparkID;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    Double averageRating = response.getDouble("avg");
+                    networkCallEventListener.onComplete(averageRating,true,null);
+                }catch (Exception e){
+                    networkCallEventListener.onComplete(null,false,null);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                networkCallEventListener.onComplete("failure",false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
+
+    //Return Type: Integer
+    public static void getCarparkReviewsCount(Context context,String carparkID, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/reviews/totalrating/" + carparkID;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    Integer totalCount = response.getInt("sum");
+                    networkCallEventListener.onComplete(totalCount,true,null);
+                }catch (Exception e){
+                    networkCallEventListener.onComplete(null,false,null);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                networkCallEventListener.onComplete("failure",false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
+
+
+
 
 }
