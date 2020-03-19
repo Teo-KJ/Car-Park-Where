@@ -45,7 +45,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN;
     private Button viewCarparkReviews_BTN;
     public RatingBar averageRatingInStars;
-    public TextView averageRating;
+    public TextView averageRating,totalNumOfReviews;
 
     //testing
     private Button seeCarparkReviews_BTN;
@@ -73,6 +73,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         detailDirection_IMGBTN = findViewById(R.id.directionsButton);
         averageRating = findViewById(R.id.averageRating);
         averageRatingInStars = findViewById(R.id.averageRatingInStars);
+        totalNumOfReviews = findViewById(R.id.totalNumOfReviews);
         //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
@@ -142,6 +143,17 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }else{
                     averageRatingInStars.setRating(0);
                     averageRating.setText("0.0");
+                }
+            }
+        });
+
+        ServerInterfaceManager.getCarparkReviewsCount(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    totalNumOfReviews.setText(((Integer) networkCallResult) + " review" + (((Integer) networkCallResult) > 1 ? "s" : ""));
+                }else{
+                    totalNumOfReviews.setText("0 review");
                 }
             }
         });
