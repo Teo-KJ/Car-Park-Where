@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Car Park Where</string>
     <string name="title_activity_maps">Map</string>
+    <string-array name="daysInWeek">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>

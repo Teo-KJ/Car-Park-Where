@@ -1,7 +1,8 @@
 package com.example.carparkwhere.Utilities;
 import android.app.DownloadManager;
 import android.content.Context;
-
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,21 +16,12 @@ import com.example.carparkwhere.Models.Review;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashMap;
 import java.util.Map;
-
-
-
-
-
-
-
 
 
 public class ServerInterfaceManager {

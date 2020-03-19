@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="200dp"
-                    app:srcCompat="@android:drawable/star_big_on"
+                    android:src="@android:drawable/btn_star"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:background="#00ffffff" />
@@ -101,8 +101,9 @@
                     android:layout_height="55dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="10dp"
-                    android:src="@drawable/signpost"
+                    android:src="@drawable/diagonal"
                     android:scaleType="centerInside"
+
                     ></ImageButton>
 
                 <ImageButton
@@ -215,7 +216,6 @@
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="10dp"
                     ></TextView>
-
                 <ImageButton
                     android:id="@+id/tutorialButton"
                     android:layout_width="wrap_content"
@@ -226,10 +226,21 @@
                     android:background="#00ffffff"></ImageButton>
             </LinearLayout>
 
+            <Spinner
+                android:id="@+id/daysDropdownBox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:spinnerMode="dropdown"
+                android:background="@android:drawable/btn_dropdown"
+            ></Spinner>
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/visualisation"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_marginTop="10dp"
                 ></com.github.mikephil.charting.charts.BarChart>
 
         </LinearLayout>
