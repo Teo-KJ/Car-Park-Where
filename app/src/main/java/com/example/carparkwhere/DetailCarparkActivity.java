@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN;
     private Button viewCarparkReviews_BTN;
+    public RatingBar averageRatingInStars;
+    public TextView averageRating;
 
     //testing
     private Button seeCarparkReviews_BTN;
@@ -68,6 +71,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
         detailDirection_IMGBTN = findViewById(R.id.directionsButton);
+        averageRating = findViewById(R.id.averageRating);
+        averageRatingInStars = findViewById(R.id.averageRatingInStars);
         //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
@@ -123,6 +128,25 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 startActivity(mapIntent);
             }
         });
+
+
+        //with server interface manager get average ratings of carpark
+
+        ServerInterfaceManager.getCarparkAverageRating(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Double rating = (Double) networkCallResult;
+                    averageRatingInStars.setRating(rating.floatValue());
+                    averageRating.setText(String.valueOf((Math.round(rating*100.0))/100.0));
+                }else{
+                    averageRatingInStars.setRating(0);
+                    averageRating.setText("0.0");
+                }
+            }
+        });
+
+
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         final String str = intent.getStringExtra("CARPARK_ID"); // Get the carpark number
