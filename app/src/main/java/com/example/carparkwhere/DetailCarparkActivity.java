@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.icu.text.SymbolTable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.Carpark;
+import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.example.carparkwhere.Utilities.UserDataManager;
@@ -39,8 +41,13 @@ import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
-    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN;
+    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN;
     private Button viewCarparkReviews_BTN;
+
+    //testing
+    private Button seeCarparkReviews_BTN;
+
+
     private ProgressDialog nDialog;
     private BarChart barChart;
     private Spinner spinner;
@@ -59,6 +66,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
+        seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
+        detailDirection_IMGBTN = findViewById(R.id.directionsButton);
+        //ImageButton bookmarkToggle_IMGBTN;
         //Button ;
 
         //  Dialogue bar
@@ -86,10 +96,33 @@ public class DetailCarparkActivity extends AppCompatActivity {
         submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class));
+                Intent intent = new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
             }
         });
 
+        seeCarparkReviews_BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
+            }
+        });
+
+        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                double latitude = intent.getDoubleExtra("Lat", 0.0);
+                double longitude = intent.getDoubleExtra("Lng", 0.0);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         final String str = intent.getStringExtra("CARPARK_ID"); // Get the carpark number

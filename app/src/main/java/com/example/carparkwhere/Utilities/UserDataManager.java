@@ -2,6 +2,7 @@ package com.example.carparkwhere.Utilities;
 
 import androidx.annotation.NonNull;
 
+import com.example.carparkwhere.Models.RegisteredUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserDataManager {
+
+    public static RegisteredUser currentUser = null;
 
     public static String getUserEmail(){
         return FirebaseManager.getCurrentUser().getEmail();
