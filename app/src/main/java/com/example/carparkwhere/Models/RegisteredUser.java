@@ -8,8 +8,6 @@ public class RegisteredUser {
     private String email;
     private Boolean isValidated;
     private String password;
-    public String email;
-    public Boolean isValidated;
 
     public RegisteredUser(String name, String email, Boolean isValidated) {
         this.name = name;
