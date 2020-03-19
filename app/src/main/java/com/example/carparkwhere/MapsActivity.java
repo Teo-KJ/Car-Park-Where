@@ -176,8 +176,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 String carparkID = mMarkerMap.get(marker.getId());
+                LatLng latLng = marker.getPosition();
+                double longnitude =  latLng.longitude;
+                double latitude =  latLng.latitude;
                 Intent intent = new Intent(MapsActivity.this, DetailCarparkActivity.class);
                 intent.putExtra("CARPARK_ID", carparkID);
+                intent.putExtra("Lat", latitude);
+                intent.putExtra("Lng", longnitude);
                 startActivity(intent);
 
                 return false;
