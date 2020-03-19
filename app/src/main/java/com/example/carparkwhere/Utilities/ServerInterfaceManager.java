@@ -15,6 +15,7 @@ import com.example.carparkwhere.Models.Carpark;
 import com.example.carparkwhere.Models.Review;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -277,6 +278,74 @@ public class ServerInterfaceManager {
         mQueue.add(request);
     }
 
+    public static void saveUserCarparkBookmark(Context context, ArrayList<String> carparkIds, String userEmail, final NetworkCallEventListener networkCallEventListener){
+        String URL = "http://3.14.70.180:3002/client/bookmarks/save";
+        JSONObject jsonBody = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        mQueue = Volley.newRequestQueue(context);
+
+        try{
+            for (String carparkid:carparkIds){
+                jsonArray.put(carparkid);
+            }
+            jsonBody.put("carparkIds", jsonArray);
+            jsonBody.put("userEmail", userEmail);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                networkCallEventListener.onComplete("Success",true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                networkCallEventListener.onComplete("Failure",false,error.getMessage());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                final Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
+        };
+        mQueue.add(request);
+    }
+
+    //return type ArrayList<String>
+    public static void getUserBookmarkCarparkIds(Context context,String userEmail, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/bookmarks/" + userEmail;
+        System.out.println(url);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    JSONArray carparkIdJsonArray = (JSONArray) response.getJSONArray("carparkIds");
+                    ArrayList<String> carparkids = new ArrayList<>();
+
+                    for (int i=0;i<carparkIdJsonArray.length();i++){
+                        carparkids.add(carparkIdJsonArray.getString(i));
+                    }
+                    networkCallEventListener.onComplete(carparkids,true,null);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    networkCallEventListener.onComplete(null,false,null);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
+                networkCallEventListener.onComplete("failure",false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
 
 
 
