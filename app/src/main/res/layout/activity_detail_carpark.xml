@@ -79,7 +79,7 @@
                     android:rating="@integer/google_play_services_version"
                     ></RatingBar>
 
-                <Button
+                <TextView
                     android:id="@+id/totalNumOfReviews"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
@@ -88,7 +88,7 @@
                     android:background="@null"
                     android:text="0 review"
                     android:textAllCaps="false"
-                    android:textColor="@color/common_google_signin_btn_text_dark"></Button>
+                    android:textColor="@color/common_google_signin_btn_text_dark"></TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -119,14 +119,18 @@
 <<<<<<< Updated upstream
 =======
 
-                <Button
+                <ImageButton
                     android:id="@+id/SeeReviewButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="55dp"
                     android:layout_height="55dp"
-                    android:layout_weight="1"
                     android:layout_marginLeft="9dp"
                     android:layout_marginTop="10dp"
+<<<<<<< Updated upstream
                     android:text="See Reviews" />
+>>>>>>> Stashed changes
+=======
+                    android:scaleType="centerInside"
+                    android:src="@drawable/see_all_reviews"></ImageButton>
 >>>>>>> Stashed changes
             </LinearLayout>
 

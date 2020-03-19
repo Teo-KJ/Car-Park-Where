@@ -38,9 +38,17 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
+<<<<<<< Updated upstream
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN;
     private Button viewCarparkReviews_BTN;
+=======
+    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV, averageRating_TV, totalReviews_TV;
+    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
+                        seeCarparkReviews_BTN;
+    //testing
+
+>>>>>>> Stashed changes
     private ProgressDialog nDialog;
     private BarChart barChart;
     private Spinner spinner;
@@ -57,7 +65,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkNumber_TV = findViewById(R.id.carparkNumber);
         carparkAddress_TV = findViewById(R.id.carparkAddress);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
-        viewCarparkReviews_BTN = findViewById(R.id.totalNumOfReviews);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         //Button ;
 
@@ -90,6 +97,22 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+<<<<<<< Updated upstream
+=======
+        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                double latitude = intent.getDoubleExtra("Lat", 0.0);
+                double longitude = intent.getDoubleExtra("Lng", 0.0);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
+>>>>>>> Stashed changes
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         final String str = intent.getStringExtra("CARPARK_ID"); // Get the carpark number
@@ -114,6 +137,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //averageRating_TV.setText("");
 
         /*bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
@@ -222,18 +247,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
         return calendar.get(Calendar.DAY_OF_WEEK) % 7-2;
     }
 
+    // Help dialogue
     public void openDialog() {
         Dialog help = new Dialog(DetailCarparkActivity.this);
-        Button okButton = findViewById(R.id.okButton);
         help.requestWindowFeature(Window.FEATURE_NO_TITLE);
         help.setContentView(R.layout.detail_carpark_tutorial);
         help.show();
-        /*okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });*/
     }
 
 }

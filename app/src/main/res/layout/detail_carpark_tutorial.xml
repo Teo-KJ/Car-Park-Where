@@ -8,7 +8,6 @@
         android:id="@+id/image1"
         android:src="@android:drawable/btn_star"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         ></ImageView>
@@ -19,7 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/image1"
         android:textSize="15dp"
-        android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
         android:text="Bookmark your carpark\nPress the corner star button to bookmark your carpark."/>
 
@@ -41,7 +39,6 @@
         android:layout_below="@id/image2"
         android:layout_alignParentStart="true"
         android:textSize="15dp"
-        android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
         android:text="Get directions\nGet to the carpark from your current location"/>
 
@@ -63,13 +60,12 @@
         android:layout_below="@id/image3"
         android:layout_alignParentStart="true"
         android:textSize="15dp"
-        android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
         android:text="Review this carpark\nRate your experience parking at this carpark now!"/>
 
     <ImageView
         android:id="@+id/image4"
-        android:src="@drawable/graph"
+        android:src="@drawable/see_all_reviews"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
         android:layout_width="40dp"
@@ -85,18 +81,29 @@
         android:layout_below="@id/image4"
         android:layout_alignParentStart="true"
         android:textSize="15dp"
-        android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
-        android:text="Popular times\nKnow which time of the day this carpark is available. If there is no data means we do not have the record for it."/>
+        android:text="See all reviews\nCheck out the reviews made by fellow users!"/>
 
-    <Button
-        android:id="@+id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/guide4"
+    <ImageView
+        android:id="@+id/image5"
+        android:src="@drawable/graph"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
-        android:text="OK"
-        ></Button>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/guide4"
+        android:scaleType="centerInside"
+        ></ImageView>
+
+    <TextView
+        android:id="@+id/guide5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image5"
+        android:layout_alignParentStart="true"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"
+        android:text="Popular times\nKnow which time of the day this carpark is available. If there is no data means we do not have the record for it.
+                       \n\nGo back to continue"/>
 
 </RelativeLayout>
