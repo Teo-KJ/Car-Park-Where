@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.RegisteredUser;
 import com.example.carparkwhere.Models.Review;
+import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
 import com.example.carparkwhere.Utilities.CarparkReviewsDataManager;
 import com.example.carparkwhere.Utilities.FirebaseManager;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
@@ -57,7 +58,7 @@ public class SignInActivity extends AppCompatActivity {
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, AccountOptionsActivity.class));
+                startActivity(new Intent(SignInActivity.this, CarparkReviewsActivity.class));
             }
         });
 
