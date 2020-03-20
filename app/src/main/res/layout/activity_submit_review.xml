@@ -25,8 +25,8 @@
 
             <ImageButton
                 android:id="@+id/reviewBack_IMGBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="#00FF3535"
                 android:padding="8dp"
                 android:tint="#C0C0C0"
@@ -42,7 +42,7 @@
                 android:layout_marginRight="4dp"
                 android:layout_marginBottom="4dp"
                 android:fontFamily="sans-serif-light"
-                android:padding="4dp"
+                android:padding="8dp"
                 android:text="Carpark A"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#202020" />
@@ -61,6 +61,7 @@
             android:layout_margin="8dp"
             android:background="#51C0C0C0"
             android:ems="10"
+            android:padding="16dp"
             android:gravity="start|top"
             android:inputType="textMultiLine" />
 
