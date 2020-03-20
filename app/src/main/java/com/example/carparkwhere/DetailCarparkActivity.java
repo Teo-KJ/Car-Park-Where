@@ -142,6 +142,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+
+        // Getting the current Availability
+
+
         // User selects this button to bookmark a carpark
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override

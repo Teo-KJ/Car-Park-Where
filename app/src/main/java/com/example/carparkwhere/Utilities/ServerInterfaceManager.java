@@ -85,10 +85,28 @@ public class ServerInterfaceManager {
         mQueue.add(request);
     }
 
-    public static void getCarparkLiveAvailability(Context context, String carparkID, Response.Listener successListener, Response.ErrorListener errorListener){
+    public static void getCarparkLiveAvailability(Context context, String carparkID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/liveavailability/" + carparkID;
-        JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    Integer liveAvailability = response.getInt("liveAvailability");
+                    networkCallEventListener.onComplete(liveAvailability,true,null);
+                }catch(Exception e){
+                    e.printStackTrace();
+                    networkCallEventListener.onComplete(null,false,"Json decoding failed");
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
+                networkCallEventListener.onComplete(null,false,error.getMessage());
+            }
+        });
         mQueue.add(request);
     }
 
