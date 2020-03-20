@@ -73,7 +73,7 @@ public class SignInActivity extends AppCompatActivity {
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, ResetPasswordActivity.class));
+                startActivity(new Intent(SignInActivity.this, AccountOptionsActivity.class));
             }
         });
 
