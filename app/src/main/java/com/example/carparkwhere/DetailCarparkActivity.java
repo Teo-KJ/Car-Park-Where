@@ -1,7 +1,6 @@
 package com.example.carparkwhere;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,7 +16,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+<<<<<<< Updated upstream
 
+=======
+import android.widget.Toast;
+>>>>>>> Stashed changes
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.Carpark;
@@ -36,6 +39,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
+<<<<<<< Updated upstream
 
 public class DetailCarparkActivity extends AppCompatActivity {
 <<<<<<< Updated upstream
@@ -52,6 +56,20 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private ProgressDialog nDialog;
     private BarChart barChart;
     private Spinner spinner;
+=======
+import io.grpc.Server;
+
+public class DetailCarparkActivity extends AppCompatActivity {
+    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV;
+    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
+                        seeCarparkReviews_BTN;
+    public RatingBar averageRatingInStars;
+    private ProgressDialog nDialog;
+    private BarChart barChart;
+    private Spinner spinner;
+    private ArrayList<String> userBookmarkCarparks;
+    private boolean userBookmarkedThis = false;
+>>>>>>> Stashed changes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +83,19 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkNumber_TV = findViewById(R.id.carparkNumber);
         carparkAddress_TV = findViewById(R.id.carparkAddress);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
+<<<<<<< Updated upstream
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
         //Button ;
+=======
+        seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
+        detailDirection_IMGBTN = findViewById(R.id.directionsButton);
+        averageRating_TV = findViewById(R.id.averageRating);
+        averageRatingInStars = findViewById(R.id.averageRatingInStars);
+        totalReviews_TV = findViewById(R.id.totalNumOfReviews);
+        liveAvailaibility_TV = findViewById(R.id.liveAvailability);
+>>>>>>> Stashed changes
 
-        //  Dialogue bar
+        //  Dialogue bar to load the carpark details
         presentProgressDialog("Loading Carpark...");
 
         //  Back button to return to previous activity
@@ -80,6 +107,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        // "Question mark" button to serve as tutorial for the user
         tutorial_IMGBTN = findViewById(R.id.tutorialButton);
         tutorial_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +121,102 @@ public class DetailCarparkActivity extends AppCompatActivity {
         submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< Updated upstream
                 startActivity(new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class));
+=======
+                Intent intent = new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
+            }
+        });
+
+        // See all the carpark reviews made on the carpark
+        seeCarparkReviews_BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
+            }
+        });
+
+        // Provide the directions to the carpark based on the user's current location.
+        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                double latitude = intent.getDoubleExtra("Lat", 0.0);
+                double longitude = intent.getDoubleExtra("Lng", 0.0);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
+        });
+
+        // Getting the user bookmarks, so that the user bookmarked carpark is saved under his/her profile
+        ServerInterfaceManager.getUserBookmarkCarparkIds(this, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    userBookmarkCarparks = (ArrayList<String>) networkCallResult;
+                    if (userBookmarkCarparks != null){
+                        if (userBookmarkCarparks.contains(getIntent().getStringExtra("CARPARK_ID"))){
+                            userBookmarkedThis = true;
+                            bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                        }
+                    }
+                }
+            }
+        });
+
+        // User selects this button to bookmark a carpark
+        bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (userBookmarkCarparks == null){
+                    userBookmarkCarparks = new ArrayList<>();
+                }
+
+                if (userBookmarkedThis){
+                    userBookmarkCarparks.remove(getIntent().getStringExtra("CARPARK_ID"));
+                }else{
+                    userBookmarkCarparks.add(getIntent().getStringExtra("CARPARK_ID"));
+                }
+
+
+                ServerInterfaceManager.saveUserCarparkBookmark(DetailCarparkActivity.this, userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
+                    @Override
+                    public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                        if (isSuccessful){
+                            userBookmarkedThis = !userBookmarkedThis;
+                            if (userBookmarkedThis){
+                                bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                            }else{
+                                bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star));
+                            }
+                            Toast.makeText(DetailCarparkActivity.this,userBookmarkedThis ? "Added bookmark!" : "Removed bookmark!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(DetailCarparkActivity.this,"Error occured, try again!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        // with server interface manager get average ratings of the carpark and display it
+        ServerInterfaceManager.getCarparkAverageRating(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Double rating = (Double) networkCallResult;
+                    averageRatingInStars.setRating(rating.floatValue());
+                    averageRating_TV.setText(String.valueOf((Math.round(rating*100.0))/100.0));
+                }else{
+                    averageRatingInStars.setRating(0);
+                    averageRating_TV.setText("0.0");
+                }
+>>>>>>> Stashed changes
             }
         });
 
@@ -138,27 +261,49 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        //averageRating_TV.setText("");
+        spinner = findViewById(R.id.daysDropdownBox);
+        //final String[] daysOfTheWeek = res.getStringArray(R.array.daysInWeek);
+        for (int i=0; i<7; i++)
+            if (i==identifyDay()) day=i;
 
-        /*bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
-        bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.daysInWeek, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setSelection(day);
+
+        // Selected day on dropdown box
+        final int finalDay = day;
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                UserDataManager.addNewFavouriteCarpark(str);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                int difference = i - finalDay;
             }
-        });*/
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                int difference = 0;
+            }
+        });
+
 
         // Bar chart for the visualisation
         barChart = findViewById(R.id.visualisation);
         //final ArrayList<BarEntry> barEntries = new ArrayList<>();
         //final ArrayList<String> allTimings = new ArrayList<String>();
-
         barChart.setNoDataText("Loading the data...");
         barChart.getAxisLeft().setDrawLabels(false);
         barChart.getAxisRight().setDrawLabels(false);
 
         // With ServerInterfaceManager, get the predicted number of carpark lots.
+<<<<<<< Updated upstream
         ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
+=======
+        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, 2, new Response.Listener() {
+>>>>>>> Stashed changes
             @Override
             public void onResponse(Object response){
                 JSONArray jsonArray = (JSONArray) response;
@@ -192,46 +337,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        spinner = findViewById(R.id.daysDropdownBox);
-        //final String[] daysOfTheWeek = res.getStringArray(R.array.daysInWeek);
-        for (int i=0; i<7; i++)
-            if (i==identifyDay()) day=i;
-
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.daysInWeek, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        spinner.setSelection(day);
-
-        // Selected day on dropdown box
-        /*spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i==today){
-                    BarDataSet dataSet = new BarDataSet(barEntries, "Time");
-                    BarData data = new BarData(allTimings, dataSet);
-                    barChart.setData(data);
-                    barChart.setTouchEnabled(true);
-                    barChart.invalidate();
-                    barChart.refreshDrawableState();
-                }
-                else{
-                    barChart.setData(null);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
-
     }
 
-    //   Progress bar to load carpark detail
+    //   Function for Progress bar to load carpark detail
     private void presentProgressDialog(String message){
         nDialog = new ProgressDialog(DetailCarparkActivity.this);
         nDialog.setMessage("Loading..");
@@ -241,13 +349,13 @@ public class DetailCarparkActivity extends AppCompatActivity {
         nDialog.show();
     }
 
-    // Identify the day of the week
+    // Function to identify the day of the week
     private int identifyDay (){
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         return calendar.get(Calendar.DAY_OF_WEEK) % 7-2;
     }
 
-    // Help dialogue
+    // Function to open up the help dialogue
     public void openDialog() {
         Dialog help = new Dialog(DetailCarparkActivity.this);
         help.requestWindowFeature(Window.FEATURE_NO_TITLE);
