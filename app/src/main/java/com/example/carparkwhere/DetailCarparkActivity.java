@@ -56,8 +56,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private ArrayList<String> userBookmarkCarparks;
     private boolean userBookmarkedThis = false;
 
-    private ArrayList<String> userBookmarkCarparks;
-    private boolean userBookmarkedThis = false;
+
 
 
     @Override
