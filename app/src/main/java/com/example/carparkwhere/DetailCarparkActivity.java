@@ -50,8 +50,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private Spinner spinner;
     private ArrayList<String> userBookmarkCarparks;
     private boolean userBookmarkedThis = false;
-    private ArrayList<String> userBookmarkCarparks;
-    private boolean userBookmarkedThis = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,14 +262,16 @@ public class DetailCarparkActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int difference = i - finalDay;
+                getAvailabilityPredictionData(difference, str);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 int difference = 0;
+                getAvailabilityPredictionData(difference, str);
             }
         });
-
+        //difference
 
         // Bar chart for the visualisation
         barChart = findViewById(R.id.visualisation);
@@ -280,9 +280,35 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.setNoDataText("Loading the data...");
         barChart.getAxisLeft().setDrawLabels(false);
         barChart.getAxisRight().setDrawLabels(false);
+    }
 
-        // With ServerInterfaceManager, get the predicted number of carpark lots.
-        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, 2, new Response.Listener() {
+    //   Function for Progress bar to load carpark detail
+    private void presentProgressDialog(String message){
+        nDialog = new ProgressDialog(DetailCarparkActivity.this);
+        nDialog.setMessage("Loading..");
+        nDialog.setTitle(message);
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+        nDialog.show();
+    }
+
+    // Function to identify the day of the week
+    private int identifyDay (){
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        return calendar.get(Calendar.DAY_OF_WEEK) % 7-2;
+    }
+
+    // Function to open up the help dialogue
+    public void openDialog() {
+        Dialog help = new Dialog(DetailCarparkActivity.this);
+        help.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        help.setContentView(R.layout.detail_carpark_tutorial);
+        help.show();
+    }
+
+    // With ServerInterfaceManager, get the predicted number of carpark lots.
+    private void getAvailabilityPredictionData(Integer increment, String str){
+        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, increment, new Response.Listener() {
             @Override
             public void onResponse(Object response){
                 JSONArray jsonArray = (JSONArray) response;
@@ -315,31 +341,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-
-    }
-
-    //   Function for Progress bar to load carpark detail
-    private void presentProgressDialog(String message){
-        nDialog = new ProgressDialog(DetailCarparkActivity.this);
-        nDialog.setMessage("Loading..");
-        nDialog.setTitle(message);
-        nDialog.setIndeterminate(false);
-        nDialog.setCancelable(true);
-        nDialog.show();
-    }
-
-    // Function to identify the day of the week
-    private int identifyDay (){
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        return calendar.get(Calendar.DAY_OF_WEEK) % 7-2;
-    }
-
-    // Function to open up the help dialogue
-    public void openDialog() {
-        Dialog help = new Dialog(DetailCarparkActivity.this);
-        help.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        help.setContentView(R.layout.detail_carpark_tutorial);
-        help.show();
     }
 
 }
