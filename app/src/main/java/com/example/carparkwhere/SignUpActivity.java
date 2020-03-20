@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.carparkwhere.Utilities.FirebaseManager;
+import com.example.carparkwhere.Utilities.UserDataManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -63,6 +64,8 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             nDialog.dismiss();
                             if (task.isSuccessful()){
+                                UserDataManager.updateDisplayName(displayNameEditText.getText().toString());
+                                System.out.println("New Display Name" + FirebaseManager.getCurrentUser().getDisplayName());
                                 Toast.makeText(SignUpActivity.this,"Sign up successful! Please check your email to verify ur account", Toast.LENGTH_SHORT).show();
                                 finish();
                             }else{

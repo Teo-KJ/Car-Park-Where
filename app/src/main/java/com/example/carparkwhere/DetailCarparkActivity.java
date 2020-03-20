@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.icu.text.SymbolTable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -14,16 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-<<<<<<< Updated upstream
-
-=======
 import android.widget.Toast;
->>>>>>> Stashed changes
+import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.Carpark;
+import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.example.carparkwhere.Utilities.UserDataManager;
@@ -32,31 +32,12 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.firebase.firestore.auth.User;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
-<<<<<<< Updated upstream
-
-public class DetailCarparkActivity extends AppCompatActivity {
-<<<<<<< Updated upstream
-    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV;
-    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN;
-    private Button viewCarparkReviews_BTN;
-=======
-    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV, averageRating_TV, totalReviews_TV;
-    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
-                        seeCarparkReviews_BTN;
-    //testing
-
->>>>>>> Stashed changes
-    private ProgressDialog nDialog;
-    private BarChart barChart;
-    private Spinner spinner;
-=======
 import io.grpc.Server;
 
 public class DetailCarparkActivity extends AppCompatActivity {
@@ -69,7 +50,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private Spinner spinner;
     private ArrayList<String> userBookmarkCarparks;
     private boolean userBookmarkedThis = false;
->>>>>>> Stashed changes
+    private ArrayList<String> userBookmarkCarparks;
+    private boolean userBookmarkedThis = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +65,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkNumber_TV = findViewById(R.id.carparkNumber);
         carparkAddress_TV = findViewById(R.id.carparkAddress);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
-<<<<<<< Updated upstream
-        bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
-        //Button ;
-=======
         seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
         detailDirection_IMGBTN = findViewById(R.id.directionsButton);
         averageRating_TV = findViewById(R.id.averageRating);
         averageRatingInStars = findViewById(R.id.averageRatingInStars);
         totalReviews_TV = findViewById(R.id.totalNumOfReviews);
         liveAvailaibility_TV = findViewById(R.id.liveAvailability);
->>>>>>> Stashed changes
 
         //  Dialogue bar to load the carpark details
         presentProgressDialog("Loading Carpark...");
@@ -121,9 +98,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         submitReview_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-<<<<<<< Updated upstream
-                startActivity(new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class));
-=======
                 Intent intent = new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class);
                 intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
                 startActivity(intent);
@@ -204,7 +178,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        // with server interface manager get average ratings of the carpark and display it
+        // With server interface manager get average ratings of the carpark and display it
         ServerInterfaceManager.getCarparkAverageRating(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -216,12 +190,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
                     averageRatingInStars.setRating(0);
                     averageRating_TV.setText("0.0");
                 }
->>>>>>> Stashed changes
             }
         });
 
-<<<<<<< Updated upstream
-=======
+        // Get the directions to the carpark from the current location
         detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,8 +206,19 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 startActivity(mapIntent);
             }
         });
+      
+        // Get the number of reviews for the specific carpark
+        ServerInterfaceManager.getCarparkReviewsCount(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    totalReviews_TV.setText(((Integer) networkCallResult) + " review" + (((Integer) networkCallResult) > 1 ? "s" : ""));
+                }else{
+                    totalReviews_TV.setText("0 review");
+                }
+            }
+        });
 
->>>>>>> Stashed changes
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         final String str = intent.getStringExtra("CARPARK_ID"); // Get the carpark number
@@ -299,11 +282,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.getAxisRight().setDrawLabels(false);
 
         // With ServerInterfaceManager, get the predicted number of carpark lots.
-<<<<<<< Updated upstream
-        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, new Response.Listener() {
-=======
         ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, 2, new Response.Listener() {
->>>>>>> Stashed changes
             @Override
             public void onResponse(Object response){
                 JSONArray jsonArray = (JSONArray) response;
