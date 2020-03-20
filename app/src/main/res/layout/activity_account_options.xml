@@ -21,7 +21,7 @@
         <ImageButton
             android:id="@+id/backAccountOptionsActivity_IMGBTN"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/back"

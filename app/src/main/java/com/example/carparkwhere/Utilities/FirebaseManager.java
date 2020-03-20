@@ -53,6 +53,11 @@ public class FirebaseManager {
         return currentUser;
     }
 
+    public static void signOut(){
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+    }
+
 
     public static void createNewUser(Context context, final String email, String password, final String displayName, OnCompleteListener<AuthResult> handler){
         mAuth.createUserWithEmailAndPassword(email, password)

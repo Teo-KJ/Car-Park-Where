@@ -13,14 +13,12 @@ import java.util.Map;
 
 public class UserDataManager {
 
-    public static RegisteredUser currentUser = null;
-
     public static String getUserEmail(){
-        return FirebaseManager.getCurrentUser().getEmail();
+        return isLoggedIn() ? FirebaseManager.getCurrentUser().getEmail() : "None";
     }
 
     public static String getDisplayName(){
-        return FirebaseManager.getCurrentUser().getDisplayName();
+        return isLoggedIn() ? FirebaseManager.getCurrentUser().getDisplayName() : "None";
     }
 
     public static boolean isLoggedIn(){
