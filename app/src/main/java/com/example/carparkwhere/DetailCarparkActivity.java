@@ -52,6 +52,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private BarChart barChart;
     private Spinner spinner;
 
+    private ArrayList<String> userBookmarkCarparks;
+    private boolean userBookmarkedThis = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
