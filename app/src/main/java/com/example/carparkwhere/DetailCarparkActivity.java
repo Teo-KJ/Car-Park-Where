@@ -19,6 +19,8 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.carparkwhere.Models.Carpark;
@@ -38,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import io.grpc.Server;
+
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV, averageRating_TV, totalReviews_TV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
@@ -47,6 +51,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private ProgressDialog nDialog;
     private BarChart barChart;
     private Spinner spinner;
+
+    private ArrayList<String> userBookmarkCarparks;
+    private boolean userBookmarkedThis = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +130,58 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        //getting the user bookmarks
+        ServerInterfaceManager.getUserBookmarkCarparkIds(this, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    userBookmarkCarparks = (ArrayList<String>) networkCallResult;
+                    if (userBookmarkCarparks != null){
+                        if (userBookmarkCarparks.contains(getIntent().getStringExtra("CARPARK_ID"))){
+                            userBookmarkedThis = true;
+                            bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
+        bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (userBookmarkCarparks == null){
+                    userBookmarkCarparks = new ArrayList<>();
+                }
+
+                if (userBookmarkedThis){
+                    userBookmarkCarparks.remove(getIntent().getStringExtra("CARPARK_ID"));
+                }else{
+                    userBookmarkCarparks.add(getIntent().getStringExtra("CARPARK_ID"));
+                }
+
+
+                ServerInterfaceManager.saveUserCarparkBookmark(DetailCarparkActivity.this, userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
+                    @Override
+                    public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                        if (isSuccessful){
+                            userBookmarkedThis = !userBookmarkedThis;
+                            if (userBookmarkedThis){
+                                bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                            }else{
+                                bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star));
+                            }
+                            Toast.makeText(DetailCarparkActivity.this,userBookmarkedThis ? "Added bookmark!" : "Removed bookmark!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(DetailCarparkActivity.this,"Error occured, try again!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
 
         //with server interface manager get average ratings of carpark
 

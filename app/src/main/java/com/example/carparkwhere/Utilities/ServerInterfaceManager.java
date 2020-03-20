@@ -325,6 +325,7 @@ public class ServerInterfaceManager {
             public void onResponse(JSONObject response) {
                 try{
                     JSONArray carparkIdJsonArray = (JSONArray) response.getJSONArray("carparkIds");
+
                     ArrayList<String> carparkids = new ArrayList<>();
 
                     for (int i=0;i<carparkIdJsonArray.length();i++){
@@ -340,7 +341,6 @@ public class ServerInterfaceManager {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println(error.getMessage());
                 networkCallEventListener.onComplete("failure",false,error.getMessage());
             }
         });
