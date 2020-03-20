@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -55,6 +56,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Bitmap greenParking;
     Bitmap yellowParking;
     Bitmap redParking;
+    Bitmap blackParking;
+    Bitmap greyParking;
     PlacesClient placesClient;
     String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
     Map<String, String> mMarkerMap = new HashMap<>();
@@ -119,12 +122,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         BitmapDrawable g = (BitmapDrawable)getResources().getDrawable(R.drawable.green_car);
         BitmapDrawable y = (BitmapDrawable)getResources().getDrawable(R.drawable.yellow_car);
         BitmapDrawable r = (BitmapDrawable)getResources().getDrawable(R.drawable.red_car);
+        BitmapDrawable b = (BitmapDrawable)getResources().getDrawable(R.drawable.black_car);
+        BitmapDrawable gr = (BitmapDrawable)getResources().getDrawable(R.drawable.grey_car);
         Bitmap b1 = g.getBitmap();
         Bitmap b2 = y.getBitmap();
         Bitmap b3 = r.getBitmap();
+        Bitmap b4 = b.getBitmap();
+        Bitmap b5 = gr.getBitmap();
         greenParking = Bitmap.createScaledBitmap(b1, width, height, false);
         yellowParking = Bitmap.createScaledBitmap(b2, width, height, false);
         redParking = Bitmap.createScaledBitmap(b3, width, height, false);
+        blackParking = Bitmap.createScaledBitmap(b4, width, height, false);
+        greyParking = Bitmap.createScaledBitmap(b5, width, height, false);
 
     }
 
@@ -158,39 +167,56 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeBitmap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        ServerInterfaceManager.getAllCarparkCoordinates(this, new NetworkCallEventListener() {
+        ServerInterfaceManager.getAllCarparkEntireFullDetails(this, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful) {
                     carparks = (ArrayList<Carpark>) networkCallResult;
                     int fullness;
+                    int availability=100;
+                    int capacity;
                     int total=300;
+
                     for (int counter = 0; counter < carparks.size(); counter++) {
-                        fullness = carparks.get(counter).liveAvailability / total;
-                        if(fullness>=0.7)
+                        if(carparks.get(counter).carDetails.liveAvailability!=null && carparks.get(counter).carDetails.capacity!=null )
                         {
-                            Marker marker =googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
-                                    .icon(BitmapDescriptorFactory.fromBitmap(greenParking)));
-                            mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
-                        }
-                        else if(fullness>=0.4 || fullness<0.7)
-                        {
-                            Marker marker =googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
-                                    .icon(BitmapDescriptorFactory.fromBitmap(yellowParking)));
-                            mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                            fullness = carparks.get(counter).carDetails.liveAvailability/ carparks.get(counter).carDetails.capacity;
+                            if(fullness>=0.7 && fullness<=1)
+                            {
+                                Marker marker =googleMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(greenParking)));
+                                mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                            }
+                            else if(fullness>=0.4 && fullness<0.7)
+                            {
+                                Marker marker =googleMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(yellowParking)));
+                                mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                            }
+                            else if(fullness>0&& fullness<0.4)
+                            {
+                                Marker marker =googleMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(redParking)));
+                                mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                            }
+                            else
+                            {
+                                Marker marker =googleMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(greyParking)));
+                                mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                            }
                         }
                         else
                         {
                             Marker marker =googleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
-                                    .icon(BitmapDescriptorFactory.fromBitmap(redParking)));
+                                    .icon(BitmapDescriptorFactory.fromBitmap(blackParking)));
                             mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
-                        }
-
-
-                    }
+                        }}
                 }else{
                     //deal with the error message, maybe toast or something
                 }
