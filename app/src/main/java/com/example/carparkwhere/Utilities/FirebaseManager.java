@@ -80,6 +80,13 @@ public class FirebaseManager {
         });
     }
 
+    public static void sendResetPasswordEmail(){
+        if (FirebaseManager.getCurrentUser().getEmail() != null){
+            mAuth.sendPasswordResetEmail(FirebaseManager.getCurrentUser().getEmail());
+        }
+
+    }
+
     public static void signInWithEmail(Context context, String email, String password, OnCompleteListener<AuthResult> handler){
         mAuth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener((Activity) context,handler);

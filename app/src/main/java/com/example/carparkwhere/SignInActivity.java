@@ -27,6 +27,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public class SignInActivity extends AppCompatActivity {
     Button signInButton;
     Button createAccountButton;
     Button guessModeButton;
+    Button resetPasswordButton;
     LottieAnimationView animationView;
     ProgressDialog nDialog;
 
@@ -56,16 +60,15 @@ public class SignInActivity extends AppCompatActivity {
         setupCreateAccountButton();
         setupAnimationView();
         setupGuessModeButton();
-
+        setupResetPasswordButton();
 
         Button testBTN1 = findViewById(R.id.testBTN1);
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, CarparkReviewsActivity.class));
+                startActivity(new Intent(SignInActivity.this, ResetPasswordActivity.class));
             }
         });
-
 
 
     }
@@ -96,6 +99,7 @@ public class SignInActivity extends AppCompatActivity {
         signInButton = findViewById(R.id.signInButton);
         createAccountButton = findViewById(R.id.createAccountButton);
         guessModeButton = findViewById(R.id.guessModeButton);
+        resetPasswordButton = findViewById(R.id.resetPasswordButton);
     }
 
     private void setupAnimationView(){
@@ -158,6 +162,15 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
                 nDialog.dismiss();
+            }
+        });
+    }
+
+    private void setupResetPasswordButton(){
+        resetPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignInActivity.this, ResetPasswordActivity.class));
             }
         });
     }
