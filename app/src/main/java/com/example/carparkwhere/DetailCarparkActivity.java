@@ -50,8 +50,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private Spinner spinner;
     private ArrayList<String> userBookmarkCarparks;
     private boolean userBookmarkedThis = false;
-    private ArrayList<String> userBookmarkCarparks;
-    private boolean userBookmarkedThis = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +141,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        // Getting the current Availability
+
 
         // User selects this button to bookmark a carpark
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {

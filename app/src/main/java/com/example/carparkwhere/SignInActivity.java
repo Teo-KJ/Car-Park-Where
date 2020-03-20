@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.carparkwhere.Models.Carpark;
 import com.example.carparkwhere.Models.RegisteredUser;
 import com.example.carparkwhere.Models.Review;
 import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
@@ -69,6 +70,18 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(new Intent(SignInActivity.this, ResetPasswordActivity.class));
             }
         });
+
+        ServerInterfaceManager.getCarparkLiveAvailability(this, "A81", new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Integer liveAvailability = (Integer) networkCallResult;
+                    System.out.println("Live: " + liveAvailability);
+                }
+            }
+        });
+
+
 
 
     }
