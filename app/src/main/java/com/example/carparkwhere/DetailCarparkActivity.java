@@ -145,6 +145,17 @@ public class DetailCarparkActivity extends AppCompatActivity {
 
         // Getting the current Availability
 
+        ServerInterfaceManager.getCarparkLiveAvailability(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Integer liveAvailability = (Integer) networkCallResult;
+                    System.out.println(liveAvailability);
+                    liveAvailaibility_TV.setText(liveAvailability + "");
+                }
+            }
+        });
+
 
         // User selects this button to bookmark a carpark
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
