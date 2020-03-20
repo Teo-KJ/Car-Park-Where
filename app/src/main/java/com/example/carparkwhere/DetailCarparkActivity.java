@@ -1,13 +1,18 @@
 package com.example.carparkwhere;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SymbolTable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebView;
@@ -56,6 +61,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_carpark);
+
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("");
 
         Resources res = getResources();
         int day = 0;
@@ -161,6 +171,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                presentProgressDialog("Changing Bookmark...");
+
                 if (userBookmarkCarparks == null){
                     userBookmarkCarparks = new ArrayList<>();
                 }
@@ -175,6 +188,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 ServerInterfaceManager.saveUserCarparkBookmark(DetailCarparkActivity.this, userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
                     @Override
                     public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                        nDialog.dismiss();
                         if (isSuccessful){
                             userBookmarkedThis = !userBookmarkedThis;
                             if (userBookmarkedThis){
@@ -358,4 +372,44 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ServerInterfaceManager.getCarparkReviewsCount(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    totalReviews_TV.setText(((Integer) networkCallResult) + " review" + (((Integer) networkCallResult) > 1 ? "s" : ""));
+                }else{
+                    totalReviews_TV.setText("0 review");
+                }
+            }
+        });
+
+        ServerInterfaceManager.getCarparkAverageRating(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Double rating = (Double) networkCallResult;
+                    averageRatingInStars.setRating(rating.floatValue());
+                    averageRating_TV.setText(String.valueOf((Math.round(rating*100.0))/100.0));
+                }else{
+                    averageRatingInStars.setRating(0);
+                    averageRating_TV.setText("0.0");
+                }
+            }
+        });
+    }
 }

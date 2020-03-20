@@ -1,9 +1,13 @@
 package com.example.carparkwhere;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -40,6 +44,12 @@ public class SubmitReviewActivity extends AppCompatActivity {
         reviewComment_ET = findViewById(R.id.reviewComment_ET);
         reviewLocation_TV = findViewById(R.id.reviewLocation_TV);
         carparkId = getIntent().getStringExtra("carparkid");
+
+
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("Submit Review for Carpark " + carparkId);
 
         ServerInterfaceManager.getCarparkDetailsByID(this, carparkId, new NetworkCallEventListener() {
             @Override
@@ -169,6 +179,17 @@ public class SubmitReviewActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

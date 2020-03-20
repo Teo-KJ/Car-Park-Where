@@ -1,15 +1,21 @@
 package com.example.carparkwhere.Utilities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.example.carparkwhere.CarparkReviewsAdapter;
+import com.example.carparkwhere.DetailCarparkActivity;
 import com.example.carparkwhere.Models.Review;
 import com.example.carparkwhere.R;
 
@@ -19,6 +25,7 @@ public class CarparkReviewsActivity extends AppCompatActivity {
     private static final int DATASET_COUNT = 5;
     protected RecyclerView mRecyclerView;
     protected CarparkReviewsAdapter mAdapter;
+    private ProgressDialog nDialog;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<Review> reviews = new ArrayList<Review>();
     String carparkId;
@@ -28,7 +35,13 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carpark_reviews);
 
+        presentProgressDialog("Loading Reviews");
+
         carparkId = getIntent().getStringExtra("carparkid");
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("Reviews for Carpark " + carparkId);
 
         ImageButton backCarparkReviewsActivity_IMGBTN = findViewById(R.id.backCarparkReviewsActivity_IMGBTN);
         backCarparkReviewsActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +72,7 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         ServerInterfaceManager.getCarparkReviewsByCarparkID(this, carparkId, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                nDialog.dismiss();
                 if (isSuccessful){
                     reviews = (ArrayList<Review>) networkCallResult;
                     final CarparkReviewsAdapter adapter = new CarparkReviewsAdapter(reviews);
@@ -72,5 +86,24 @@ public class CarparkReviewsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void presentProgressDialog(String message){
+        nDialog = new ProgressDialog(this);
+        nDialog.setMessage("Loading..");
+        nDialog.setTitle(message);
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+        nDialog.show();
+    }
 
 }
