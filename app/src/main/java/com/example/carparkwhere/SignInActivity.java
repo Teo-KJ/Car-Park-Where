@@ -71,15 +71,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        ServerInterfaceManager.getCarparkLiveAvailability(this, "A81", new NetworkCallEventListener() {
-            @Override
-            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-                if (isSuccessful){
-                    Integer liveAvailability = (Integer) networkCallResult;
-                    System.out.println("Live: " + liveAvailability);
-                }
-            }
-        });
 
 
 
