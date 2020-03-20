@@ -16,7 +16,6 @@ import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -53,7 +52,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayList<Carpark> carparks = new ArrayList<Carpark>();
     int height = 40;
     int width = 40;
-    Bitmap smallParking;
+    Bitmap greenParking;
+    Bitmap yellowParking;
+    Bitmap redParking;
     PlacesClient placesClient;
     String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
     Map<String, String> mMarkerMap = new HashMap<>();
@@ -115,9 +116,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private void makeBitmap() {
-        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.parking);
-        Bitmap b = bitmapdraw.getBitmap();
-        smallParking = Bitmap.createScaledBitmap(b, width, height, false);
+        BitmapDrawable g = (BitmapDrawable)getResources().getDrawable(R.drawable.green_car);
+        BitmapDrawable y = (BitmapDrawable)getResources().getDrawable(R.drawable.yellow_car);
+        BitmapDrawable r = (BitmapDrawable)getResources().getDrawable(R.drawable.red_car);
+        Bitmap b1 = g.getBitmap();
+        Bitmap b2 = y.getBitmap();
+        Bitmap b3 = r.getBitmap();
+        greenParking = Bitmap.createScaledBitmap(b1, width, height, false);
+        yellowParking = Bitmap.createScaledBitmap(b2, width, height, false);
+        redParking = Bitmap.createScaledBitmap(b3, width, height, false);
+
     }
 
     private void fetchLocation() {
@@ -155,11 +163,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful) {
                     carparks = (ArrayList<Carpark>) networkCallResult;
+                    int fullness;
+                    int total=300;
                     for (int counter = 0; counter < carparks.size(); counter++) {
-                        Marker marker =googleMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
-                                .icon(BitmapDescriptorFactory.fromBitmap(smallParking)));
-                        mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                        fullness = carparks.get(counter).liveAvailability / total;
+                        if(fullness>=0.7)
+                        {
+                            Marker marker =googleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(greenParking)));
+                            mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                        }
+                        else if(fullness>=0.4 || fullness<0.7)
+                        {
+                            Marker marker =googleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(yellowParking)));
+                            mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                        }
+                        else
+                        {
+                            Marker marker =googleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(carparks.get(counter).latitude, carparks.get(counter).longitude))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(redParking)));
+                            mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                        }
+
+
                     }
                 }else{
                     //deal with the error message, maybe toast or something
