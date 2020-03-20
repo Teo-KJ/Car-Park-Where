@@ -1,12 +1,14 @@
 package com.example.carparkwhere;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.example.carparkwhere.Models.Carpark;
@@ -177,5 +179,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
         }
+    }
+
+    // Function to open up the dialogue reminding user to switch on location
+    public void openDialog() {
+        Dialog help = new Dialog(MapsActivity.this);
+        help.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        help.setContentView(R.layout.switch_on_location);
+        help.show();
     }
 }
