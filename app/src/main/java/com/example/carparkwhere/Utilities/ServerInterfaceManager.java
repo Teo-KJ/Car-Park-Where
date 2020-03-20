@@ -71,6 +71,27 @@ public class ServerInterfaceManager {
         mQueue.add(request);
     }
 
+    //Return type: ArrayList<Carpark>
+    public static void getAllCarparkEntireFullDetails(Context context, final NetworkCallEventListener networkCallEventListener){
+        mQueue = Volley.newRequestQueue(context);
+        String url = "http://3.14.70.180:3002/client/carparkdetails/";
+        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Gson gson = new Gson();
+                ArrayList<Carpark> carparks = gson.fromJson(response.toString(),new TypeToken<ArrayList<Carpark>>(){}.getType());
+                networkCallEventListener.onComplete(carparks,true,null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println(error.getMessage());
+                networkCallEventListener.onComplete(new ArrayList<Carpark>(),false,error.getMessage());
+            }
+        });
+        mQueue.add(request);
+    }
+
     public static void getCarparkWholeDayPredictedAvailability(Context context, String carparkID, Integer increment, Response.Listener successListener, Response.ErrorListener errorListener){
         mQueue = Volley.newRequestQueue(context);
         String url = "http://3.14.70.180:3002/client/carparkdetails/prediction/" + carparkID + "/" + String.valueOf(increment);
