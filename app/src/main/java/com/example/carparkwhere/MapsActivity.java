@@ -183,7 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful) {
                     carparks = (ArrayList<Carpark>) networkCallResult;
-                    int fullness;
+                    double fullness;
                     int availability=100;
                     int capacity;
                     int total=300;
@@ -195,7 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         distance= currentLocation.distanceTo(mark);
                         if(carparks.get(counter).carDetails.liveAvailability!=null && carparks.get(counter).carDetails.capacity!=null )
                         {
-                            fullness = carparks.get(counter).carDetails.liveAvailability/ carparks.get(counter).carDetails.capacity;
+                            fullness = carparks.get(counter).carDetails.liveAvailability.doubleValue() / carparks.get(counter).carDetails.capacity.doubleValue();
                             if(fullness>=0.7 && fullness<=1)
                             {
                                 Marker marker =googleMap.addMarker(new MarkerOptions()
