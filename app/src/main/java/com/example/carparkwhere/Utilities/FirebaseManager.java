@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -52,6 +53,11 @@ public class FirebaseManager {
         return currentUser;
     }
 
+    public static void signOut(){
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+    }
+
 
     public static void createNewUser(Context context, final String email, String password, final String displayName, OnCompleteListener<AuthResult> handler){
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -79,6 +85,13 @@ public class FirebaseManager {
         });
     }
 
+    public static void sendResetPasswordEmail(){
+        if (FirebaseManager.getCurrentUser().getEmail() != null){
+            mAuth.sendPasswordResetEmail(FirebaseManager.getCurrentUser().getEmail());
+        }
+
+    }
+
     public static void signInWithEmail(Context context, String email, String password, OnCompleteListener<AuthResult> handler){
         mAuth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener((Activity) context,handler);
@@ -86,7 +99,7 @@ public class FirebaseManager {
 
 
 
-    public static void insertToFirestore(String collectionName, String documentName, Map<String,Object> data, OnCompleteListener<Void> handler){
+    public static void insertToFirestore(String collectionName, String documentName, Object data, OnCompleteListener<Void> handler){
         db.collection(collectionName).document(documentName)
                 .set(data)
                 .addOnCompleteListener(handler);
@@ -95,6 +108,12 @@ public class FirebaseManager {
     public static void updateFieldFirestore(String collectionName, String documentName, Map<String,Object> data){
         db.collection(collectionName).document(documentName).set(data,SetOptions.merge());
     }
+
+    public static void updateFieldFirestoreArray(String collectionName, String documentName, Map<String,Object> data){
+        db.collection(collectionName).document(documentName).update(data);
+    }
+
+
 
     public static void retrieveFromFirestore(String collectionName, String documentName, OnCompleteListener<DocumentSnapshot> handler) {
         DocumentReference docRef = db.collection(collectionName).document(documentName);

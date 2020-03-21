@@ -4,44 +4,55 @@ import java.util.List;
 
 public class Review {
 
-    private RegisteredUser user;
-    public int userRating;
-    private Carpark carpark;
-    private String userComments;
+    private String userEmail;
+    private Double userRating;
+    private String carparkId;
+    private String userDisplayName;
+    private String userComment;
+    private String _id;
 
-    public Review(RegisteredUser user, int userRating, Carpark carpark, String userComments){
-        this.user = user;
+    public Review(String userEmail, Double userRating, String carparkId, String userComment, String userDisplayName){
+        this.userEmail = userEmail;
         this.userRating = userRating;
-        this.carpark = carpark;
-        this.userComments = userComments;
+        this.carparkId = carparkId;
+        this.userComment = userComment;
+        this.userDisplayName = userDisplayName;
+        this._id = null;
 
     }
 
-    public void loadReviewData(){
-
+    //getters setters
+    public String getCarparkId(){
+        return this.carparkId;
+    }
+    public String getUserEmail(){
+        return this.userEmail;
     }
 
-    public void saveReviewData(){
-
+    public String getUserDisplayName() {
+        return userDisplayName;
+    }
+    public Double getRating(){
+        return this.userRating;
+    }
+    public String getComment(){
+        return this.userComment;
     }
 
-    public List<Review> getCarparkReviews(){
-        List<Review> reviewList = null;
-
-        return reviewList;
+    public String get_id() {
+        return _id;
     }
-
-    public void setCarPark(String carparkID){
-        //this.carpark = ...?
-
-    }
-
-    public void setUser(String userEmail){
-
-    }
-
-    public void setRating(int rating){
-        this.userRating = rating;
-    }
+    //    public void setCarPark(Carpark carpark){
+//        this.carpark = carpark;
+//    }
+//    public void setUser(RegisteredUser user){
+//        this.user = user;
+//    }
+//    public void setRating(int rating){
+//        this.userRating = rating;
+//    }
+//    public void setComments(String comments){
+//        this.userComments = comments;
+//    }
 
 }

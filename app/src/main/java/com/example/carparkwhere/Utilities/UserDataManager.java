@@ -2,6 +2,7 @@ package com.example.carparkwhere.Utilities;
 
 import androidx.annotation.NonNull;
 
+import com.example.carparkwhere.Models.RegisteredUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -13,11 +14,11 @@ import java.util.Map;
 public class UserDataManager {
 
     public static String getUserEmail(){
-        return FirebaseManager.getCurrentUser().getEmail();
+        return isLoggedIn() ? FirebaseManager.getCurrentUser().getEmail() : "None";
     }
 
     public static String getDisplayName(){
-        return FirebaseManager.getCurrentUser().getDisplayName();
+        return isLoggedIn() ? FirebaseManager.getCurrentUser().getDisplayName() : "None";
     }
 
     public static boolean isLoggedIn(){

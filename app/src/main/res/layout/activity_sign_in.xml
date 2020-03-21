@@ -68,7 +68,7 @@
     <Button
         android:id="@+id/signInButton"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:textColor="@color/quantum_white_100"
         android:textSize="16dp"
         android:text="Sign in"
@@ -82,7 +82,7 @@
     <Button
         android:id="@+id/createAccountButton"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:textColor="@color/quantum_white_100"
         android:textSize="16dp"
         android:background="@drawable/createaccount_button_background"
@@ -96,7 +96,7 @@
     <Button
         android:id="@+id/guessModeButton"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Guest Mode"
         android:textColor="@color/quantum_white_100"
         android:textSize="16dp"
@@ -108,8 +108,6 @@
         android:layout_marginRight="50dp" />
 
     <Button
-<<<<<<< Updated upstream
-=======
         android:id="@+id/resetPasswordButton"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -123,7 +121,6 @@
         android:layout_marginRight="50dp" />
 
     <Button
->>>>>>> Stashed changes
         android:id="@+id/testBTN1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
