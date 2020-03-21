@@ -2,47 +2,26 @@ package com.example.carparkwhere;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.health.SystemHealthManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.example.carparkwhere.Models.Carpark;
-import com.example.carparkwhere.Models.RegisteredUser;
 import com.example.carparkwhere.Models.Review;
-import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
-import com.example.carparkwhere.Utilities.CarparkReviewsDataManager;
 import com.example.carparkwhere.Utilities.FirebaseManager;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
-import com.example.carparkwhere.Utilities.UserDataManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.JsonObject;
 
-import org.json.JSONObject;
-
-import java.io.Console;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-
-import io.grpc.Server;
 
 public class SignInActivity extends AppCompatActivity {
     EditText emailAddressEditText;
@@ -59,6 +38,13 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        ServerInterfaceManager.getServerPrepared(this, new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+
+            }
+        });
 
         getSupportActionBar().hide();
 
@@ -77,6 +63,9 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(new Intent(SignInActivity.this, AccountOptionsActivity.class));
             }
         });
+
+
+
 
 
 
