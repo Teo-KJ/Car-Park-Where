@@ -46,7 +46,7 @@ import java.util.TimeZone;
 import io.grpc.Server;
 
 public class DetailCarparkActivity extends AppCompatActivity {
-    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV;
+    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
                         seeCarparkReviews_BTN;
     public RatingBar averageRatingInStars;
@@ -55,9 +55,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private Spinner spinner;
     private ArrayList<String> userBookmarkCarparks;
     private boolean userBookmarkedThis = false;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +67,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("");
 
-        Resources res = getResources();
         int day = 0;
         parkingRates_TV = findViewById(R.id.carparkPrices);
         carparkNumber_TV = findViewById(R.id.carparkNumber);
@@ -82,6 +78,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         averageRatingInStars = findViewById(R.id.averageRatingInStars);
         totalReviews_TV = findViewById(R.id.totalNumOfReviews);
         liveAvailaibility_TV = findViewById(R.id.liveAvailability);
+        timeAdvice_TV = findViewById(R.id.suggestedTimeToPark);
 
         //  Dialogue bar to load the carpark details
         presentProgressDialog("Loading Carpark...");
@@ -155,9 +152,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-
         // Getting the current Availability
-
         ServerInterfaceManager.getCarparkLiveAvailability(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -169,14 +164,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-
         // User selects this button to bookmark a carpark
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 presentProgressDialog("Changing Bookmark...");
-
+              
                 if (userBookmarkCarparks == null){
                     userBookmarkCarparks = new ArrayList<>();
                 }
@@ -186,7 +179,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }else{
                     userBookmarkCarparks.add(getIntent().getStringExtra("CARPARK_ID"));
                 }
-
 
                 ServerInterfaceManager.saveUserCarparkBookmark(DetailCarparkActivity.this, userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
                     @Override
@@ -275,7 +267,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         spinner = findViewById(R.id.daysDropdownBox);
-        //final String[] daysOfTheWeek = res.getStringArray(R.array.daysInWeek);
         for (int i=0; i<7; i++)
             if (i==identifyDay()) day=i;
 
@@ -303,15 +294,15 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 getAvailabilityPredictionData(difference, str);
             }
         });
-        //difference
 
         // Bar chart for the visualisation
         barChart = findViewById(R.id.visualisation);
-        //final ArrayList<BarEntry> barEntries = new ArrayList<>();
-        //final ArrayList<String> allTimings = new ArrayList<String>();
         barChart.setNoDataText("Loading the data...");
         barChart.getAxisLeft().setDrawLabels(false);
         barChart.getAxisRight().setDrawLabels(false);
+
+
+
     }
 
     //   Function for Progress bar to load carpark detail
@@ -339,8 +330,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
     }
 
     // With ServerInterfaceManager, get the predicted number of carpark lots.
-    private void getAvailabilityPredictionData(Integer increment, String str){
-        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, increment, new Response.Listener() {
+    private void getAvailabilityPredictionData(Integer increment, String carparkNumber){
+        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, carparkNumber, increment, new Response.Listener() {
             @Override
             public void onResponse(Object response){
                 JSONArray jsonArray = (JSONArray) response;
@@ -374,7 +365,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
     }
-
+}
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -382,7 +373,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
