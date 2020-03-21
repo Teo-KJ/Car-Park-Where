@@ -60,7 +60,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
 import io.grpc.Server;
 
 public class DetailCarparkActivity extends AppCompatActivity {
-    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, testTV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV;
+    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
                         seeCarparkReviews_BTN;
     public RatingBar averageRatingInStars;
@@ -73,15 +73,26 @@ public class DetailCarparkActivity extends AppCompatActivity {
 >>>>>>> Stashed changes
 =======
 
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 
+=======
+>>>>>>> Stashed changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_carpark);
 
+<<<<<<< Updated upstream
         Resources res = getResources();
+=======
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("");
+
+>>>>>>> Stashed changes
         int day = 0;
         parkingRates_TV = findViewById(R.id.carparkPrices);
         carparkNumber_TV = findViewById(R.id.carparkNumber);
@@ -97,6 +108,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
         averageRatingInStars = findViewById(R.id.averageRatingInStars);
         totalReviews_TV = findViewById(R.id.totalNumOfReviews);
         liveAvailaibility_TV = findViewById(R.id.liveAvailability);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+        timeAdvice_TV = findViewById(R.id.suggestedTimeToPark);
 >>>>>>> Stashed changes
 
         //  Dialogue bar to load the carpark details
@@ -174,10 +189,31 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+<<<<<<< Updated upstream
+=======
+
+        // Getting the current Availability
+        ServerInterfaceManager.getCarparkLiveAvailability(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Integer liveAvailability = (Integer) networkCallResult;
+                    System.out.println(liveAvailability);
+                    liveAvailaibility_TV.setText(liveAvailability + "");
+                }
+            }
+        });
+
+>>>>>>> Stashed changes
         // User selects this button to bookmark a carpark
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< Updated upstream
+=======
+                presentProgressDialog("Changing Bookmark...");
+
+>>>>>>> Stashed changes
                 if (userBookmarkCarparks == null){
                     userBookmarkCarparks = new ArrayList<>();
                 }
@@ -187,7 +223,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }else{
                     userBookmarkCarparks.add(getIntent().getStringExtra("CARPARK_ID"));
                 }
-
 
                 ServerInterfaceManager.saveUserCarparkBookmark(DetailCarparkActivity.this, userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
                     @Override
@@ -266,7 +301,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         spinner = findViewById(R.id.daysDropdownBox);
-        //final String[] daysOfTheWeek = res.getStringArray(R.array.daysInWeek);
         for (int i=0; i<7; i++)
             if (i==identifyDay()) day=i;
 
@@ -294,15 +328,15 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 getAvailabilityPredictionData(difference, str);
             }
         });
-        //difference
 
         // Bar chart for the visualisation
         barChart = findViewById(R.id.visualisation);
-        //final ArrayList<BarEntry> barEntries = new ArrayList<>();
-        //final ArrayList<String> allTimings = new ArrayList<String>();
         barChart.setNoDataText("Loading the data...");
         barChart.getAxisLeft().setDrawLabels(false);
         barChart.getAxisRight().setDrawLabels(false);
+
+
+
     }
 
     //   Function for Progress bar to load carpark detail
@@ -338,8 +372,13 @@ public class DetailCarparkActivity extends AppCompatActivity {
 >>>>>>> Stashed changes
 =======
     // With ServerInterfaceManager, get the predicted number of carpark lots.
+<<<<<<< Updated upstream
     private void getAvailabilityPredictionData(Integer increment, String str){
         ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, str, increment, new Response.Listener() {
+>>>>>>> Stashed changes
+=======
+    private void getAvailabilityPredictionData(Integer increment, String carparkNumber){
+        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, carparkNumber, increment, new Response.Listener() {
 >>>>>>> Stashed changes
             @Override
             public void onResponse(Object response){
@@ -375,4 +414,47 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
     }
 
+<<<<<<< Updated upstream
 }
+=======
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ServerInterfaceManager.getCarparkReviewsCount(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    totalReviews_TV.setText(((Integer) networkCallResult) + " review" + (((Integer) networkCallResult) > 1 ? "s" : ""));
+                }else{
+                    totalReviews_TV.setText("0 review");
+                }
+            }
+        });
+
+        ServerInterfaceManager.getCarparkAverageRating(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Double rating = (Double) networkCallResult;
+                    averageRatingInStars.setRating(rating.floatValue());
+                    averageRating_TV.setText(String.valueOf((Math.round(rating*100.0))/100.0));
+                }else{
+                    averageRatingInStars.setRating(0);
+                    averageRating_TV.setText("0.0");
+                }
+            }
+        });
+    }
+}
+>>>>>>> Stashed changes

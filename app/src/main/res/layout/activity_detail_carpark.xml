@@ -161,10 +161,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
+<<<<<<< Updated upstream
                     android:layout_marginTop="10dp"
                     android:text="Current availabiltiy: "
                     android:textSize="20dp"
                     ></TextView>
+=======
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Current availability:"
+                    android:textSize="20dp"></TextView>
+>>>>>>> Stashed changes
 
                 <TextView
                     android:id="@+id/liveAvailability"
@@ -277,6 +284,33 @@
                 android:layout_height="200dp"
                 android:layout_marginTop="10dp"
                 ></com.github.mikephil.charting.charts.BarChart>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Suggested time to park"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:id="@+id/suggestedTimeToPark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="103dp"
+                android:textSize="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
 
         </LinearLayout>
 
