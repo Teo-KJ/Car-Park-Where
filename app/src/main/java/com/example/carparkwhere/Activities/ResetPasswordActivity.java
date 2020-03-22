@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,9 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.carparkwhere.Utilities.FirebaseManager;
+import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
+import com.example.carparkwhere.R;
 
 public class ResetPasswordActivity extends AppCompatActivity {
+
+    private UserDataDao userDataDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +26,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
         final EditText emailAddress_ET;
         Button resetPasswordSubmit_BTN, resetPasswordCancel_BTN;
         final TextView checkPassword_TV = findViewById(R.id.checkPassword);
+
+        userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
         emailAddress_ET = findViewById(R.id.emailAddress);
 //        resetPasswordOld_ET = findViewById(R.id.oldPassword);
@@ -43,8 +50,12 @@ public class ResetPasswordActivity extends AppCompatActivity {
 //                }
                 else {
                     checkPassword_TV.setText("");
-                    FirebaseManager.sendResetPasswordEmail();
-                    Toast.makeText(ResetPasswordActivity.this,"Sent to your email. Please Check" , Toast.LENGTH_SHORT).show();
+                    try{
+                        userDataDaoHelper.sendResetPasswordEmail();
+                        Toast.makeText(ResetPasswordActivity.this,"Sent to your email. Please Check" , Toast.LENGTH_SHORT).show();
+                    }catch (UserNotLoggedInException e){
+
+                    }
 
                 }
             }

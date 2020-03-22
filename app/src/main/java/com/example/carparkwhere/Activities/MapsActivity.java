@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Activities;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -18,6 +18,7 @@ import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;

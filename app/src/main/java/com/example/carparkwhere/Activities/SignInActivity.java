@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,13 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
+import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
-import com.example.carparkwhere.Utilities.FirebaseManager;
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -33,6 +35,7 @@ public class SignInActivity extends AppCompatActivity {
     ProgressDialog nDialog;
 
     private CarparkDao carparkDaoHelper;
+    private UserDataDao userDataDaoHelper;
 
 
     @Override
@@ -40,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         carparkDaoHelper = new CarparkDaoImpl(this);
+        userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
         carparkDaoHelper.getServerPrepared(new NetworkCallEventListener() {
             @Override
@@ -76,14 +80,16 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void checkIfUserIsAlreadySignIn(){
-        FirebaseUser user = FirebaseManager.getCurrentUser();
-        boolean isEmailVerified = user.isEmailVerified();
-
-        if ((user != null) && (isEmailVerified)){
-            Toast.makeText(SignInActivity.this,"Successfully Signed In As " + user.getEmail(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(SignInActivity.this, MapsActivity.class);
-            SignInActivity.this.startActivity ( intent );
+        try{
+            if ((userDataDaoHelper.isLoggedIn()) && (userDataDaoHelper.isEmailVerified())){
+                Toast.makeText(SignInActivity.this,"Successfully Signed In As " + userDataDaoHelper.getUserEmail(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignInActivity.this, MapsActivity.class);
+                SignInActivity.this.startActivity ( intent );
+            }
+        }catch (UserNotLoggedInException e){
+            //user is not logged in
         }
+
     }
 
     private void presentProgressDialog(String message){
@@ -118,12 +124,12 @@ public class SignInActivity extends AppCompatActivity {
                     Toast.makeText(SignInActivity.this,"Email and Password cannot be blank. Try again", Toast.LENGTH_SHORT).show();
                 }else{
                     presentProgressDialog("Verifying Credentials...");
-                    FirebaseManager.signInWithEmail(SignInActivity.this, emailAddressEditText.getText().toString(), passwordEditText.getText().toString(), new OnCompleteListener<AuthResult>() {
+                    userDataDaoHelper.signInWithEmail(SignInActivity.this, emailAddressEditText.getText().toString(), passwordEditText.getText().toString(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             nDialog.dismiss();
                             if (task.isSuccessful()){
-                                if (FirebaseManager.getCurrentUser().isEmailVerified()){
+                                if (userDataDaoHelper.isEmailVerified()){
 
                                     Toast.makeText(SignInActivity.this,"Successfully signed in!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(SignInActivity.this, MapsActivity.class);

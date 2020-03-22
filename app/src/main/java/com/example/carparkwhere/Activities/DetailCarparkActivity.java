@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,12 +23,15 @@ import com.android.volley.Response;
 import com.example.carparkwhere.DAO.DAOImplementations.BookmarkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
+import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.BookmarkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
 import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-import com.example.carparkwhere.Utilities.UserDataManager;
+import com.example.carparkwhere.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -54,6 +57,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private CarparkDao carparkDaoHelper;
     private ReviewDao reviewDaoHelper;
     private BookmarkDao bookmarkDaoHelper;
+    private UserDataDao userDataDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkDaoHelper = new CarparkDaoImpl(this);
         reviewDaoHelper = new ReviewDaoImpl(this);
         bookmarkDaoHelper = new BookmarkDaoImpl(this);
+        userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
@@ -140,20 +145,25 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         // Getting the user bookmarks, so that the user bookmarked carpark is saved under his/her profile
-        bookmarkDaoHelper.getUserBookmarkCarparkIds(UserDataManager.getUserEmail(), new NetworkCallEventListener() {
-            @Override
-            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-                if (isSuccessful){
-                    userBookmarkCarparks = (ArrayList<String>) networkCallResult;
-                    if (userBookmarkCarparks != null){
-                        if (userBookmarkCarparks.contains(getIntent().getStringExtra("CARPARK_ID"))){
-                            userBookmarkedThis = true;
-                            bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+        try{
+            bookmarkDaoHelper.getUserBookmarkCarparkIds(userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {
+                @Override
+                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                    if (isSuccessful){
+                        userBookmarkCarparks = (ArrayList<String>) networkCallResult;
+                        if (userBookmarkCarparks != null){
+                            if (userBookmarkCarparks.contains(getIntent().getStringExtra("CARPARK_ID"))){
+                                userBookmarkedThis = true;
+                                bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }catch (UserNotLoggedInException e){
+
+        }
+
 
         // Getting the current Availability
         carparkDaoHelper.getCarparkLiveAvailability(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
@@ -183,23 +193,28 @@ public class DetailCarparkActivity extends AppCompatActivity {
                     userBookmarkCarparks.add(getIntent().getStringExtra("CARPARK_ID"));
                 }
 
-                bookmarkDaoHelper.saveUserCarparkBookmark(userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
-                    @Override
-                    public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-                        nDialog.dismiss();
-                        if (isSuccessful){
-                            userBookmarkedThis = !userBookmarkedThis;
-                            if (userBookmarkedThis){
-                                bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                try{
+                    bookmarkDaoHelper.saveUserCarparkBookmark(userBookmarkCarparks, userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {
+                        @Override
+                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                            nDialog.dismiss();
+                            if (isSuccessful){
+                                userBookmarkedThis = !userBookmarkedThis;
+                                if (userBookmarkedThis){
+                                    bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star_big_on));
+                                }else{
+                                    bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star));
+                                }
+                                Toast.makeText(DetailCarparkActivity.this,userBookmarkedThis ? "Added bookmark!" : "Removed bookmark!", Toast.LENGTH_SHORT).show();
                             }else{
-                                bookmarkToggle_IMGBTN.setImageDrawable(getResources().getDrawable(android.R.drawable.btn_star));
+                                Toast.makeText(DetailCarparkActivity.this,"Error occured, try again!", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(DetailCarparkActivity.this,userBookmarkedThis ? "Added bookmark!" : "Removed bookmark!", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(DetailCarparkActivity.this,"Error occured, try again!", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    });
+                }catch (UserNotLoggedInException e){
+
+                }
+
             }
         });
 

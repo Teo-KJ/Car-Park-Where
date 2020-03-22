@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.carparkwhere.Utilities.FirebaseManager;
-import com.example.carparkwhere.Utilities.UserDataManager;
+import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
+import com.example.carparkwhere.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,11 +25,14 @@ public class SignUpActivity extends AppCompatActivity {
     EditText displayNameEditText;
     Button signUpButton;
     ProgressDialog nDialog;
+    private UserDataDao userDataDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
         emailAddressSignUpEditText = findViewById(R.id.signUpActivity_emailAddressEditText);
         passwordSignUpEditText = findViewById(R.id.signUpActivity_passwordEditText);
@@ -59,13 +64,16 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this,"Please fill up all the fields", Toast.LENGTH_SHORT).show();
                 }else{
                     presentProgressDialog("Creating Account...");
-                    FirebaseManager.createNewUser(SignUpActivity.this, emailAddressSignUpEditText.getText().toString(), passwordSignUpEditText.getText().toString(), displayNameEditText.getText().toString(), new OnCompleteListener<AuthResult>() {
+                    userDataDaoHelper.createNewUser(SignUpActivity.this, emailAddressSignUpEditText.getText().toString(), passwordSignUpEditText.getText().toString(), displayNameEditText.getText().toString(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             nDialog.dismiss();
                             if (task.isSuccessful()){
-                                UserDataManager.updateDisplayName(displayNameEditText.getText().toString());
-                                System.out.println("New Display Name" + FirebaseManager.getCurrentUser().getDisplayName());
+                                try{
+                                    userDataDaoHelper.updateDisplayName(displayNameEditText.getText().toString());
+                                }catch (UserNotLoggedInException e){
+
+                                }
                                 Toast.makeText(SignUpActivity.this,"Sign up successful! Please check your email to verify ur account", Toast.LENGTH_SHORT).show();
                                 finish();
                             }else{

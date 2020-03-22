@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.FilesIdkWhereToPutYet;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 

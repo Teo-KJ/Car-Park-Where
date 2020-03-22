@@ -1,4 +1,4 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +17,15 @@ import android.widget.Toast;
 
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
+import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
 import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.ModelObjects.Review;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-import com.example.carparkwhere.Utilities.UserDataManager;
+import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
 
     private ReviewDao reviewDaoHelper;
     private CarparkDao carparkDaoHelper;
+    private UserDataDao userDataDaoHelper;
 
 
     @Override
@@ -49,6 +53,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
 
         reviewDaoHelper = new ReviewDaoImpl(this);
         carparkDaoHelper = new CarparkDaoImpl(this);
+        userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
         reviewRating_RBAR = findViewById(R.id.reviewRating_RBAR);
         reviewComment_ET = findViewById(R.id.reviewComment_ET);
@@ -97,25 +102,30 @@ public class SubmitReviewActivity extends AppCompatActivity {
         });
         reviewDelete_BTN.setVisibility(View.INVISIBLE);
 
-
-        reviewDaoHelper.getCarparkReviewsByUserEmail(UserDataManager.getUserEmail(), new NetworkCallEventListener() {
-            @Override
-            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-                if (isSuccessful){
-                    ArrayList<Review> existingReviews = (ArrayList<Review>) networkCallResult;
-                    for (Review review:existingReviews){
-                        if (review.getCarparkId().equals(carparkId)){
-                            oldReview = existingReviews.get(0);
-                            isEditingReview = true;
-                            reviewRating_RBAR.setRating(oldReview.getRating().floatValue());
-                            reviewComment_ET.setText(oldReview.getComment());
-                            reviewDelete_BTN.setVisibility(View.VISIBLE);
-                            reviewSave_BTN.setText("UPDATE");
+        try{
+            reviewDaoHelper.getCarparkReviewsByUserEmail(userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {
+                @Override
+                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                    if (isSuccessful){
+                        ArrayList<Review> existingReviews = (ArrayList<Review>) networkCallResult;
+                        for (Review review:existingReviews){
+                            if (review.getCarparkId().equals(carparkId)){
+                                oldReview = existingReviews.get(0);
+                                isEditingReview = true;
+                                reviewRating_RBAR.setRating(oldReview.getRating().floatValue());
+                                reviewComment_ET.setText(oldReview.getComment());
+                                reviewDelete_BTN.setVisibility(View.VISIBLE);
+                                reviewSave_BTN.setText("UPDATE");
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }catch (UserNotLoggedInException e){
+
+        }
+
+
 
 
 
@@ -155,36 +165,46 @@ public class SubmitReviewActivity extends AppCompatActivity {
         presentProgressDialog("Submitting");
 
         if (isEditingReview){
-            Review newReview = new Review(UserDataManager.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),UserDataManager.getDisplayName());
-            reviewDaoHelper.updateCarparkReviewWithNewValues(oldReview.get_id(), newReview, new NetworkCallEventListener() {
-                @Override
-                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-                    nDialog.dismiss();
-                    if (isSuccessful){
-                        Toast.makeText(SubmitReviewActivity.this,"Successfully Updated!", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }else{
-                        Toast.makeText(SubmitReviewActivity.this,"Please check your network and try again!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-
-        else{
-            if (reviewRating_RBAR.getRating() != 0 && !reviewComment_ET.getText().toString().isEmpty()){
-                Review newReview = new Review(UserDataManager.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),UserDataManager.getDisplayName());
-                reviewDaoHelper.saveNewCarparkReview(newReview, new NetworkCallEventListener() {
+            try{
+                Review newReview = new Review(userDataDaoHelper.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),userDataDaoHelper.getDisplayName());
+                reviewDaoHelper.updateCarparkReviewWithNewValues(oldReview.get_id(), newReview, new NetworkCallEventListener() {
                     @Override
                     public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                         nDialog.dismiss();
                         if (isSuccessful){
-                            Toast.makeText(SubmitReviewActivity.this,"Successfully Submitted!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SubmitReviewActivity.this,"Successfully Updated!", Toast.LENGTH_SHORT).show();
                             finish();
                         }else{
                             Toast.makeText(SubmitReviewActivity.this,"Please check your network and try again!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+            }catch (UserNotLoggedInException e){
+
+            }
+
+        }
+
+        else{
+            if (reviewRating_RBAR.getRating() != 0 && !reviewComment_ET.getText().toString().isEmpty()){
+                try{
+                    Review newReview = new Review(userDataDaoHelper.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),userDataDaoHelper.getDisplayName());
+                    reviewDaoHelper.saveNewCarparkReview(newReview, new NetworkCallEventListener() {
+                        @Override
+                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                            nDialog.dismiss();
+                            if (isSuccessful){
+                                Toast.makeText(SubmitReviewActivity.this,"Successfully Submitted!", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }else{
+                                Toast.makeText(SubmitReviewActivity.this,"Please check your network and try again!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }catch (UserNotLoggedInException e){
+
+                }
+
             }
         }
 
