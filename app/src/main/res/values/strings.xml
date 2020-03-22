@@ -10,4 +10,5 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+    <string name="serverUrl">http://3.14.70.180:3002</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.carparkwhere.Utilities;
+package com.example.carparkwhere;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,26 +14,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.example.carparkwhere.CarparkReviewsAdapter;
-import com.example.carparkwhere.DetailCarparkActivity;
-import com.example.carparkwhere.Models.Review;
-import com.example.carparkwhere.R;
+import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.ModelObjects.Review;
 
 import java.util.ArrayList;
 
 public class CarparkReviewsActivity extends AppCompatActivity {
+
     private static final int DATASET_COUNT = 5;
     protected RecyclerView mRecyclerView;
     protected CarparkReviewsAdapter mAdapter;
     private ProgressDialog nDialog;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<Review> reviews = new ArrayList<Review>();
-    String carparkId;
+    private String carparkId;
+    private ReviewDao reviewDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carpark_reviews);
+
+        reviewDaoHelper = new ReviewDaoImpl(this);
 
         presentProgressDialog("Loading Reviews");
 
@@ -69,7 +73,9 @@ public class CarparkReviewsActivity extends AppCompatActivity {
 //        reviews_RV.setAdapter(adapter);
 //        Log.d(Integer.toString(adapter.getItemCount()),"ADAPTER COUNT");
 
-        ServerInterfaceManager.getCarparkReviewsByCarparkID(this, carparkId, new NetworkCallEventListener() {
+
+
+        reviewDaoHelper.getCarparkReviewsByCarparkID(carparkId, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 nDialog.dismiss();

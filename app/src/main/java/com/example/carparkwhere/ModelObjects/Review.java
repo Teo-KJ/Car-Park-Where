@@ -1,6 +1,4 @@
-package com.example.carparkwhere.Models;
-
-import java.util.List;
+package com.example.carparkwhere.ModelObjects;
 
 public class Review {
 

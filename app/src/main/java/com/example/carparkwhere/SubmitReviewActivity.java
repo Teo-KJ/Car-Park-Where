@@ -15,11 +15,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.carparkwhere.Models.Carpark;
-import com.example.carparkwhere.Models.Review;
-import com.example.carparkwhere.Utilities.CarparkReviewsDataManager;
-import com.example.carparkwhere.Utilities.NetworkCallEventListener;
-import com.example.carparkwhere.Utilities.ServerInterfaceManager;
+import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
+import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
+import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.UserDataManager;
 
 import java.util.ArrayList;
@@ -32,14 +34,22 @@ public class SubmitReviewActivity extends AppCompatActivity {
     ImageButton reviewBack_IMGBTN;
     Button reviewDelete_BTN;
     ProgressDialog nDialog;
-    public String carparkId = "";
-    public Boolean isEditingReview = false;
-    public Review oldReview = null;
+    private String carparkId = "";
+    private Boolean isEditingReview = false;
+    private Review oldReview = null;
+
+    private ReviewDao reviewDaoHelper;
+    private CarparkDao carparkDaoHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_review);
+
+        reviewDaoHelper = new ReviewDaoImpl(this);
+        carparkDaoHelper = new CarparkDaoImpl(this);
+
         reviewRating_RBAR = findViewById(R.id.reviewRating_RBAR);
         reviewComment_ET = findViewById(R.id.reviewComment_ET);
         reviewLocation_TV = findViewById(R.id.reviewLocation_TV);
@@ -51,7 +61,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("Submit Review for Carpark " + carparkId);
 
-        ServerInterfaceManager.getCarparkDetailsByID(this, carparkId, new NetworkCallEventListener() {
+        carparkDaoHelper.getCarparkDetailsByID(carparkId, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
@@ -88,7 +98,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
         reviewDelete_BTN.setVisibility(View.INVISIBLE);
 
 
-        ServerInterfaceManager.getCarparkReviewsByUserEmail(this, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
+        reviewDaoHelper.getCarparkReviewsByUserEmail(UserDataManager.getUserEmail(), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
@@ -125,7 +135,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
 
         presentProgressDialog("Deleting Review");
 
-        ServerInterfaceManager.deleteCarparkReviewByReviewID(this, oldReview.get_id(), new NetworkCallEventListener() {
+        reviewDaoHelper.deleteCarparkReviewByReviewID(oldReview.get_id(), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 nDialog.dismiss();
@@ -146,7 +156,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
 
         if (isEditingReview){
             Review newReview = new Review(UserDataManager.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),UserDataManager.getDisplayName());
-            ServerInterfaceManager.updateCarparkReviewWithNewValues(this, oldReview.get_id(), newReview, new NetworkCallEventListener() {
+            reviewDaoHelper.updateCarparkReviewWithNewValues(oldReview.get_id(), newReview, new NetworkCallEventListener() {
                 @Override
                 public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                     nDialog.dismiss();
@@ -163,7 +173,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
         else{
             if (reviewRating_RBAR.getRating() != 0 && !reviewComment_ET.getText().toString().isEmpty()){
                 Review newReview = new Review(UserDataManager.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),UserDataManager.getDisplayName());
-                ServerInterfaceManager.saveNewCarparkReview(this, newReview, new NetworkCallEventListener() {
+                reviewDaoHelper.saveNewCarparkReview(newReview, new NetworkCallEventListener() {
                     @Override
                     public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                         nDialog.dismiss();

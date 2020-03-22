@@ -1,4 +1,4 @@
-package com.example.carparkwhere.Models;
+package com.example.carparkwhere.ModelObjects;
 
 public class CarparkPrices {
 
