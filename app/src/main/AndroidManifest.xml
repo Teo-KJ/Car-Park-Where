@@ -18,10 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CarparkReviewsActivity"></activity>
-        <activity android:name=".ResetPasswordActivity" />
-        <activity android:name=".DetailCarparkActivity" />
-        <activity android:name=".SubmitReviewActivity" />
+        <activity android:name=".Activities.CarparkReviewsActivity"></activity>
+        <activity android:name=".Activities.ResetPasswordActivity" />
+        <activity android:name=".Activities.DetailCarparkActivity" />
+        <activity android:name=".Activities.SubmitReviewActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -31,11 +31,11 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <activity
-            android:name=".MapsActivity"
+            android:name=".Activities.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".AccountOptionsActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity">
+        <activity android:name=".Activities.AccountOptionsActivity" />
+        <activity android:name=".Activities.SignUpActivity" />
+        <activity android:name=".Activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

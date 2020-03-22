@@ -1,9 +1,8 @@
-package com.example.carparkwhere;
+package com.example.carparkwhere.Activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,20 +13,22 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.carparkwhere.Utilities.FirebaseManager;
-import com.example.carparkwhere.Utilities.UserDataManager;
-import com.google.firebase.firestore.auth.User;
-import com.google.firestore.admin.v1beta1.Progress;
+import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
+import com.example.carparkwhere.R;
 
 public class AccountOptionsActivity extends AppCompatActivity {
 
     private TextView accountEmailTitle_TV;
+    private UserDataDao userDataDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_options);
 
+        userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
 
         ActionBar bar = getSupportActionBar();
@@ -37,7 +38,12 @@ public class AccountOptionsActivity extends AppCompatActivity {
 
 
         accountEmailTitle_TV = findViewById(R.id.accountEmailTitle_TV);
-        accountEmailTitle_TV.setText("Signed-in as " + UserDataManager.getUserEmail());
+        try{
+            accountEmailTitle_TV.setText("Signed-in as " + userDataDaoHelper.getUserEmail());
+        }catch (UserNotLoggedInException e){
+            accountEmailTitle_TV.setText("Not Signed-in");
+        }
+
 
         ImageButton backAccountOptionsActivity_IMGBTN = findViewById(R.id.backAccountOptionsActivity_IMGBTN);
         backAccountOptionsActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +73,12 @@ public class AccountOptionsActivity extends AppCompatActivity {
         signOutAccount_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseManager.signOut();
+                try{
+                    userDataDaoHelper.signOut();
+                }catch (UserNotLoggedInException e){
+                    //user not logged in
+                }
+
                 finish();
             }
         });

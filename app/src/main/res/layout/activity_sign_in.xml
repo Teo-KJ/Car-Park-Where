@@ -5,7 +5,7 @@
     android:background="@color/quantum_grey800"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInActivity">
+    tools:context=".Activities.SignInActivity">
 
     <TextView
         android:id="@+id/logoTextView"
