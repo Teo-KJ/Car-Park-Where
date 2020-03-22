@@ -10,7 +10,9 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.carparkwhere.Models.Carpark;
@@ -72,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Map<String, Double> mDistanceMap = new HashMap<>();
     Map<String, Double> sortedDistanceMap = new HashMap<>();
     Marker currentMarker;
+    private ImageButton starBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +126,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
-
+        starBTN = findViewById(R.id.starButton);
+        starBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MapsActivity.this, SubmitReviewActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
