@@ -25,6 +25,27 @@ public class Carpark {
 
     }
 
+
+    public class CarparkPrices {
+
+        public String description;
+        public String price;
+
+        public CarparkPrices(String description, String price){
+            this.description = description;
+            this.price = price;
+        }
+
+        public String getDescription(){
+            return description;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+    }
+
+
     public String carparkNo;
     public Double latitude;
     public Double longitude;
