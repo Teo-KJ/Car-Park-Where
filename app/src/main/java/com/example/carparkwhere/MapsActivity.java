@@ -9,15 +9,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.carparkwhere.Models.Carpark;
-import com.example.carparkwhere.Utilities.NetworkCallEventListener;
-import com.example.carparkwhere.Utilities.ServerInterfaceManager;
+import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -39,12 +39,8 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -75,11 +71,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Map<String, Double> sortedDistanceMap = new HashMap<>();
     Marker currentMarker;
     private ImageButton starBTN;
+    private CarparkDao carparkDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        carparkDaoHelper = new CarparkDaoImpl(this);
+
         // Setup Places Client
         if (!Places.isInitialized()) {
             Places.initialize(MapsActivity.this, apiKey);
@@ -188,7 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeBitmap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        ServerInterfaceManager.getAllCarparkEntireFullDetails(this, new NetworkCallEventListener() {
+        carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful) {

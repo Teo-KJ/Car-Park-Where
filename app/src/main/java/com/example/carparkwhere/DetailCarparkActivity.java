@@ -1,6 +1,5 @@
 package com.example.carparkwhere;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
@@ -8,40 +7,39 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.SymbolTable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.example.carparkwhere.Models.Carpark;
-import com.example.carparkwhere.Utilities.CarparkReviewsActivity;
-import com.example.carparkwhere.Utilities.NetworkCallEventListener;
-import com.example.carparkwhere.Utilities.ServerInterfaceManager;
+import com.example.carparkwhere.DAO.DAOImplementations.BookmarkDaoImpl;
+import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
+import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.BookmarkDao;
+import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
+import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.UserDataManager;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.google.firebase.firestore.auth.User;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
-import io.grpc.Server;
 
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV;
@@ -53,12 +51,19 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private Spinner spinner;
     private ArrayList<String> userBookmarkCarparks;
     private boolean userBookmarkedThis = false;
+    private CarparkDao carparkDaoHelper;
+    private ReviewDao reviewDaoHelper;
+    private BookmarkDao bookmarkDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_carpark);
+
+        carparkDaoHelper = new CarparkDaoImpl(this);
+        reviewDaoHelper = new ReviewDaoImpl(this);
+        bookmarkDaoHelper = new BookmarkDaoImpl(this);
 
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
@@ -135,7 +140,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         // Getting the user bookmarks, so that the user bookmarked carpark is saved under his/her profile
-        ServerInterfaceManager.getUserBookmarkCarparkIds(this, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
+        bookmarkDaoHelper.getUserBookmarkCarparkIds(UserDataManager.getUserEmail(), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
@@ -151,7 +156,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         // Getting the current Availability
-        ServerInterfaceManager.getCarparkLiveAvailability(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+        carparkDaoHelper.getCarparkLiveAvailability(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
@@ -178,7 +183,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                     userBookmarkCarparks.add(getIntent().getStringExtra("CARPARK_ID"));
                 }
 
-                ServerInterfaceManager.saveUserCarparkBookmark(DetailCarparkActivity.this, userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
+                bookmarkDaoHelper.saveUserCarparkBookmark(userBookmarkCarparks, UserDataManager.getUserEmail(), new NetworkCallEventListener() {
                     @Override
                     public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                         nDialog.dismiss();
@@ -199,7 +204,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         // With server interface manager get average ratings of the carpark and display it
-        ServerInterfaceManager.getCarparkAverageRating(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+        reviewDaoHelper.getCarparkAverageRating(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
@@ -228,7 +233,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
       
         // Get the number of reviews for the specific carpark
-        ServerInterfaceManager.getCarparkReviewsCount(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+        reviewDaoHelper.getCarparkReviewsCount(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
@@ -242,7 +247,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         final String str = intent.getStringExtra("CARPARK_ID"); // Get the carpark number
-        ServerInterfaceManager.getCarparkDetailsByID(this, str, new NetworkCallEventListener() {
+        carparkDaoHelper.getCarparkDetailsByID(str, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 nDialog.dismiss();
@@ -329,7 +334,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
 
     // With ServerInterfaceManager, get the predicted number of carpark lots.
     private void getAvailabilityPredictionData(Integer increment, String carparkNumber){
-        ServerInterfaceManager.getCarparkWholeDayPredictedAvailability(this, carparkNumber, increment, new Response.Listener() {
+        carparkDaoHelper.getCarparkWholeDayPredictedAvailability(carparkNumber, increment, new Response.Listener() {
             @Override
             public void onResponse(Object response){
                 JSONArray jsonArray = (JSONArray) response;
@@ -373,7 +378,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        ServerInterfaceManager.getCarparkReviewsCount(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+        reviewDaoHelper.getCarparkReviewsCount(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
@@ -384,7 +389,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        ServerInterfaceManager.getCarparkAverageRating(this, getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
+        reviewDaoHelper.getCarparkAverageRating(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){

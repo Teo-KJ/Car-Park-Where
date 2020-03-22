@@ -1,8 +1,5 @@
 package com.example.carparkwhere.Utilities;
-import android.app.DownloadManager;
 import android.content.Context;
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,16 +8,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.carparkwhere.Models.Carpark;
-import com.example.carparkwhere.Models.Review;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.ModelObjects.Review;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +54,7 @@ public class ServerInterfaceManager {
                 Gson gson = new Gson();
                 Carpark carpark = gson.fromJson(response.toString(), Carpark.class);
                 networkCallEventListener.onComplete(carpark,true,null);
+
             }
         }, new Response.ErrorListener() {
             @Override

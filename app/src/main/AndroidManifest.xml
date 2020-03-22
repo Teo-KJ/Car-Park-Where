@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Utilities.CarparkReviewsActivity"></activity>
+        <activity android:name=".CarparkReviewsActivity"></activity>
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".DetailCarparkActivity" />
         <activity android:name=".SubmitReviewActivity" />
