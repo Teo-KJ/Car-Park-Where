@@ -22,7 +22,7 @@
             <ImageButton
                 android:id="@+id/back_button"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/back"
@@ -38,6 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
+                    android:layout_weight="0.85"
                     android:textColor="@color/common_google_signin_btn_text_dark"
                     android:textSize="25dp"
                     app:layout_constraintEnd_toEndOf="parent"></TextView>
@@ -46,7 +47,8 @@
                     android:id="@+id/BookmarkButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="200dp"
+                    android:layout_weight="0.15"
+                    android:layout_marginLeft="0dp"
                     android:src="@android:drawable/btn_star"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
@@ -116,8 +118,6 @@
                     android:scaleType="centerInside"
                     android:adjustViewBounds="true"
                     ></ImageButton>
-<<<<<<< Updated upstream
-=======
 
                 <ImageButton
                     android:id="@+id/SeeReviewButton"
@@ -125,13 +125,9 @@
                     android:layout_height="55dp"
                     android:layout_marginLeft="9dp"
                     android:layout_marginTop="10dp"
-<<<<<<< Updated upstream
-                    android:text="See Reviews" />
->>>>>>> Stashed changes
-=======
                     android:scaleType="centerInside"
                     android:src="@drawable/see_all_reviews"></ImageButton>
->>>>>>> Stashed changes
+              
             </LinearLayout>
 
         </LinearLayout>
@@ -154,36 +150,38 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-<<<<<<< Updated upstream
-                    android:layout_marginTop="10dp"
-                    android:text="Current availabiltiy: "
-                    android:textSize="20dp"
-                    ></TextView>
-=======
                     android:layout_marginTop="0dp"
                     android:layout_gravity="center_vertical"
                     android:text="Current availability:"
                     android:textSize="20dp"></TextView>
->>>>>>> Stashed changes
 
                 <TextView
                     android:id="@+id/liveAvailability"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="0dp"
+                    android:textStyle="bold"
                     android:text=""
-                    android:textSize="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="25dp"
                     ></TextView>
 
             </LinearLayout>
+
+            <ListView
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="0dp"
+                android:background="?android:attr/listDivider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -193,7 +191,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginLeft="25dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:src="@drawable/pin"
 
                     ></ImageView>
@@ -203,6 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
+                    android:paddingEnd="16dp"
                     android:layout_marginTop="10dp"
                     android:textSize="20dp"></TextView>
             </LinearLayout>
@@ -210,8 +209,9 @@
             <ListView
                 android:id="@+id/divider1"
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="?android:attr/listDivider"/>
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:background="?android:attr/listDivider" />
 
             <ListView
                 android:id="@+id/divider2"
@@ -227,7 +227,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginLeft="25dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:src="@drawable/price"
                     ></ImageView>
 
@@ -244,6 +244,7 @@
                 android:id="@+id/divider3"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
+                android:layout_marginTop="10dp"
                 android:background="?android:attr/listDivider"/>
 
             <LinearLayout
@@ -255,6 +256,7 @@
                     android:layout_height="wrap_content"
                     android:text="Popular Times"
                     android:textSize="25dp"
+                    android:layout_weight="0.8"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="10dp"
                     ></TextView>
@@ -262,7 +264,8 @@
                     android:id="@+id/tutorialButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="110dp"
+                    android:layout_weight="0.2"
+                    android:layout_marginLeft="0dp"
                     android:layout_marginTop="10dp"
                     app:srcCompat="@android:drawable/ic_menu_help"
                     android:background="#00ffffff"></ImageButton>

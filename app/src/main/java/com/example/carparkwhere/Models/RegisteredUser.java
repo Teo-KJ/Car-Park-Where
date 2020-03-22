@@ -5,40 +5,45 @@ import java.util.List;
 
 public class RegisteredUser {
     private String name;
-    public String email;
-    public Boolean isValidated;
-    public String password;
+    private String email;
+    private Boolean isValidated;
+    private String password;
 
-    public RegisteredUser(String name, String email, Boolean isValidated, String password) {
+    public RegisteredUser(String name, String email, Boolean isValidated) {
         this.name = name;
         this.email = email;
         this.isValidated = isValidated;
-        this.password = password;
-    }
-
-    public void loadUserData(){
-
-    }
-
-    public void saveUserData(){
-
     }
 
     public String getName(){
         return this.name;
     }
+    public String getEmail(){
+        return this.email;
+    }
+
+    public boolean getIsValidated(){
+        return this.isValidated;
+    }
+
+    public String getPassword(){
+        return this.password;
+    }
 
     public void setName(String name){
         this.name = name;
+    }
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public void setIsValidated(boolean isValidated){
+        this.isValidated = isValidated;
     }
 
     public void setPassword(String password){
         this.password = password;
     }
 
-    public ArrayList<Review> getUserReviews(){
-        ArrayList<Review> reviewList = new ArrayList<Review>();
-        return reviewList;
-    }
 
 }
