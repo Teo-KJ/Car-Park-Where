@@ -4,7 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+<<<<<<< Updated upstream
 import android.content.res.Resources;
+=======
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+>>>>>>> Stashed changes
 import android.icu.text.SymbolTable;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +25,9 @@ import android.widget.TextView;
 
 =======
 import android.widget.Toast;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -406,12 +414,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 barChart.refreshDrawableState();
             }
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+        }, error -> error.printStackTrace());
     }
 
 <<<<<<< Updated upstream
