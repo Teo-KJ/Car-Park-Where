@@ -4,13 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-
 import com.example.carparkwhere.FilesIdkWhereToPutYet.RecyclerAdapter;
 import com.example.carparkwhere.ModelObjects.BookmarkedCarparks;
 import com.example.carparkwhere.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +36,8 @@ public class ExpandableView extends AppCompatActivity {
         initRecyclerView();
     }
 
-
-
-        private void initRecyclerView() {
-            recyclerAdapter = new RecyclerAdapter(bookmarkedCarparks);
-            recyclerView.setAdapter(recyclerAdapter);
-        }
-
-
-
+    private void initRecyclerView() {
+        recyclerAdapter = new RecyclerAdapter(bookmarkedCarparks);
+        recyclerView.setAdapter(recyclerAdapter);
+    }
 }

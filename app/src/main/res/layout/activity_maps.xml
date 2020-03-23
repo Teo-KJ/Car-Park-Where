@@ -27,9 +27,30 @@
         android:layout_marginTop="1dp"
         android:layout_marginRight="30dp"/>
 
-
     </fragment>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="9dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="5dp"
+            android:text="Date and Time:"/>
+        <EditText
+            android:id="@+id/dateAndTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="9dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="5dp"
+            android:text="23-03-2020 12:00 HRS"/>
+    </LinearLayout>
 
     <fragment
         android:id="@+id/map"

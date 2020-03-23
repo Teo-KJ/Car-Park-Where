@@ -1,7 +1,9 @@
 package com.example.carparkwhere.Activities;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,7 +13,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
@@ -38,8 +42,11 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -49,7 +56,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
-
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -73,19 +79,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker currentMarker;
     private ImageButton starBTN;
     private CarparkDao carparkDaoHelper;
+    EditText date_TV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         carparkDaoHelper = new CarparkDaoImpl(this);
 
         // Setup Places Client
         if (!Places.isInitialized()) {
             Places.initialize(MapsActivity.this, apiKey);
         }
-// Retrieve a PlacesClient (previously initialized - see MainActivity)
+
+        // Retrieve a PlacesClient (previously initialized - see MainActivity)
         placesClient = Places.createClient(this);
 
         final AutocompleteSupportFragment autocompleteSupportFragment =
@@ -100,8 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onPlaceSelected(Place place) {
                         LatLng latLng = place.getLatLng();
-                        if(currentMarker!=null)
-                        {
+                        if(currentMarker!=null) {
                             currentMarker.remove();
                         }
 
@@ -113,7 +119,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                         Toast.makeText(MapsActivity.this, ""+latLng.latitude, Toast.LENGTH_SHORT).show();
-
                     }
 
                     @Override
@@ -121,9 +126,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Toast.makeText(MapsActivity.this, ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
@@ -136,8 +138,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        date_TV = findViewById(R.id.dateAndTimeText);
+        date_TV.setText(identifyDate());
+        date_TV.setOnClickListener(view -> showDateTimeDialog(date_TV));
     }
 
+    private String identifyDate (){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy HH:mm");
+        Date date = new Date();
+        return formatter.format(date);
+    }
+
+    private void showDateTimeDialog(TextView date) {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener= (view, year, month, dayOfMonth) -> {
+            calendar.set(Calendar.YEAR,year);
+            calendar.set(Calendar.MONTH,month);
+            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+            TimePickerDialog.OnTimeSetListener timeSetListener= (view1, hourOfDay, minute) -> {
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                calendar.set(Calendar.MINUTE,minute);
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yy HH:mm");
+                date.setText(simpleDateFormat.format(calendar.getTime()));
+            };
+            new TimePickerDialog(MapsActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),false).show();
+        };
+        new DatePickerDialog(MapsActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
 
     private void makeBitmap() {
         BitmapDrawable g = (BitmapDrawable)getResources().getDrawable(R.drawable.green_car);
@@ -175,12 +205,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(MapsActivity.this);
-
                 }
             }
         });
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -279,9 +307,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
-
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
