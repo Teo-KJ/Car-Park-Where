@@ -18,18 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< Updated upstream
         <activity android:name=".Utilities.CarparkReviewsActivity"></activity>
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".DetailCarparkActivity" />
         <activity android:name=".SubmitReviewActivity" />
-=======
-        <activity android:name=".Activities.CarparkReviewsActivity"></activity>
-        <activity android:name=".Activities.ExpandableView" />
-        <activity android:name=".Activities.ResetPasswordActivity" />
-        <activity android:name=".Activities.DetailCarparkActivity" />
-        <activity android:name=".Activities.SubmitReviewActivity" />
->>>>>>> Stashed changes
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

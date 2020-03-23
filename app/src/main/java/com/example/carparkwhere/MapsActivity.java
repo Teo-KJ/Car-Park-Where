@@ -84,8 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (!Places.isInitialized()) {
             Places.initialize(MapsActivity.this, apiKey);
         }
-
-        // Retrieve a PlacesClient (previously initialized - see MainActivity)
+// Retrieve a PlacesClient (previously initialized - see MainActivity)
         placesClient = Places.createClient(this);
 
         final AutocompleteSupportFragment autocompleteSupportFragment =
