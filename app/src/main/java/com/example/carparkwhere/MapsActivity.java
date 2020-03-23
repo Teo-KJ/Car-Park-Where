@@ -88,7 +88,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 <<<<<<< Updated upstream:app/src/main/java/com/example/carparkwhere/MapsActivity.java
 =======
     private CarparkDao carparkDaoHelper;
+<<<<<<< Updated upstream:app/src/main/java/com/example/carparkwhere/MapsActivity.java
     EditText date_TV;
+>>>>>>> Stashed changes:app/src/main/java/com/example/carparkwhere/Activities/MapsActivity.java
+=======
+    TextView date_TV;
 >>>>>>> Stashed changes:app/src/main/java/com/example/carparkwhere/Activities/MapsActivity.java
 
     @Override
@@ -152,7 +156,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private String identifyDate (){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy HH:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         Date date = new Date();
         return formatter.format(date);
     }
@@ -167,7 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             TimePickerDialog.OnTimeSetListener timeSetListener= (view1, hourOfDay, minute) -> {
                 calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
                 calendar.set(Calendar.MINUTE,minute);
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yy HH:mm");
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy HH:mm");
                 date.setText(simpleDateFormat.format(calendar.getTime()));
             };
             new TimePickerDialog(MapsActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
