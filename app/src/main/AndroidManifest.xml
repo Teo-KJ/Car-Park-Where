@@ -22,6 +22,7 @@
         <activity android:name=".Activities.ResetPasswordActivity" />
         <activity android:name=".Activities.DetailCarparkActivity" />
         <activity android:name=".Activities.SubmitReviewActivity" />
+        <activity android:name=".FilesIdkWhereToPutYet.ExpandableView" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

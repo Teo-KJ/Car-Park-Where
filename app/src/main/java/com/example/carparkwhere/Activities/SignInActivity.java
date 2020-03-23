@@ -16,6 +16,7 @@ import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.ExpandableView;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.example.carparkwhere.R;
@@ -66,7 +67,7 @@ public class SignInActivity extends AppCompatActivity {
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, AccountOptionsActivity.class));
+                startActivity(new Intent(SignInActivity.this, ExpandableView.class));
             }
         });
 
