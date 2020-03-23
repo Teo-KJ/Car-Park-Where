@@ -1,7 +1,9 @@
 package com.example.carparkwhere;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,7 +14,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carparkwhere.Models.Carpark;
@@ -37,10 +41,16 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+<<<<<<< Updated upstream:app/src/main/java/com/example/carparkwhere/MapsActivity.java
 import java.util.Collections;
 import java.util.Comparator;
+=======
+import java.util.Calendar;
+import java.util.Date;
+>>>>>>> Stashed changes:app/src/main/java/com/example/carparkwhere/Activities/MapsActivity.java
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -75,6 +85,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Map<String, Double> sortedDistanceMap = new HashMap<>();
     Marker currentMarker;
     private ImageButton starBTN;
+<<<<<<< Updated upstream:app/src/main/java/com/example/carparkwhere/MapsActivity.java
+=======
+    private CarparkDao carparkDaoHelper;
+    EditText date_TV;
+>>>>>>> Stashed changes:app/src/main/java/com/example/carparkwhere/Activities/MapsActivity.java
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +99,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (!Places.isInitialized()) {
             Places.initialize(MapsActivity.this, apiKey);
         }
-// Retrieve a PlacesClient (previously initialized - see MainActivity)
+
+        // Retrieve a PlacesClient (previously initialized - see MainActivity)
         placesClient = Places.createClient(this);
 
         final AutocompleteSupportFragment autocompleteSupportFragment =
@@ -99,8 +115,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onPlaceSelected(Place place) {
                         LatLng latLng = place.getLatLng();
-                        if(currentMarker!=null)
-                        {
+                        if(currentMarker!=null) {
                             currentMarker.remove();
                         }
 
@@ -112,7 +127,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                         Toast.makeText(MapsActivity.this, ""+latLng.latitude, Toast.LENGTH_SHORT).show();
-
                     }
 
                     @Override
@@ -120,9 +134,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Toast.makeText(MapsActivity.this, ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
@@ -135,8 +146,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        date_TV = findViewById(R.id.dateAndTimeText);
+        date_TV.setText(identifyDate());
+        date_TV.setOnClickListener(view -> showDateTimeDialog(date_TV));
     }
 
+    private String identifyDate (){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy HH:mm");
+        Date date = new Date();
+        return formatter.format(date);
+    }
+
+    private void showDateTimeDialog(TextView date) {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener= (view, year, month, dayOfMonth) -> {
+            calendar.set(Calendar.YEAR,year);
+            calendar.set(Calendar.MONTH,month);
+            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+            TimePickerDialog.OnTimeSetListener timeSetListener= (view1, hourOfDay, minute) -> {
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                calendar.set(Calendar.MINUTE,minute);
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yy HH:mm");
+                date.setText(simpleDateFormat.format(calendar.getTime()));
+            };
+            new TimePickerDialog(MapsActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),false).show();
+        };
+        new DatePickerDialog(MapsActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
 
     private void makeBitmap() {
         BitmapDrawable g = (BitmapDrawable)getResources().getDrawable(R.drawable.green_car);
@@ -154,7 +193,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         redParking = Bitmap.createScaledBitmap(b3, width, height, false);
         blackParking = Bitmap.createScaledBitmap(b4, width, height, false);
         greyParking = Bitmap.createScaledBitmap(b5, width, height, false);
-
     }
 
     private void fetchLocation() {
@@ -179,7 +217,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -280,7 +317,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
