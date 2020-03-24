@@ -13,13 +13,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.TimePickerFragment;
 import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.example.carparkwhere.R;
@@ -42,6 +46,8 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import java.sql.Time;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,11 +61,12 @@ import java.util.stream.Collectors;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import org.w3c.dom.Text;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     Location currentLocation;
     private GoogleMap googleMap;
@@ -81,7 +88,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker currentMarker;
     private ImageButton starBTN;
     private CarparkDao carparkDaoHelper;
-    TextView date_TV;
+    TextView date_TV, time_TV;
+    String selectedDate = identifyDate(), selectedTime = identifyTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,35 +148,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        date_TV = findViewById(R.id.dateAndTimeText);
+        date_TV = findViewById(R.id.dateText);
+        time_TV = findViewById(R.id.timeText);
         date_TV.setText(identifyDate());
-        date_TV.setOnClickListener(view -> showDateTimeDialog(date_TV));
+        time_TV.setText(identifyTime());
+
+        date_TV.setOnClickListener(view -> {
+            DialogFragment datePicker = new DatePickerFragment();
+            datePicker.show(getSupportFragmentManager(), "date picker");
+
+        });
+        time_TV.setOnClickListener(view -> {
+            DialogFragment timePicker = new TimePickerFragment();
+            timePicker.show(getSupportFragmentManager(), "time picker");
+        });
+
     }
 
     private String identifyDate (){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         return formatter.format(date);
     }
 
-    private void showDateTimeDialog(TextView date) {
-        final Calendar calendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener= (view, year, month, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR,year);
-            calendar.set(Calendar.MONTH,month);
-            calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-
-            TimePickerDialog.OnTimeSetListener timeSetListener= (view1, hourOfDay, minute) -> {
-                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                calendar.set(Calendar.MINUTE,minute);
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy HH:mm");
-                date.setText(simpleDateFormat.format(calendar.getTime()));
-            };
-            new TimePickerDialog(MapsActivity.this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY),
-                    calendar.get(Calendar.MINUTE),false).show();
-        };
-        new DatePickerDialog(MapsActivity.this, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    private String identifyTime (){
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        Date date = new Date();
+        return formatter.format(date);
     }
 
     private void makeBitmap() {
@@ -328,5 +334,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         help.requestWindowFeature(Window.FEATURE_NO_TITLE);
         help.setContentView(R.layout.switch_on_location);
         help.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(calendar.getTime());
+        date_TV.setText(currentDateString);
+        selectedDate = currentDateString;
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR_OF_DAY, hour);
+        time.set(Calendar.MINUTE, minute);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        String currentTimeString = simpleDateFormat.format(time.getTime());
+        time_TV.setText(currentTimeString);
+        selectedTime = currentTimeString;
     }
 }
