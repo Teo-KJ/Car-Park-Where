@@ -1,5 +1,11 @@
 package com.example.carparkwhere.ModelObjects;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class Review {
 
     private String userEmail;
@@ -8,14 +14,16 @@ public class Review {
     private String userDisplayName;
     private String userComment;
     private String _id;
+    private Integer date;
 
-    public Review(String userEmail, Double userRating, String carparkId, String userComment, String userDisplayName){
+    public Review(String userEmail, Double userRating, String carparkId, String userComment, String userDisplayName,Integer date){
         this.userEmail = userEmail;
         this.userRating = userRating;
         this.carparkId = carparkId;
         this.userComment = userComment;
         this.userDisplayName = userDisplayName;
         this._id = null;
+        this.date = date;
 
     }
 
@@ -40,6 +48,20 @@ public class Review {
     public String get_id() {
         return _id;
     }
+
+    public String getDateString() {
+        long unixSeconds = this.date.longValue();
+        Date date = new java.util.Date(unixSeconds*1000L);
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
+        String formattedDate = sdf.format(date);
+        return formattedDate;
+    }
+
+    public Integer getDate() {
+        return date;
+    }
+
     //    public void setCarPark(Carpark carpark){
 //        this.carpark = carpark;
 //    }

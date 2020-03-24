@@ -91,6 +91,7 @@ public class ReviewDaoImpl implements ReviewDao {
             jsonBody.put("displayName", review.getUserDisplayName());
             jsonBody.put("carparkId", review.getCarparkId());
             jsonBody.put("comment", review.getComment());
+            jsonBody.put("date",review.getDate());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -127,6 +128,7 @@ public class ReviewDaoImpl implements ReviewDao {
             jsonBody.put("newRating", newReview.getRating());
             jsonBody.put("newDisplayName", newReview.getUserDisplayName());
             jsonBody.put("newComment", newReview.getComment());
+            jsonBody.put("newDate",newReview.getDate());
         }catch (Exception e){
             e.printStackTrace();
         }

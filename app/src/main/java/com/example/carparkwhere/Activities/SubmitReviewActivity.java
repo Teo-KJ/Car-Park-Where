@@ -28,6 +28,9 @@ import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class SubmitReviewActivity extends AppCompatActivity {
 
@@ -166,7 +169,15 @@ public class SubmitReviewActivity extends AppCompatActivity {
 
         if (isEditingReview){
             try{
-                Review newReview = new Review(userDataDaoHelper.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),userDataDaoHelper.getDisplayName());
+                Calendar cal = Calendar.getInstance();
+                TimeZone timeZone = cal.getTimeZone();
+                Date cals = Calendar.getInstance(TimeZone.getTimeZone("GMT+8")).getTime();
+                long milliseconds = cals.getTime();
+                milliseconds = milliseconds + TimeZone.getTimeZone("GMT+8").getOffset(milliseconds);
+                long unixTimeStamp = milliseconds / 1000L;
+                Integer unixTime = (int) unixTimeStamp;
+
+                Review newReview = new Review(userDataDaoHelper.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),userDataDaoHelper.getDisplayName(),unixTime);
                 reviewDaoHelper.updateCarparkReviewWithNewValues(oldReview.get_id(), newReview, new NetworkCallEventListener() {
                     @Override
                     public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -188,7 +199,15 @@ public class SubmitReviewActivity extends AppCompatActivity {
         else{
             if (reviewRating_RBAR.getRating() != 0 && !reviewComment_ET.getText().toString().isEmpty()){
                 try{
-                    Review newReview = new Review(userDataDaoHelper.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),userDataDaoHelper.getDisplayName());
+                    Calendar cal = Calendar.getInstance();
+                    TimeZone timeZone = cal.getTimeZone();
+                    Date cals = Calendar.getInstance(TimeZone.getDefault()).getTime();
+                    long milliseconds = cals.getTime();
+                    milliseconds = milliseconds + timeZone.getOffset(milliseconds);
+                    long unixTimeStamp = milliseconds / 1000L;
+                    Integer unixTime = (int) unixTimeStamp;
+
+                    Review newReview = new Review(userDataDaoHelper.getUserEmail(),Double.valueOf(reviewRating_RBAR.getRating()),carparkId,reviewComment_ET.getText().toString(),userDataDaoHelper.getDisplayName(),unixTime);
                     reviewDaoHelper.saveNewCarparkReview(newReview, new NetworkCallEventListener() {
                         @Override
                         public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
