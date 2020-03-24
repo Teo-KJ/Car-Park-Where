@@ -55,6 +55,7 @@
 
 
         </LinearLayout>
+        
         <!--android:background="#236E6C6C"-->
         <!--android:textColor="@color/common_google_signin_btn_text_light_focused"-->
         <TextView

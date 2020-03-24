@@ -58,9 +58,9 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         });
 
         final RecyclerView reviews_RV = (RecyclerView) findViewById(R.id.reviews_RV);
-        Review r1 = new Review("user001@email.com", 3.0,"001","Carpark was convenient to get to, but a bit too crowded on weekends.","user001");
-        Review r2 = new Review("user007@email.com", 5.0,"001","This is my favorite carpark man.","user007");
-        Review r3 = new Review("user008@email.com", 1.0,"001","Is this considered a carpark? I consider it a parked car.","user008");
+        Review r1 = new Review("user001@email.com", 3.0,"001","Carpark was convenient to get to, but a bit too crowded on weekends.","user001",1);
+        Review r2 = new Review("user007@email.com", 5.0,"001","This is my favorite carpark man.","user007",2);
+        Review r3 = new Review("user008@email.com", 1.0,"001","Is this considered a carpark? I consider it a parked car.","user008",3);
 
 
         reviews.add(r1);
@@ -85,6 +85,9 @@ public class CarparkReviewsActivity extends AppCompatActivity {
                     reviews = (ArrayList<Review>) networkCallResult;
                     final CarparkReviewsAdapter adapter = new CarparkReviewsAdapter(reviews);
 
+                    for (Review review: reviews){
+                        System.out.println(review.getDateString());
+                    }
                     reviews_RV.setLayoutManager(new LinearLayoutManager(CarparkReviewsActivity.this));
                     reviews_RV.setAdapter(adapter);
                     Log.d(Integer.toString(adapter.getItemCount()),"ADAPTER COUNT");
