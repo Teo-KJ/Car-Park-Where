@@ -1,10 +1,10 @@
 package com.example.carparkwhere.ModelObjects;
 
-public class BookmarkedCarparks {
+public class BookmarkedCarpark {
     private String carpark_id;
     private boolean expanded;
 
-    public BookmarkedCarparks(String carpark_id){
+    public BookmarkedCarpark(String carpark_id){
         this.carpark_id = carpark_id;
         this.expanded = false;
     }

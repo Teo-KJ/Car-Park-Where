@@ -67,7 +67,7 @@ public class SignInActivity extends AppCompatActivity {
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, ExpandableView.class));
+                startActivity(new Intent(SignInActivity.this, UserBookmarksActivity.class));
             }
         });
 

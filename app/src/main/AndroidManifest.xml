@@ -36,6 +36,7 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".Activities.AccountOptionsActivity" />
         <activity android:name=".Activities.SignUpActivity" />
+        <activity android:name=".Activities.UserBookmarksActivity" />
         <activity android:name=".Activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
