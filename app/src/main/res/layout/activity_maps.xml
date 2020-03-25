@@ -66,6 +66,16 @@
             android:background="@android:color/transparent"
             android:padding="9dp"
             android:text="12:00 HRS" />
+
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="45dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/settings"
+            android:background="@color/places_text_white_alpha_26"
+            android:layout_gravity="right"/>
     </LinearLayout>
 
 

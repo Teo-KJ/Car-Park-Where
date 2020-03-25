@@ -100,6 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     RecyclerView recyclerView;
     BookmarkAdaptor recyclerAdapter;
     List<BookmarkedCarpark> bookmarkedCarparks;
+    ImageButton settingsButton_IMGBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,8 +154,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         starBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MapsActivity.this, SubmitReviewActivity.class);
+                Intent intent = new Intent(MapsActivity.this, UserBookmarksActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        settingsButton_IMGBTN = findViewById(R.id.settings);
+        settingsButton_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MapsActivity.this, AccountOptionsActivity.class));
             }
         });
 
@@ -174,12 +183,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         expandableView();
-        if(mMarkerMap.isEmpty()==true)
-        {
+        if(mMarkerMap.isEmpty()==true) {
             Log.d("ccb", "Empty");
         }
-        else
-        {
+        else {
             Log.d("ccb", "EmptyNot");
         }
     }
@@ -446,6 +453,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         time_TV.setText(currentTimeString);
         selectedTime = currentTimeString;
     }
+
     private void initRecyclerView() {
         recyclerAdapter = new BookmarkAdaptor(bookmarkedCarparks,this);
         recyclerView.setAdapter(recyclerAdapter);

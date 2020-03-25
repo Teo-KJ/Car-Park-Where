@@ -55,7 +55,7 @@ public class SignInActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-//        checkIfUserIsAlreadySignIn();
+        //checkIfUserIsAlreadySignIn();
         setupFindViewsByID();
         setupSignInButton();
         setupCreateAccountButton();
@@ -63,20 +63,13 @@ public class SignInActivity extends AppCompatActivity {
         setupGuessModeButton();
         setupResetPasswordButton();
 
-        Button testBTN1 = findViewById(R.id.testBTN1);
+        /*Button testBTN1 = findViewById(R.id.testBTN1);
         testBTN1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignInActivity.this, UserBookmarksActivity.class));
             }
-        });
-
-
-
-
-
-
-
+        });*/
 
     }
 
