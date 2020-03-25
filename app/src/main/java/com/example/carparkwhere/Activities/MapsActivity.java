@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.DatePicker;
@@ -22,8 +23,10 @@ import android.widget.Toast;
 
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.TimePickerFragment;
+import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
 import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.example.carparkwhere.R;
@@ -55,6 +58,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -63,6 +67,9 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
@@ -90,6 +97,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private CarparkDao carparkDaoHelper;
     TextView date_TV, time_TV;
     String selectedDate = identifyDate(), selectedTime = identifyTime();
+    RecyclerView recyclerView;
+    BookmarkAdaptor recyclerAdapter;
+    List<BookmarkedCarpark> bookmarkedCarparks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +173,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             timePicker.show(getSupportFragmentManager(), "time picker");
         });
 
+        expandableView();
+        if(mMarkerMap.isEmpty()==true)
+        {
+            Log.d("ccb", "Empty");
+        }
+        else
+        {
+            Log.d("ccb", "EmptyNot");
+        }
     }
 
     private String identifyDate (){
@@ -218,6 +237,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    public void expandableView()
+    {
+        recyclerView = findViewById(R.id.recyclerView);
+        // setting LinearLayout
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //this also can be done in XML
+        //Making sure divider nice nice
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        //initialising data
+        //from this retrieve from firestore, add bookmark_carparks into bookmarkedCarparks
+        //constructor of bookmark_carparks is just takes in the carpark_id
+        //once done then can remove bottom hardcode
+        bookmarkedCarparks = new ArrayList<>();
+        bookmarkedCarparks.add(new BookmarkedCarpark("A81"));
+        bookmarkedCarparks.add(new BookmarkedCarpark("NTU North Spine"));
+        //bookmarkedCarparks.add(new BookmarkedCarpark("NIE"));
+        int counter=0;
+        for (String name : mDistanceMap.keySet())
+        {
+            bookmarkedCarparks.add(new BookmarkedCarpark(name));
+            counter++;
+        }
+
+        initRecyclerView();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMaps) {
@@ -225,7 +270,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeBitmap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        
+
+
+
         carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -250,6 +297,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(greenParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                                mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
                             else if(fullness>=0.4 && fullness<0.7)
                             {
@@ -257,6 +305,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(yellowParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                                mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
                             else if(fullness>0&& fullness<0.4)
                             {
@@ -264,6 +313,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(redParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                                mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
                             else
                             {
@@ -271,6 +321,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(greyParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                                mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
                         }
                         else
@@ -279,15 +330,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                     .icon(BitmapDescriptorFactory.fromBitmap(blackParking)));
                             mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
+                            mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                         }
-                        mDistanceMap.put(carparks.get(counter).carparkNo, distance);
+
+                       // mDistanceMap.put(carparks.get(counter).carparkNo, distance);
+                        Log.d("ccb", "0");
+
                     }
 
                 }else{
                     //deal with the error message, maybe toast or something
                 }
+                sortedDistanceMap=mDistanceMap.entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByValue())
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+                int counter =0;
+                for (String name : sortedDistanceMap.keySet())
+                {
+                    if (counter<=10)
+                    {
+                        bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                        counter++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                initRecyclerView();
             }
         });
+        int counter=0;
+
+        mMarkerMap.forEach((k,v)->Log.d("ccb", k));
+        //double carpar = mDistanceMap.get("A81");
+        //Log.d("ccb", Double.toString(carpar));
+
+        Log.d("ccb", Integer.toString(counter));
         sortedDistanceMap=mDistanceMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -316,6 +396,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+        if(mMarkerMap.isEmpty()==true)
+        {
+            Log.d("ccb", "Empty");
+        }
+        else
+        {
+            Log.d("ccb", "EmptyNot");
+        }
     }
 
     @Override
@@ -357,5 +445,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String currentTimeString = simpleDateFormat.format(time.getTime());
         time_TV.setText(currentTimeString);
         selectedTime = currentTimeString;
+    }
+    private void initRecyclerView() {
+        recyclerAdapter = new BookmarkAdaptor(bookmarkedCarparks,this);
+        recyclerView.setAdapter(recyclerAdapter);
     }
 }
