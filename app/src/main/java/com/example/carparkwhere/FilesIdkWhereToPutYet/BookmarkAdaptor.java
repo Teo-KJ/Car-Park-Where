@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -62,7 +63,7 @@ public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
-        Button direct,info;
+        ImageButton direct,info;
         ConstraintLayout expandableLayout;
 
         public ViewHolder(@NonNull View itemView) {
