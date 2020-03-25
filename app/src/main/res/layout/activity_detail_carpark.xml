@@ -105,7 +105,6 @@
                     android:layout_marginTop="10dp"
                     android:src="@drawable/diagonal"
                     android:scaleType="centerInside"
-
                     ></ImageButton>
 
                 <ImageButton
