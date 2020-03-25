@@ -15,9 +15,21 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+
 import com.example.carparkwhere.Models.Carpark;
 import com.example.carparkwhere.Utilities.NetworkCallEventListener;
 import com.example.carparkwhere.Utilities.ServerInterfaceManager;
+
+import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
+import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.TimePickerFragment;
+import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
+import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.R;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -43,7 +55,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+
 import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,6 +66,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -75,6 +92,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Map<String, Double> sortedDistanceMap = new HashMap<>();
     Marker currentMarker;
     private ImageButton starBTN;
+
+    private CarparkDao carparkDaoHelper;
+    TextView date_TV, time_TV;
+    String selectedDate = identifyDate(), selectedTime = identifyTime();
+    RecyclerView recyclerView;
+    List<BookmarkedCarpark> bookmarkedCarparks;
+    BookmarkAdaptor recyclerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         starBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MapsActivity.this, SubmitReviewActivity.class);
+                Intent intent = new Intent(MapsActivity.this, UserBookmarksActivity.class);
                 startActivity(intent);
             }
         });
@@ -188,7 +213,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeBitmap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
         ServerInterfaceManager.getAllCarparkEntireFullDetails(this, new NetworkCallEventListener() {
+
+        recyclerView = findViewById(R.id.recyclerView);
+        // setting LinearLayout
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //this also can be done in XML
+        //Making sure divider nice nice
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        //initialising data
+        //from this retrieve from firestore, add bookmark_carparks into bookmarkedCarparks
+        //constructor of bookmark_carparks is just takes in the carpark_id
+        //once done then can remove bottom hardcode
+        bookmarkedCarparks = new ArrayList<>();
+
+        int counter=0;
+        bookmarkedCarparks.add(new BookmarkedCarpark("A81"));
+        bookmarkedCarparks.add(new BookmarkedCarpark("NTU North Spine"));
+        bookmarkedCarparks.add(new BookmarkedCarpark("NIE"));
+        initRecyclerView();
+        carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
+
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful) {
@@ -255,6 +301,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
+
+
+        /*for (String name : sortedDistanceMap.keySet())
+        {
+            if(counter<5)
+            {
+                bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                counter++;
+            }
+            else
+            {
+                break;
+            }
+        }*/
+
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Current Location");
 
@@ -300,4 +361,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         help.setContentView(R.layout.switch_on_location);
         help.show();
     }
+
 }
+
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(calendar.getTime());
+        date_TV.setText(currentDateString);
+        selectedDate = currentDateString;
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR_OF_DAY, hour);
+        time.set(Calendar.MINUTE, minute);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        String currentTimeString = simpleDateFormat.format(time.getTime());
+        time_TV.setText(currentTimeString);
+        selectedTime = currentTimeString;
+    }
+    private void initRecyclerView() {
+        recyclerAdapter = new BookmarkAdaptor(bookmarkedCarparks,this);
+        recyclerView.setAdapter(recyclerAdapter);
+    }
+}
+
