@@ -118,15 +118,6 @@
                     android:scaleType="centerInside"
                     android:adjustViewBounds="true"
                     ></ImageButton>
-
-                <ImageButton
-                    android:id="@+id/SeeReviewButton"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginTop="10dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/see_all_reviews"></ImageButton>
               
             </LinearLayout>
 
