@@ -46,8 +46,7 @@ import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV, capacity_TV;
-    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
-                        seeCarparkReviews_BTN;
+    private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN;
     public RatingBar averageRatingInStars;
     private ProgressDialog nDialog;
     private BarChart barChart;
@@ -80,7 +79,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         carparkNumber_TV = findViewById(R.id.carparkNumber);
         carparkAddress_TV = findViewById(R.id.carparkAddress);
         bookmarkToggle_IMGBTN = findViewById(R.id.BookmarkButton);
-        seeCarparkReviews_BTN = findViewById(R.id.SeeReviewButton);
         detailDirection_IMGBTN = findViewById(R.id.directionsButton);
         averageRating_TV = findViewById(R.id.averageRating);
         averageRatingInStars = findViewById(R.id.averageRatingInStars);
@@ -116,16 +114,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetailCarparkActivity.this, SubmitReviewActivity.class);
-                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
-                startActivity(intent);
-            }
-        });
-
-        // See all the carpark reviews made on the carpark
-        seeCarparkReviews_BTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
                 intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
                 startActivity(intent);
             }
@@ -257,6 +245,14 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }else{
                     totalReviews_TV.setText("0 review");
                 }
+            }
+        });
+        totalReviews_TV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
+                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
             }
         });
 
