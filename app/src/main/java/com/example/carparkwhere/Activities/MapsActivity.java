@@ -507,6 +507,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         selectedDate = currentDateString;
     }
 
+
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         Calendar time = Calendar.getInstance();

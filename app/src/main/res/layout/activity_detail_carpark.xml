@@ -177,11 +177,48 @@
             </LinearLayout>
 
             <ListView
-                android:id="@+id/divider3"
+                android:id="@+id/divider5"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
                 android:layout_marginTop="0dp"
                 android:background="?android:attr/listDivider"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Capacity:"
+                    android:textSize="20dp"></TextView>
+
+                <TextView
+                    android:id="@+id/capacity_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="0dp"
+                    android:textStyle="bold"
+                    android:text="32"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="25dp"
+                    ></TextView>
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_marginTop="0dp"
+                android:background="?android:attr/listDivider"/>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"

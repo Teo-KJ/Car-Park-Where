@@ -18,12 +18,13 @@
         android:paddingRight="5dp"
         android:paddingBottom="5dp">
 
-        <!--android:background="#415A5A5A"-->
+
+        <!--android:background="#333333"-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="51dp"
             android:layout_weight="1"
-            android:background="#333333"
+            android:background="#415A5A5A"
             android:orientation="horizontal"
             android:padding="5dp"
             android:paddingStart="5dp"
@@ -32,7 +33,8 @@
             android:paddingEnd="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="5dp">
-            <!--android:textColor="#272727"-->
+
+            <!--android:textColor="#ffffff"-->
             <TextView
                 android:id="@+id/itemTitle_TV"
                 android:layout_width="144dp"
@@ -42,7 +44,7 @@
                 android:paddingLeft="6dp"
                 android:text="User0101"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#ffffff" />
+                android:textColor="#272727"/>
 
             <RatingBar
                 android:id="@+id/itemRating_RBAR"
@@ -50,24 +52,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:isIndicator="true"
                 android:scaleX="0.8"
                 android:scaleY="0.8" />
 
 
         </LinearLayout>
-        
-        <!--android:background="#236E6C6C"-->
-        <!--android:textColor="@color/common_google_signin_btn_text_light_focused"-->
+        <!--android:background="#555555"-->
+        <!--android:textColor="#eeeeee"-->
+
         <TextView
             android:id="@+id/itemContent_TV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="10dp"
-            android:background="#555555"
+
+            android:background="#236E6C6C"
             android:text="Parking lot is quite empty on weekdays mornings. Otherwise too crowded on the weekends. Good location"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#eeeeee" />
+            android:textColor="@color/common_google_signin_btn_text_light_focused"
+            />
     </LinearLayout>
 
 </LinearLayout>
