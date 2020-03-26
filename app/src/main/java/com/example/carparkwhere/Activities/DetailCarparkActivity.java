@@ -45,7 +45,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
-    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV;
+    private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV, capacity_TV;
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN,
                         seeCarparkReviews_BTN;
     public RatingBar averageRatingInStars;
@@ -87,6 +87,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         totalReviews_TV = findViewById(R.id.totalNumOfReviews);
         liveAvailaibility_TV = findViewById(R.id.liveAvailability);
         timeAdvice_TV = findViewById(R.id.suggestedTimeToPark);
+        capacity_TV = findViewById(R.id.capacity_tv);
 
         //  Dialogue bar to load the carpark details
         presentProgressDialog("Loading Carpark...");
@@ -269,6 +270,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 Carpark carpark = (Carpark) networkCallResult;
                 carparkNumber_TV.setText(carpark.carparkNo);
                 carparkAddress_TV.setText(carpark.carparkName);
+                capacity_TV.setText(Integer.toString(carpark.carDetails.capacity));
                 ArrayList<Carpark.CarparkCarDetails.CarparkPriceJson> allPrices = carpark.carDetails.prices;
                 Carpark.CarparkCarDetails.CarparkPriceJson prices = allPrices.get(0);
                 String description = prices.description;
