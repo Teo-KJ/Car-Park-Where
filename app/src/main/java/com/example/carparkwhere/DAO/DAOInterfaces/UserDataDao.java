@@ -17,7 +17,7 @@ public interface UserDataDao{
     public String getDisplayName() throws UserNotLoggedInException;
     public void updateDisplayName(String displayName) throws UserNotLoggedInException;
     public void signOut() throws UserNotLoggedInException;
-    public void sendResetPasswordEmail() throws UserNotLoggedInException;;
+    public void sendResetPasswordEmail(String email);
 
 
 }

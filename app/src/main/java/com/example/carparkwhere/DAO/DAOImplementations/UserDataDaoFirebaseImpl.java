@@ -62,12 +62,8 @@ public class UserDataDaoFirebaseImpl implements UserDataDao {
         }
     }
 
-    public void sendResetPasswordEmail() throws UserNotLoggedInException{
-        if (isLoggedIn()){
-            mAuth.sendPasswordResetEmail(mAuth.getCurrentUser().getEmail());
-        }else{
-            throw new UserNotLoggedInException("User is not logged in");
-        }
+    public void sendResetPasswordEmail(String email){
+        mAuth.sendPasswordResetEmail(email);
     }
 
     public void signInWithEmail(Context context, String email, String password, OnCompleteListener<AuthResult> handler){

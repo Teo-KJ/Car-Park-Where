@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
@@ -21,7 +22,17 @@ import com.example.carparkwhere.R;
 public class AccountOptionsActivity extends AppCompatActivity {
 
     private TextView accountEmailTitle_TV;
+    private Button signInSettings_BTN;
+    Button viewUserBookmarks_BTN;
+    ImageButton backAccountOptionsActivity_IMGBTN;
+    Button viewUserReviews_BTN;
+    Button signOutAccount_BTN;
+    Button viewResetPassword_BTN;
+    Button viewDeactivateAccount_BTN;
+
+
     private UserDataDao userDataDaoHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +47,26 @@ public class AccountOptionsActivity extends AppCompatActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("Settings");
 
-
+        backAccountOptionsActivity_IMGBTN = findViewById(R.id.backAccountOptionsActivity_IMGBTN);
+        viewUserBookmarks_BTN = findViewById(R.id.viewUserBookmarks_BTN);
         accountEmailTitle_TV = findViewById(R.id.accountEmailTitle_TV);
-        try{
-            accountEmailTitle_TV.setText("Signed-in as " + userDataDaoHelper.getUserEmail());
-        }catch (UserNotLoggedInException e){
-            accountEmailTitle_TV.setText("Not Signed-in");
-        }
+        viewUserReviews_BTN = findViewById(R.id.viewUserReviews_BTN);
+        signOutAccount_BTN = findViewById(R.id.signOutAccount_BTN);
+        viewResetPassword_BTN = findViewById(R.id.viewResetPassword_BTN);
+        viewDeactivateAccount_BTN = findViewById(R.id.viewDeactivateAccount_BTN);
+
+        signInSettings_BTN = findViewById(R.id.signInSettings_BTN);
+        signInSettings_BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AccountOptionsActivity.this,SignInActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
 
 
-        ImageButton backAccountOptionsActivity_IMGBTN = findViewById(R.id.backAccountOptionsActivity_IMGBTN);
+
         backAccountOptionsActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +74,7 @@ public class AccountOptionsActivity extends AppCompatActivity {
             }
         });
 
-        Button viewUserBookmarks_BTN = findViewById(R.id.viewUserBookmarks_BTN);
+
         viewUserBookmarks_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,7 +82,7 @@ public class AccountOptionsActivity extends AppCompatActivity {
             }
         });
 
-        Button viewUserReviews_BTN = findViewById(R.id.viewUserReviews_BTN);
+
         viewUserReviews_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,12 +90,15 @@ public class AccountOptionsActivity extends AppCompatActivity {
             }
         });
 
-        Button signOutAccount_BTN = findViewById(R.id.signOutAccount_BTN);
+
         signOutAccount_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try{
                     userDataDaoHelper.signOut();
+                    Intent intent = new Intent(AccountOptionsActivity.this,SignInActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }catch (UserNotLoggedInException e){
                     //user not logged in
                 }
@@ -83,7 +107,7 @@ public class AccountOptionsActivity extends AppCompatActivity {
             }
         });
 
-        Button viewResetPassword_BTN = findViewById(R.id.viewResetPassword_BTN);
+
         viewResetPassword_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,13 +115,24 @@ public class AccountOptionsActivity extends AppCompatActivity {
             }
         });
 
-        Button viewDeactivateAccount_BTN = findViewById(R.id.viewDeactivateAccount_BTN);
+
         viewDeactivateAccount_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
+
+
+
+        try{
+            accountEmailTitle_TV.setText("Signed-in as " + userDataDaoHelper.getUserEmail());
+            signInSettings_BTN.setVisibility(View.INVISIBLE);
+        }catch (UserNotLoggedInException e){
+            accountEmailTitle_TV.setText("Not Signed-in");
+            setButtonsHiddenIfNotSignedIn();
+        }
+
 
     }
 
@@ -109,6 +144,13 @@ public class AccountOptionsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void setButtonsHiddenIfNotSignedIn(){
+        viewUserReviews_BTN.setVisibility(View.INVISIBLE);
+        signOutAccount_BTN.setVisibility(View.INVISIBLE);
+        viewResetPassword_BTN.setVisibility(View.INVISIBLE);
     }
 
 
