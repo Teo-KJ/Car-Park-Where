@@ -43,6 +43,7 @@ public class CarparkReviewsAdapter extends
         RatingBar onBind_RatingRBAR = viewHolder.itemRating_RBAR;
         onBind_RatingRBAR.setRating(review.getRating().floatValue());
 
+
         Log.d(onBind_TitleTV.getText().toString(),"onBind title");
         Log.d(onBind_ContentTV.getText().toString(),"onBind content");
         Log.d(Integer.toString(onBind_RatingRBAR.getNumStars()),"onBind rating");
