@@ -166,6 +166,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        if (!userDataDaoHelper.isLoggedIn()){
+            bookmarkToggle_IMGBTN.setVisibility(View.INVISIBLE);
+        }
+
         // User selects this button to bookmark a carpark
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
