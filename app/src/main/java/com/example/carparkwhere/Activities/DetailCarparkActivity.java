@@ -318,7 +318,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.setNoDataText("Loading the data...");
         barChart.getAxisLeft().setDrawLabels(false);
         barChart.getAxisRight().setDrawLabels(false);
-
+        barChart.setDescription("");
 
 
     }
