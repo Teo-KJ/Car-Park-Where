@@ -27,6 +27,7 @@ import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.ListMapAdapter;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.RecyclerAdapter;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.TimePickerFragment;
 import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
@@ -76,7 +77,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, ListMapAdapter.UserListRecyclerClickListener {
 
     Location currentLocation;
     private GoogleMap googleMap;
@@ -104,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView date_TV, time_TV;
     String selectedDate = identifyDate(), selectedTime = identifyTime();
     RecyclerView recyclerView;
-    BookmarkAdaptor recyclerAdapter;
+    ListMapAdapter recyclerAdapter;
     List<BookmarkedCarpark> bookmarkedCarparks;
     ImageButton settingsButton_IMGBTN;
 
@@ -527,8 +528,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void initRecyclerView() {
-        recyclerAdapter = new BookmarkAdaptor(bookmarkedCarparks,this);
+        recyclerAdapter = new ListMapAdapter(bookmarkedCarparks, this, this);
         recyclerView.setAdapter(recyclerAdapter);
+        /*Intent intent = getIntent();
 
+
+        try {
+            double latitude = intent.getDoubleExtra("Lat", 0.0);
+            double longitude = intent.getDoubleExtra("Lng", 0.0);
+            LatLng latLng = new LatLng(latitude, longitude);
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        }
+        catch(Exception e) {
+            //  Block of code to handle errors
+        }*/
+    }
+
+    @Override
+    public void onUserClicked(int position) {
+        String name= bookmarkedCarparks.get(position).getCarparkID();
+        carparkDaoHelper.getCarparkDetailsByID(name, new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                Carpark carpark = (Carpark) networkCallResult;
+                double latitude = carpark.latitude;
+                double longitude = carpark.longitude;
+                LatLng latLng = new LatLng(latitude, longitude);
+                if(currentMarker!=null) {
+                    currentMarker.remove();
+                }
+                MarkerOptions markerOptions2 = new MarkerOptions().position(latLng);
+                currentMarker=googleMap.addMarker(markerOptions2);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+            }
+        });
     }
 }
