@@ -46,15 +46,8 @@ public class SignInActivity extends AppCompatActivity {
         carparkDaoHelper = new CarparkDaoImpl(this);
         userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
-        carparkDaoHelper.getServerPrepared(new NetworkCallEventListener() {
-            @Override
-            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-
-            }
-        });
-
         getSupportActionBar().hide();
-        checkIfUserIsAlreadySignIn();
+        //checkIfUserIsAlreadySignIn();
         setupFindViewsByID();
         setupSignInButton();
         setupCreateAccountButton();
