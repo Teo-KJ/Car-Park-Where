@@ -55,7 +55,7 @@ public class SignInActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        //checkIfUserIsAlreadySignIn();
+        checkIfUserIsAlreadySignIn();
         setupFindViewsByID();
         setupSignInButton();
         setupCreateAccountButton();

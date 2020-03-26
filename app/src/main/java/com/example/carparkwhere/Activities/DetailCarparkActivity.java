@@ -320,7 +320,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.getAxisRight().setDrawLabels(false);
         barChart.setDescription("");
 
-
     }
 
     //   Function for Progress bar to load carpark detail
