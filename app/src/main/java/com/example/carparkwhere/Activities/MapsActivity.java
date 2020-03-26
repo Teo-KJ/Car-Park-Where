@@ -22,7 +22,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
+import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.RecyclerAdapter;
@@ -98,6 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker currentMarker;
     private ImageButton starBTN;
     private CarparkDao carparkDaoHelper;
+    private UserDataDao userDataDaoHelper;
     TextView date_TV, time_TV;
     String selectedDate = identifyDate(), selectedTime = identifyTime();
     RecyclerView recyclerView;
@@ -110,6 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         carparkDaoHelper = new CarparkDaoImpl(this);
+        userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
         // Setup Places Client
         if (!Places.isInitialized()) {
@@ -200,6 +204,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
         starBTN = findViewById(R.id.starButton);
+        if (!userDataDaoHelper.isLoggedIn()){
+            starBTN.setVisibility(View.INVISIBLE);
+        }
         starBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
