@@ -43,6 +43,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
         emailAddress_ET = findViewById(R.id.emailAddress);
 //        resetPasswordOld_ET = findViewById(R.id.oldPassword);
 //        resetPasswordNew_ET = findViewById(R.id.newPassword);
+
+        try {
+            emailAddress_ET.setText(userDataDaoHelper.getUserEmail());
+        }catch (Exception e){
+
+        }
+
         resetPasswordCancel_BTN = findViewById(R.id.cancelButton);
         resetPasswordSubmit_BTN = findViewById(R.id.submitButton);
 
@@ -50,7 +57,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         resetPasswordSubmit_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("ss","passing in");
                 if (emailAddress_ET.getText().toString().isEmpty()){
                     checkPassword_TV.setText("Enter email address.");
                 }
