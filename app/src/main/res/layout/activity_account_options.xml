@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#202020"
+    android:background="@color/quantum_white_100"
     tools:context=".Activities.AccountOptionsActivity">
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:id="@+id/backAccountOptionsActivity_IMGBTN"
             android:layout_width="50dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/back"
             android:scaleType="centerInside" />
@@ -30,10 +30,46 @@
         <Button
             android:id="@+id/viewUserBookmarks_BTN"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="1dp"
             android:background="#353535"
             android:text="Bookmarks"
+            android:textColor="#C0C0C0" />
+
+
+
+        <TextView
+            android:id="@+id/accountSettingsTitle_TV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:background="@color/quantum_white_100"
+            android:fontFamily="sans-serif-light"
+            android:text="Account Settings"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#222222" />
+
+        <TextView
+            android:id="@+id/accountEmailTitle_TV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@color/quantum_white_100"
+            android:fontFamily="sans-serif-light"
+            android:text="SIgned-in as someone@gmail.com"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#222222" />
+
+
+        <Button
+            android:id="@+id/signInSettings_BTN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="#353535"
+            android:text="Sign in"
             android:textColor="#C0C0C0" />
 
         <Button
@@ -45,29 +81,7 @@
             android:text="Reviews"
             android:textColor="#C0C0C0" />
 
-        <TextView
-            android:id="@+id/accountSettingsTitle_TV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="#202020"
-            android:fontFamily="sans-serif-light"
-            android:text="Account Settings"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#C0C0C0" />
 
-        <TextView
-            android:id="@+id/accountEmailTitle_TV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:background="#202020"
-            android:fontFamily="sans-serif-light"
-            android:text="SIgned-in as someone@gmail.com"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#C0C0C0" />
 
         <Button
             android:id="@+id/signOutAccount_BTN"
@@ -90,7 +104,7 @@
         <Button
             android:id="@+id/viewDeactivateAccount_BTN"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="1dp"
             android:background="#353535"
             android:text="Deactivate Account"

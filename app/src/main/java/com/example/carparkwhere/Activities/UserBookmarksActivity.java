@@ -45,6 +45,8 @@ public class UserBookmarksActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
         bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("Bookmarks");
+
         try{
             bar.setTitle("Bookmarks for " + userDataDaoHelper.getDisplayName());
         }catch (UserNotLoggedInException e){
