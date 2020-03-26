@@ -105,11 +105,21 @@ public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHo
                 @Override
                 public void onClick(View view){
                     BookmarkedCarpark bookmark = bookmarkedCarparks.get(getAdapterPosition());
-                    String text = bookmark.getCarparkID();
-                    System.out.println("Info "+text);
-                    Intent intent = new Intent(context, DetailCarparkActivity.class);
-                    intent.putExtra("CARPARK_ID",bookmark.getCarparkID());
-                    context.startActivity(intent);
+                    carparkDaoHelper.getCarparkDetailsByID(bookmark.getCarparkID(), new NetworkCallEventListener() {
+                        @Override
+                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                            Carpark carpark = (Carpark) networkCallResult;
+                            BookmarkedCarpark bookmark = bookmarkedCarparks.get(getAdapterPosition());
+                            String text = bookmark.getCarparkID();
+                            System.out.println("Info "+text);
+                            Intent intent = new Intent(context, DetailCarparkActivity.class);
+                            intent.putExtra("CARPARK_ID",bookmark.getCarparkID());
+                            intent.putExtra("Lat", carpark.latitude);
+                            intent.putExtra("Lng", carpark.longitude);
+                            context.startActivity(intent);
+                        }
+                    });
+
                 }
             });
         }
