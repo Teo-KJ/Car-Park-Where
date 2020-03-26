@@ -25,6 +25,7 @@ import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.RecyclerAdapter;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.TimePickerFragment;
 import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
 import com.example.carparkwhere.ModelObjects.Carpark;
@@ -91,6 +92,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
     Map<String, String> mMarkerMap = new HashMap<>();
     Map<String, Double> mDistanceMap = new HashMap<>();
+    Map<String, Double> mDistanceMapNew = new HashMap<>();
+    Map<String, Double> sortedDistanceMapNew = new HashMap<>();
     Map<String, Double> sortedDistanceMap = new HashMap<>();
     Marker currentMarker;
     private ImageButton starBTN;
@@ -131,7 +134,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if(currentMarker!=null) {
                             currentMarker.remove();
                         }
-
+                        Location searchedLocation=new Location ("");
+                        searchedLocation.setLongitude(place.getLatLng().longitude);
+                        searchedLocation.setLatitude(place.getLatLng().latitude);
                         MarkerOptions markerOption= new MarkerOptions();
                         markerOption.position(latLng);
                         markerOption.title(place.getName());
@@ -140,6 +145,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                         Toast.makeText(MapsActivity.this, ""+latLng.latitude, Toast.LENGTH_SHORT).show();
+
+                        bookmarkedCarparks.clear();
+
+                        carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
+                            @RequiresApi(api = Build.VERSION_CODES.N)
+                            @Override
+                            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                                if (isSuccessful) {
+                                    carparks = (ArrayList<Carpark>) networkCallResult;
+                                    double fullness;
+                                    double distance;
+                                    Location mark=new Location ("");
+                                    for (int counter = 0; counter < carparks.size(); counter++) {
+                                        mark.setLatitude(carparks.get(counter).latitude);
+                                        mark.setLongitude(carparks.get(counter).longitude);
+                                        distance= searchedLocation.distanceTo(mark);
+                                        mDistanceMapNew.put(carparks.get(counter).carparkNo, distance);
+                                        Log.d("ccb1", "knn");
+                                    }
+
+                                }else{
+                                    //deal with the error message, maybe toast or something
+                                }
+                                sortedDistanceMapNew=mDistanceMapNew.entrySet()
+                                        .stream()
+                                        .sorted(Map.Entry.comparingByValue())
+                                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+                                int counter =0;
+                                for (String name : sortedDistanceMapNew.keySet())
+                                {
+                                    if (counter<=10)
+                                    {
+                                        bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                                        counter++;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                recyclerAdapter.notifyDataSetChanged();
+                                initRecyclerView();
+                            }
+                        });
                     }
 
                     @Override
@@ -257,16 +306,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //constructor of bookmark_carparks is just takes in the carpark_id
         //once done then can remove bottom hardcode
         bookmarkedCarparks = new ArrayList<>();
-        bookmarkedCarparks.add(new BookmarkedCarpark("A81"));
-        bookmarkedCarparks.add(new BookmarkedCarpark("NTU North Spine"));
+        //bookmarkedCarparks.add(new BookmarkedCarpark("A81"));
+        //bookmarkedCarparks.add(new BookmarkedCarpark("NTU North Spine"));
         //bookmarkedCarparks.add(new BookmarkedCarpark("NIE"));
-        int counter=0;
-        for (String name : mDistanceMap.keySet())
-        {
-            bookmarkedCarparks.add(new BookmarkedCarpark(name));
-            counter++;
-        }
-
         initRecyclerView();
     }
 
@@ -365,6 +407,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
                     }
                 }
+
                 initRecyclerView();
             }
         });
@@ -385,7 +428,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        googleMap.addMarker(markerOptions);
+        currentMarker=googleMap.addMarker(markerOptions);
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -403,14 +446,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
-        if(mMarkerMap.isEmpty()==true)
-        {
-            Log.d("ccb", "Empty");
-        }
-        else
-        {
-            Log.d("ccb", "EmptyNot");
-        }
+        googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                if(currentMarker!=null) {
+                    currentMarker.remove();
+                }
+                currentMarker=googleMap.addMarker(markerOptions);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                bookmarkedCarparks.clear();
+                int counter =0;
+                for (String name : sortedDistanceMap.keySet())
+                {
+                    if (counter<=10)
+                    {
+                        bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                        counter++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                recyclerAdapter.notifyDataSetChanged();
+                initRecyclerView();
+
+                return true;
+            }
+        });
     }
 
     @Override
@@ -457,5 +521,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void initRecyclerView() {
         recyclerAdapter = new BookmarkAdaptor(bookmarkedCarparks,this);
         recyclerView.setAdapter(recyclerAdapter);
+
     }
 }
