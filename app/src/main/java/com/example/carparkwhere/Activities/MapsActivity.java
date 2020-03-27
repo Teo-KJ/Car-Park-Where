@@ -3,7 +3,6 @@ package com.example.carparkwhere.Activities;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -20,10 +19,6 @@ import android.widget.Toast;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
-import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.ListMapAdapter;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.RecyclerAdapter;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.ListMapAdapter;
 import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
@@ -145,6 +140,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Toast.makeText(MapsActivity.this, "" + latLng.latitude, Toast.LENGTH_SHORT).show();
 
                         bookmarkedCarparks.clear();
+                        bookmarkedCarparks = new ArrayList<>();
 
                         carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
                             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -171,6 +167,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .sorted(Map.Entry.comparingByValue())
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
                                 int counter = 0;
+                                bookmarkedCarparks = new ArrayList<>();
                                 for (String name : sortedDistanceMapNew.keySet()) {
                                     if (counter <= 10) {
                                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
@@ -181,6 +178,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 }
                                 recyclerAdapter.notifyDataSetChanged();
                                 initRecyclerView();
+
+                                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
+                                    carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+                                        @Override
+                                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                                            if (isSuccessful) {
+                                                Carpark carpark = (Carpark) networkCallResult;
+                                                bookmarkedCarpark.setCarparkName(carpark.carparkName);
+                                                recyclerAdapter.notifyDataSetChanged();
+                                            }
+
+                                        }
+                                    });
+
+                                    carparkDaoHelper.getCarparkLiveAvailability(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+                                        @Override
+                                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                                            if (isSuccessful) {
+                                                Integer availability = (Integer) networkCallResult;
+                                                bookmarkedCarpark.setAvailability(availability.toString());
+                                                recyclerAdapter.notifyDataSetChanged();
+                                            }
+
+                                        }
+                                    });
+
+                                }
                             }
                         });
                     }
@@ -427,6 +451,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
                 int counter = 0;
+                bookmarkedCarparks = new ArrayList<>();
                 for (String name : sortedDistanceMap.keySet()) {
                     if (counter <= 10) {
                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
@@ -434,6 +459,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     } else {
                         break;
                     }
+                }
+
+
+                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
+                    carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+                        @Override
+                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                            if (isSuccessful) {
+                                Carpark carpark = (Carpark) networkCallResult;
+                                bookmarkedCarpark.setCarparkName(carpark.carparkName);
+                                recyclerAdapter.notifyDataSetChanged();
+                            }
+
+                        }
+                    });
+
+                    carparkDaoHelper.getCarparkLiveAvailability(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+                        @Override
+                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                            if (isSuccessful) {
+                                Integer availability = (Integer) networkCallResult;
+                                bookmarkedCarpark.setAvailability(availability.toString());
+                                recyclerAdapter.notifyDataSetChanged();
+                            }
+
+                        }
+                    });
+
                 }
 
                 initRecyclerView();
@@ -484,6 +537,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
                 bookmarkedCarparks.clear();
+                bookmarkedCarparks = new ArrayList<>();
+
+                System.out.println(bookmarkedCarparks);
                 int counter =0;
                 for (String name : sortedDistanceMap.keySet()) {
                     if (counter <= 10) {
@@ -493,42 +549,100 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
                 }
 
-                carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-                        if (isSuccessful) {
-                            carparks = (ArrayList<Carpark>) networkCallResult;
-                            double distance;
-                            Location mark = new Location("");
-                            for (int counter = 0; counter < carparks.size(); counter++) {
-                                mark.setLatitude(carparks.get(counter).latitude);
-                                mark.setLongitude(carparks.get(counter).longitude);
-                                distance = currentLocation.distanceTo(mark);
-                                mDistanceMapNew.put(carparks.get(counter).carparkNo, distance);
-                                Log.d("ccb1", "knn");
+
+                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
+                    carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+                        @Override
+                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                            if (isSuccessful) {
+                                Carpark carpark = (Carpark) networkCallResult;
+                                bookmarkedCarpark.setCarparkName(carpark.carparkName);
+                                recyclerAdapter.notifyDataSetChanged();
                             }
 
-                        } else {
-                            //deal with the error message, maybe toast or something
                         }
-                        sortedDistanceMapNew = mDistanceMapNew.entrySet()
-                                .stream()
-                                .sorted(Map.Entry.comparingByValue())
-                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-                        int counter = 0;
-                        for (String name : sortedDistanceMapNew.keySet()) {
-                            if (counter <= 10) {
-                                bookmarkedCarparks.add(new BookmarkedCarpark(name));
-                                counter++;
-                            } else {
-                                break;
+                    });
+
+                    carparkDaoHelper.getCarparkLiveAvailability(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+                        @Override
+                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                            if (isSuccessful) {
+                                Integer availability = (Integer) networkCallResult;
+                                bookmarkedCarpark.setAvailability(availability.toString());
+                                recyclerAdapter.notifyDataSetChanged();
                             }
+
                         }
-                        recyclerAdapter.notifyDataSetChanged();
-                        initRecyclerView();
-                    }
-                });
+                    });
+
+                }
+
+                recyclerAdapter.notifyDataSetChanged();
+
+//                carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
+//                    @RequiresApi(api = Build.VERSION_CODES.N)
+//                    @Override
+//                    public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+//                        if (isSuccessful) {
+//                            carparks = (ArrayList<Carpark>) networkCallResult;
+//                            double distance;
+//                            Location mark = new Location("");
+//                            for (int counter = 0; counter < carparks.size(); counter++) {
+//                                mark.setLatitude(carparks.get(counter).latitude);
+//                                mark.setLongitude(carparks.get(counter).longitude);
+//                                distance = currentLocation.distanceTo(mark);
+//                                mDistanceMapNew.put(carparks.get(counter).carparkNo, distance);
+//                                Log.d("ccb1", "knn");
+//                            }
+//
+//                        } else {
+//                            //deal with the error message, maybe toast or something
+//                        }
+//                        sortedDistanceMapNew = mDistanceMapNew.entrySet()
+//                                .stream()
+//                                .sorted(Map.Entry.comparingByValue())
+//                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+//                        int counter = 0;
+//
+//                        for (String name : sortedDistanceMapNew.keySet()) {
+//                            if (counter <= 10) {
+//                                bookmarkedCarparks.add(new BookmarkedCarpark(name));
+//                                counter++;
+//                            } else {
+//                                break;
+//                            }
+//                        }
+//                        recyclerAdapter.notifyDataSetChanged();
+//                        initRecyclerView();
+//
+////                        for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
+////                            carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+////                                @Override
+////                                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+////                                    if (isSuccessful) {
+////                                        Carpark carpark = (Carpark) networkCallResult;
+////                                        bookmarkedCarpark.setCarparkName(carpark.carparkName);
+////                                        recyclerAdapter.notifyDataSetChanged();
+////                                    }
+////
+////                                }
+////                            });
+////
+////                            carparkDaoHelper.getCarparkLiveAvailability(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
+////                                @Override
+////                                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+////                                    if (isSuccessful) {
+////                                        Integer availability = (Integer) networkCallResult;
+////                                        bookmarkedCarpark.setAvailability(availability.toString());
+////                                        recyclerAdapter.notifyDataSetChanged();
+////                                    }
+////
+////                                }
+////                            });
+////
+////                        }
+//                    }
+//                });
 
                 return true;
             }

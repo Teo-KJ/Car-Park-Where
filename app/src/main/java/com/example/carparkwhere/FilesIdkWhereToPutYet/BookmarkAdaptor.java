@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,16 +25,20 @@ import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
 import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHolder> {
 
     List<BookmarkedCarpark> bookmarkedCarparks;
+//    List<Carpark> carparks;
+    ArrayList<String> availabilityStrings;
     Context context;
     CarparkDao carparkDaoHelper;
 
     public BookmarkAdaptor(List<BookmarkedCarpark> bookmarkedCarparks, Context context) {
         this.bookmarkedCarparks = bookmarkedCarparks;
+//        this.carparks = carparks;
         this.context = context;
         carparkDaoHelper = new CarparkDaoImpl(context);
     }
@@ -54,6 +59,12 @@ public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHo
         holder.textView.setText(bookmarks.getCarparkID());
         boolean isExpanded = bookmarkedCarparks.get(position).isExpanded();
         holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.address_TV.setText(bookmarkedCarparks.get(position).getCarparkName());
+        String availabilityString = bookmarkedCarparks.get(position).getAvailability();
+        if (availabilityString.equals("")){
+            availabilityString = "-";
+        }
+        holder.liveAvailability_bookmark_TV.setText(availabilityString);
     }
     //number of items in the view
     @Override
@@ -62,9 +73,10 @@ public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView textView,address_TV,liveAvailability_bookmark_TV;
         ImageButton direct,info;
         ConstraintLayout expandableLayout;
+        LinearLayout topLinearLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,8 +85,12 @@ public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHo
             direct = itemView.findViewById(R.id.btnDirection);
             info = itemView.findViewById(R.id.btnInformation);
             expandableLayout = itemView.findViewById(R.id.expandableLayout);
+            topLinearLayout = itemView.findViewById(R.id.topLinearLayout);
+            address_TV = itemView.findViewById(R.id.carparkAddress_TV);
+            liveAvailability_bookmark_TV = itemView.findViewById(R.id.liveAvailability_bookmark_TV);
 
-            textView.setOnClickListener(new View.OnClickListener(){
+
+            topLinearLayout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     BookmarkedCarpark bookmark = bookmarkedCarparks.get(getAdapterPosition());
@@ -82,6 +98,9 @@ public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHo
                     notifyItemChanged(getAdapterPosition());
                 }
             });
+
+
+
             direct.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
