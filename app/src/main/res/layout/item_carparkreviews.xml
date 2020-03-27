@@ -10,13 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="5dp"
-        android:paddingStart="5dp"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="5dp">
+        android:padding="0dp"
+        >
 
 
         <!--android:background="#333333"-->
@@ -24,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="51dp"
             android:layout_weight="1"
-            android:background="#415A5A5A"
+            android:background="#ffffff"
             android:orientation="horizontal"
             android:padding="5dp"
             android:paddingStart="5dp"
@@ -37,27 +32,34 @@
             <!--android:textColor="#ffffff"-->
             <TextView
                 android:id="@+id/itemTitle_TV"
-                android:layout_width="144dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:paddingLeft="6dp"
-                android:text="User0101"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#272727"/>
-
-            <RatingBar
-                android:id="@+id/itemRating_RBAR"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:isIndicator="true"
-                android:scaleX="0.8"
-                android:scaleY="0.8" />
+                android:paddingLeft="12dp"
+                android:text="Someguy"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
 
 
         </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/itemRating_RBAR"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:isIndicator="true"
+            android:paddingStart="0dp"
+            android:layout_marginTop="-7dp"
+            android:layout_marginLeft="16dp"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp"
+            android:theme="@style/RatingBar"
+            android:scaleX="0.35"
+            android:scaleY="0.35" />
         <!--android:background="#555555"-->
         <!--android:textColor="#eeeeee"-->
 
@@ -66,13 +68,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
-
-            android:background="#236E6C6C"
+            android:padding="16dp"
+            android:paddingTop="0dp"
+            android:layout_marginTop="-20dp"
+            android:textSize="16sp"
+            android:background="#ffffff"
             android:text="Parking lot is quite empty on weekdays mornings. Otherwise too crowded on the weekends. Good location"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/common_google_signin_btn_text_light_focused"
+            android:textColor="@color/quantum_grey900"
             />
+
+        <ListView
+            android:id="@+id/divider10"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="?android:attr/listDivider"/>
+
     </LinearLayout>
+
+
 
 </LinearLayout>
