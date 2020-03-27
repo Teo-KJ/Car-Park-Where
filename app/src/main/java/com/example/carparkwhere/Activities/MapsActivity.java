@@ -22,10 +22,8 @@ import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.ListMapAdapter;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.RecyclerAdapter;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.TimePickerFragment;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.ListMapAdapter;
 import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
@@ -488,12 +486,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 bookmarkedCarparks.clear();
                 int counter =0;
                 for (String name : sortedDistanceMap.keySet()) {
-                    if (counter<=10) {
+                    if (counter <= 10) {
                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
                         counter++;
-                    }
-                    else {
+                    } else
                         break;
+                }
 
                 carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
