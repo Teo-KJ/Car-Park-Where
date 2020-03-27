@@ -1,5 +1,6 @@
 package com.example.carparkwhere.Activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.carparkwhere.DAO.DAOImplementations.BookmarkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
@@ -40,8 +43,15 @@ import com.github.mikephil.charting.data.BarEntry;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
@@ -57,6 +67,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private ReviewDao reviewDaoHelper;
     private BookmarkDao bookmarkDaoHelper;
     private UserDataDao userDataDaoHelper;
+    float carparkCapacity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,6 +284,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 carparkAddress_TV.setText(carpark.carparkName);
                 try{
                     capacity_TV.setText(Integer.toString(carpark.carDetails.capacity));
+                    carparkCapacity = carpark.carDetails.capacity;
+                    getAvailabilityPredictionData(1, str);
                 }catch(Exception e){
                     capacity_TV.setText("");
                 }
@@ -328,9 +341,30 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.getAxisRight().setDrawLabels(false);
         barChart.setDescription("");
 
-        timeAdvice_TV.setText(getIntent().getStringExtra("Year"));
+        /*Calendar currentDateAndTime = getCurrentDateAndTime();
+        year = Integer.toString(currentDateAndTime.get(Calendar.YEAR));
+        month = Integer.toString(currentDateAndTime.get(Calendar.MONTH));
+        dateDay = Integer.toString(currentDateAndTime.get(Calendar.DAY_OF_MONTH));
+        hour = Integer.toString(currentDateAndTime.get(Calendar.HOUR));
+        minute = Integer.toString(currentDateAndTime.get(Calendar.MINUTE));*/
 
-        //carparkDaoHelper.getCarparkAvailabilityPredictionByDateTime(str, )
+        /*for (int i=0; i<10; i++) {
+            carparkDaoHelper.getCarparkAvailabilityPredictionByDateTime(str, year, month, dateDay, hour, minute, new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    JSONObject jsonObject = (JSONObject) response;
+                    try {
+                        int predictedLots = jsonObject.getInt("predictedAvailability");
+                        timeAdvice_TV.append(predictedLots + "\n");
+                        allSuggestedTimes.add(predictedLots);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, error -> error.printStackTrace());
+            minute += 5;
+        }*/
     }
 
     //   Function for Progress bar to load carpark detail
@@ -365,15 +399,24 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 JSONArray jsonArray = (JSONArray) response;
                 ArrayList<BarEntry> barEntries = new ArrayList<>();
                 ArrayList<String> allTimings = new ArrayList<String>();
+                ArrayList<String> allSuggestedTimes = new ArrayList<String>();
+                StringBuilder stringBuilder = new StringBuilder();
+                int counter = 5;
 
                 for (int j=0; j<jsonArray.length(); j++){
                     try {
                         JSONObject predictions = jsonArray.getJSONObject(j);
                         String time = predictions.getString("time");
                         float carparkPrediction = predictions.getInt("predictedAvailability");
+
+                        if ( (convertTimeString(time).compareTo(getCurrentTime())>0) && (carparkPrediction/carparkCapacity >= 0.5) &&
+                                (j<counter)){
+                            allSuggestedTimes.add(time);
+                        }
+
                         barEntries.add(new BarEntry(carparkPrediction, j));
                         allTimings.add(time);
-                    } catch (JSONException e) {
+                    } catch (JSONException | ParseException e) {
                         e.printStackTrace();
                     }
                 }
@@ -384,6 +427,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 barChart.setTouchEnabled(true);
                 barChart.invalidate();
                 barChart.refreshDrawableState();
+
+                for (String time: allSuggestedTimes){
+                    stringBuilder.append(time + "\n");
+                }
+                if (allSuggestedTimes.size()==0) timeAdvice_TV.setText("Carpark is estimated to be less than 50% full at the moment.");
+                else timeAdvice_TV.setText(stringBuilder);
             }
 
         }, error -> error.printStackTrace());
@@ -397,6 +446,17 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private Date convertTimeString (String time) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String date = currentDate + " " + time;
+        return formatter.parse(date);
+    }
+
+    private Date getCurrentTime(){
+        return java.util.Calendar.getInstance().getTime();
     }
 
     @Override
@@ -427,5 +487,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public Calendar getCurrentDateAndTime(){
+        return Calendar.getInstance(TimeZone.getDefault());
     }
 }

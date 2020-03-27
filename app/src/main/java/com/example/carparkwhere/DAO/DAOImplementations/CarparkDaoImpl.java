@@ -121,7 +121,8 @@ public class CarparkDaoImpl implements CarparkDao {
 
     public void getCarparkAvailabilityPredictionByDateTime(String carparkID,String year,String month, String day, String hour, String minute, Response.Listener successListener, Response.ErrorListener errorListener){
         mQueue = Volley.newRequestQueue(context);
-        String url = context.getResources().getString(R.string.serverUrl) + "/client/carparkdetails/prediction/" + carparkID + "?date=" + year + "-" + ((month.length() == 1) ? "0"+month : month) + "-" + ((day.length() == 1) ? "0"+day : day) + "T" + ((hour.length() == 1) ? "0"+hour : hour) + ":" + ((minute.length() == 1) ? "0"+minute : minute);
+        // 0 means for the current day itself only
+        String url = context.getResources().getString(R.string.serverUrl) + "/client/carparkdetails/prediction/" + carparkID + "/0?date=" + year + "-" + ((month.length() == 1) ? "0"+month : month) + "-" + ((day.length() == 1) ? "0"+day : day) + "T" + ((hour.length() == 1) ? "0"+hour : hour) + ":" + ((minute.length() == 1) ? "0"+minute : minute);
         JsonObjectRequest request = new JsonObjectRequest(url, null, successListener,errorListener);
         mQueue.add(request);
     }
