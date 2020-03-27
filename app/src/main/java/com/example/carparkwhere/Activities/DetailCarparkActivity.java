@@ -328,6 +328,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.getAxisRight().setDrawLabels(false);
         barChart.setDescription("");
 
+        timeAdvice_TV.setText(getIntent().getStringExtra("Year"));
+
+        //carparkDaoHelper.getCarparkAvailabilityPredictionByDateTime(str, )
     }
 
     //   Function for Progress bar to load carpark detail

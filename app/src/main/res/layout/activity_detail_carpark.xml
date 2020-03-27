@@ -290,13 +290,14 @@
                     ></TextView>
                 <ImageButton
                     android:id="@+id/tutorialButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_weight="0.2"
                     android:layout_marginLeft="0dp"
                     android:layout_marginTop="10dp"
-                    app:srcCompat="@android:drawable/ic_menu_help"
-                    android:background="#00ffffff"></ImageButton>
+                    android:src="@drawable/question"
+                    android:background="#00ffffff"
+                    android:scaleType="centerInside"></ImageButton>
             </LinearLayout>
 
             <Spinner
@@ -326,6 +327,13 @@
 
             <TextView
                 android:id="@+id/suggestedTimeToPark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"

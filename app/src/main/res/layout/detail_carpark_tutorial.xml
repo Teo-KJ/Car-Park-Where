@@ -103,7 +103,16 @@
         android:layout_alignParentStart="true"
         android:textSize="15dp"
         android:layout_marginTop="10dp"
-        android:text="Popular times\nKnow which time of the day this carpark is available. If there is no data means we do not have the record for it.
-                       \n\nGo back to continue"/>
+        android:text="Popular times\nKnow which time of the day this carpark is available. If there is no data means we do not have the record for it."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/guide5"
+        android:layout_alignParentStart="true"
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"
+        android:text="Go back to continue"
+        android:textStyle="bold"/>
 
 </RelativeLayout>
