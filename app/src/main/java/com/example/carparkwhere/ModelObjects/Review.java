@@ -52,7 +52,7 @@ public class Review {
     public String getDateString() {
         long unixSeconds = this.date.longValue();
         Date date = new java.util.Date(unixSeconds*1000L);
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy • HH:mm");
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
         String formattedDate = sdf.format(date);
         return formattedDate;

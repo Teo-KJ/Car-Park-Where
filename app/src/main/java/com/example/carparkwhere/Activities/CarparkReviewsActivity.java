@@ -58,6 +58,7 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
         bar.setDisplayHomeAsUpEnabled(true);
+        bar.openOptionsMenu();
         bar.setTitle("Reviews for Carpark " + carparkId);
 
         final RecyclerView reviews_RV = (RecyclerView) findViewById(R.id.reviews_RV);
@@ -133,7 +134,7 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-                return true;
+
         }
 
         return super.onOptionsItemSelected(item);

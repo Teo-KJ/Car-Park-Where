@@ -14,7 +14,7 @@ import java.util.List;
 public class ExpandableView extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    RecyclerAdapter recyclerAdapter;
+    MapRecyclerAdaptor recyclerAdapter;
 
     List<BookmarkedCarpark> bookmarkedCarparks;
     @Override
@@ -37,7 +37,7 @@ public class ExpandableView extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        recyclerAdapter = new RecyclerAdapter(bookmarkedCarparks);
+        recyclerAdapter = new MapRecyclerAdaptor(bookmarkedCarparks);
         recyclerView.setAdapter(recyclerAdapter);
     }
 }

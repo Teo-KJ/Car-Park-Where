@@ -43,6 +43,9 @@ public class CarparkReviewsAdapter extends
         RatingBar onBind_RatingRBAR = viewHolder.itemRating_RBAR;
         onBind_RatingRBAR.setRating(review.getRating().floatValue());
 
+        TextView date_TV = viewHolder.date_TV;
+        date_TV.setText(review.getDateString());
+
 
         Log.d(onBind_TitleTV.getText().toString(),"onBind title");
         Log.d(onBind_ContentTV.getText().toString(),"onBind content");
@@ -58,13 +61,14 @@ public class CarparkReviewsAdapter extends
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemTitle_TV;
         private RatingBar itemRating_RBAR;
-        private TextView itemContent_TV;
+        private TextView itemContent_TV,date_TV;
 
         public ViewHolder(View itemView) {
             super(itemView);
            itemTitle_TV = (TextView) itemView.findViewById(R.id.itemTitle_TV);
            itemRating_RBAR = (RatingBar) itemView.findViewById(R.id.itemRating_RBAR);
            itemContent_TV = (TextView) itemView.findViewById(R.id.itemContent_TV);
+           date_TV = itemView.findViewById(R.id.date_TV);
 
         }
     }

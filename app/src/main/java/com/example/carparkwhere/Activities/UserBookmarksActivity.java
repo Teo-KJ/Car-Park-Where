@@ -21,6 +21,7 @@ import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
 import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
+import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
@@ -31,8 +32,10 @@ public class UserBookmarksActivity extends AppCompatActivity {
     BookmarkAdaptor recyclerAdapter;
     List<String> retrievefromFirebase;
     List<BookmarkedCarpark> bookmarkedCarparks;
+    List<Carpark> carparks;
     BookmarkDao bookmarkDaoHelper;
     UserDataDao userDataDaoHelper;
+    CarparkDao carparkDaoHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class UserBookmarksActivity extends AppCompatActivity {
 
         bookmarkDaoHelper = new BookmarkDaoImpl(this);
         userDataDaoHelper = new UserDataDaoFirebaseImpl();
+        carparkDaoHelper = new CarparkDaoImpl(this);
 
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
@@ -66,6 +70,7 @@ public class UserBookmarksActivity extends AppCompatActivity {
         //constructor of bookmark_carparks is just takes in the carpark_id
         //once done then can remove bottom hardcode
         bookmarkedCarparks = new ArrayList<>();
+        carparks = new ArrayList<>();
 
         try{
             bookmarkDaoHelper.getUserBookmarkCarparkIds(userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {
@@ -77,13 +82,54 @@ public class UserBookmarksActivity extends AppCompatActivity {
                         for (String carparkId:carparkIds){
                             bookmarkedCarparks.add(new BookmarkedCarpark(carparkId));
                         }
+
                         initRecyclerView();
+
+                        for (String carparkId:carparkIds){
+                            carparkDaoHelper.getCarparkDetailsByID(carparkId, new NetworkCallEventListener() {
+                                @Override
+                                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                                    if (isSuccessful) {
+                                        Carpark carpark = (Carpark) networkCallResult;
+
+                                        for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
+                                            if (bookmarkedCarpark.getCarparkID().equals(carpark.carparkNo)) {
+                                                bookmarkedCarpark.setCarparkName(carpark.carparkName);
+                                            }
+                                        }
+
+                                        recyclerAdapter.notifyDataSetChanged();
+                                    }
+
+                                }
+                            });
+
+                            carparkDaoHelper.getCarparkLiveAvailability(carparkId, new NetworkCallEventListener() {
+                                @Override
+                                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                                    if (isSuccessful) {
+                                        Integer availability = (Integer) networkCallResult;
+                                        for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
+                                            if (bookmarkedCarpark.getCarparkID().equals(carparkId)) {
+                                                bookmarkedCarpark.setAvailability(availability.toString());
+                                            }
+
+                                        }
+                                        recyclerAdapter.notifyDataSetChanged();
+                                    }
+
+                                }
+                            });
+
+                        }
                     }
                 }
             });
         }catch (UserNotLoggedInException e){
             e.printStackTrace();
         }
+
+
 
 
 //        bookmarkedCarparks.add(new BookmarkedCarpark("A81"));
