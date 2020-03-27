@@ -124,27 +124,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         autocompleteSupportFragment.setCountry("SG");
 
-        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID,  Place.Field.NAME,Place.Field.LAT_LNG,Place.Field.ADDRESS));
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
         autocompleteSupportFragment.setCountry("SG");
         autocompleteSupportFragment.setOnPlaceSelectedListener(
                 new PlaceSelectionListener() {
                     @Override
                     public void onPlaceSelected(Place place) {
                         LatLng latLng = place.getLatLng();
-                        if(currentMarker!=null) {
+                        if (currentMarker != null) {
                             currentMarker.remove();
                         }
-                        Location searchedLocation=new Location ("");
+                        Location searchedLocation = new Location("");
                         searchedLocation.setLongitude(place.getLatLng().longitude);
                         searchedLocation.setLatitude(place.getLatLng().latitude);
-                        MarkerOptions markerOption= new MarkerOptions();
+                        MarkerOptions markerOption = new MarkerOptions();
                         markerOption.position(latLng);
                         markerOption.title(place.getName());
-                        currentMarker= googleMap.addMarker(markerOption);
+                        currentMarker = googleMap.addMarker(markerOption);
                         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
-                        Toast.makeText(MapsActivity.this, ""+latLng.latitude, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "" + latLng.latitude, Toast.LENGTH_SHORT).show();
 
                         bookmarkedCarparks.clear();
 
@@ -156,32 +156,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     carparks = (ArrayList<Carpark>) networkCallResult;
                                     double fullness;
                                     double distance;
-                                    Location mark=new Location ("");
+                                    Location mark = new Location("");
                                     for (int counter = 0; counter < carparks.size(); counter++) {
                                         mark.setLatitude(carparks.get(counter).latitude);
                                         mark.setLongitude(carparks.get(counter).longitude);
-                                        distance= searchedLocation.distanceTo(mark);
+                                        distance = searchedLocation.distanceTo(mark);
                                         mDistanceMapNew.put(carparks.get(counter).carparkNo, distance);
                                         Log.d("ccb1", "knn");
                                     }
 
-                                }else{
+                                } else {
                                     //deal with the error message, maybe toast or something
                                 }
-                                sortedDistanceMapNew=mDistanceMapNew.entrySet()
+                                sortedDistanceMapNew = mDistanceMapNew.entrySet()
                                         .stream()
                                         .sorted(Map.Entry.comparingByValue())
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-                                int counter =0;
-                                for (String name : sortedDistanceMapNew.keySet())
-                                {
-                                    if (counter<=10)
-                                    {
+                                int counter = 0;
+                                for (String name : sortedDistanceMapNew.keySet()) {
+                                    if (counter <= 10) {
                                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
                                         counter++;
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         break;
                                     }
                                 }
@@ -193,14 +189,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     @Override
                     public void onError(Status status) {
-                        Toast.makeText(MapsActivity.this, ""+status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "" + status.getStatusMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLocation();
         starBTN = findViewById(R.id.starButton);
-        if (!userDataDaoHelper.isLoggedIn()){
+        if (!userDataDaoHelper.isLoggedIn()) {
             starBTN.setVisibility(View.INVISIBLE);
         }
         starBTN.setOnClickListener(new View.OnClickListener() {
@@ -220,10 +216,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         expandableView();
-        if(mMarkerMap.isEmpty()==true) {
+        if (mMarkerMap.isEmpty() == true) {
             Log.d("ccb", "Empty");
-        }
-        else {
+        } else {
             Log.d("ccb", "EmptyNot");
         }
 
@@ -288,11 +283,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void makeBitmap() {
-        BitmapDrawable g = (BitmapDrawable)getResources().getDrawable(R.drawable.green_car);
-        BitmapDrawable y = (BitmapDrawable)getResources().getDrawable(R.drawable.yellow_car);
-        BitmapDrawable r = (BitmapDrawable)getResources().getDrawable(R.drawable.red_car);
-        BitmapDrawable b = (BitmapDrawable)getResources().getDrawable(R.drawable.black_car);
-        BitmapDrawable gr = (BitmapDrawable)getResources().getDrawable(R.drawable.grey_car);
+        BitmapDrawable g = (BitmapDrawable) getResources().getDrawable(R.drawable.green_car);
+        BitmapDrawable y = (BitmapDrawable) getResources().getDrawable(R.drawable.yellow_car);
+        BitmapDrawable r = (BitmapDrawable) getResources().getDrawable(R.drawable.red_car);
+        BitmapDrawable b = (BitmapDrawable) getResources().getDrawable(R.drawable.black_car);
+        BitmapDrawable gr = (BitmapDrawable) getResources().getDrawable(R.drawable.grey_car);
         Bitmap b1 = g.getBitmap();
         Bitmap b2 = y.getBitmap();
         Bitmap b3 = r.getBitmap();
@@ -324,6 +319,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(MapsActivity.this);
                 }
+
+                else
+                {
+                    Location NTU= new Location("");
+                    NTU.setLatitude(1.3483);
+                    NTU.setLongitude(103.6831);
+                    currentLocation=NTU;
+                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                    assert supportMapFragment != null;
+                    supportMapFragment.getMapAsync(MapsActivity.this);
+                }
             }
         });
     }
@@ -349,7 +356,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMaps) {
-       googleMap=googleMaps;
+        googleMap = googleMaps;
         makeBitmap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -360,74 +367,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (isSuccessful) {
                     carparks = (ArrayList<Carpark>) networkCallResult;
                     double fullness;
-                    int availability=100;
+                    int availability = 100;
                     int capacity;
-                    int total=300;
+                    int total = 300;
                     double distance;
-                    Location mark=new Location ("");
+                    Location mark = new Location("");
                     for (int counter = 0; counter < carparks.size(); counter++) {
                         mark.setLatitude(carparks.get(counter).latitude);
                         mark.setLongitude(carparks.get(counter).longitude);
-                        distance= currentLocation.distanceTo(mark);
-                        if(carparks.get(counter).carDetails.liveAvailability!=null && carparks.get(counter).carDetails.capacity!=null )
-                        {
+                        distance = currentLocation.distanceTo(mark);
+                        if (carparks.get(counter).carDetails.liveAvailability != null && carparks.get(counter).carDetails.capacity != null) {
                             fullness = carparks.get(counter).carDetails.liveAvailability.doubleValue() / carparks.get(counter).carDetails.capacity.doubleValue();
+                          
                             if(fullness>=0.7 && fullness<=1) {
                                 Marker marker =googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(greenParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
-                            }
-                            else if(fullness>=0.4 && fullness<0.7) {
-                                Marker marker =googleMap.addMarker(new MarkerOptions()
+
+                            } else if (fullness >= 0.4 && fullness < 0.7) {
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(yellowParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
-                            }
-                            else if(fullness>0&& fullness<0.4) {
-                                Marker marker =googleMap.addMarker(new MarkerOptions()
+
+                            } else if (fullness > 0 && fullness < 0.4) {
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(redParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
-                            }
-                            else {
-                                Marker marker =googleMap.addMarker(new MarkerOptions()
+
+                            } else {
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(greyParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
-                        }
-                        else {
-                            Marker marker =googleMap.addMarker(new MarkerOptions()
+                          
+                        } else {
+                            Marker marker = googleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                     .icon(BitmapDescriptorFactory.fromBitmap(blackParking)));
                             mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                             mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                         }
 
-                       // mDistanceMap.put(carparks.get(counter).carparkNo, distance);
+                        // mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                         Log.d("ccb", "0");
                     }
 
-                }else{
+                } else {
                     //deal with the error message, maybe toast or something
                 }
-                sortedDistanceMap=mDistanceMap.entrySet()
+                sortedDistanceMap = mDistanceMap.entrySet()
                         .stream()
                         .sorted(Map.Entry.comparingByValue())
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-                int counter =0;
-                for (String name : sortedDistanceMap.keySet())
-                {
-                    if (counter<=10) {
+
+                int counter = 0;
+                for (String name : sortedDistanceMap.keySet()) {
+                    if (counter <= 10) {
                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
                         counter++;
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
@@ -435,14 +441,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 initRecyclerView();
             }
         });
-        int counter=0;
+        int counter = 0;
 
-        mMarkerMap.forEach((k,v)->Log.d("ccb", k));
+        mMarkerMap.forEach((k, v) -> Log.d("ccb", k));
         //double carpar = mDistanceMap.get("A81");
         //Log.d("ccb", Double.toString(carpar));
 
         Log.d("ccb", Integer.toString(counter));
-        sortedDistanceMap=mDistanceMap.entrySet()
+        sortedDistanceMap = mDistanceMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
@@ -452,15 +458,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        currentMarker=googleMap.addMarker(markerOptions);
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 String carparkID = mMarkerMap.get(marker.getId());
                 LatLng latLng = marker.getPosition();
-                double longnitude =  latLng.longitude;
-                double latitude =  latLng.latitude;
+                double longnitude = latLng.longitude;
+                double latitude = latLng.latitude;
                 Intent intent = new Intent(MapsActivity.this, DetailCarparkActivity.class);
                 intent.putExtra("CARPARK_ID", carparkID);
                 intent.putExtra("Lat", latitude);
@@ -472,12 +477,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
-                if(currentMarker!=null) {
+                if (currentMarker != null) {
                     currentMarker.remove();
                 }
-                currentMarker=googleMap.addMarker(markerOptions);
+                fetchLocation();
+                bookmarkedCarparks.clear();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
                 bookmarkedCarparks.clear();
                 int counter =0;
                 for (String name : sortedDistanceMap.keySet()) {
@@ -487,15 +494,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     else {
                         break;
+
+                carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @Override
+                    public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                        if (isSuccessful) {
+                            carparks = (ArrayList<Carpark>) networkCallResult;
+                            double distance;
+                            Location mark = new Location("");
+                            for (int counter = 0; counter < carparks.size(); counter++) {
+                                mark.setLatitude(carparks.get(counter).latitude);
+                                mark.setLongitude(carparks.get(counter).longitude);
+                                distance = currentLocation.distanceTo(mark);
+                                mDistanceMapNew.put(carparks.get(counter).carparkNo, distance);
+                                Log.d("ccb1", "knn");
+                            }
+
+                        } else {
+                            //deal with the error message, maybe toast or something
+                        }
+                        sortedDistanceMapNew = mDistanceMapNew.entrySet()
+                                .stream()
+                                .sorted(Map.Entry.comparingByValue())
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+                        int counter = 0;
+                        for (String name : sortedDistanceMapNew.keySet()) {
+                            if (counter <= 10) {
+                                bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                                counter++;
+                            } else {
+                                break;
+                            }
+                        }
+                        recyclerAdapter.notifyDataSetChanged();
+                        initRecyclerView();
                     }
-                }
-                recyclerAdapter.notifyDataSetChanged();
-                initRecyclerView();
+                });
 
                 return true;
             }
         });
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -536,7 +577,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onUserClicked(int position) {
-        String name= bookmarkedCarparks.get(position).getCarparkID();
+        String name = bookmarkedCarparks.get(position).getCarparkID();
         carparkDaoHelper.getCarparkDetailsByID(name, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -544,14 +585,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 double latitude = carpark.latitude;
                 double longitude = carpark.longitude;
                 LatLng latLng = new LatLng(latitude, longitude);
-                if(currentMarker!=null) {
+                if (currentMarker != null) {
                     currentMarker.remove();
                 }
                 MarkerOptions markerOptions2 = new MarkerOptions().position(latLng);
-                currentMarker=googleMap.addMarker(markerOptions2);
+                currentMarker = googleMap.addMarker(markerOptions2);
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
             }
         });
     }
+
+
 }
