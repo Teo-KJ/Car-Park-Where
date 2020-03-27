@@ -1,7 +1,13 @@
 package com.example.carparkwhere.Activities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +28,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle("Reset Password");
+
 //        final EditText emailAddress_ET, resetPasswordOld_ET, resetPasswordNew_ET;
         final EditText emailAddress_ET;
         Button resetPasswordSubmit_BTN, resetPasswordCancel_BTN;
@@ -32,6 +43,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
         emailAddress_ET = findViewById(R.id.emailAddress);
 //        resetPasswordOld_ET = findViewById(R.id.oldPassword);
 //        resetPasswordNew_ET = findViewById(R.id.newPassword);
+
+        try {
+            emailAddress_ET.setText(userDataDaoHelper.getUserEmail());
+        }catch (Exception e){
+
+        }
+
         resetPasswordCancel_BTN = findViewById(R.id.cancelButton);
         resetPasswordSubmit_BTN = findViewById(R.id.submitButton);
 
@@ -50,12 +68,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
 //                }
                 else {
                     checkPassword_TV.setText("");
-                    try{
-                        userDataDaoHelper.sendResetPasswordEmail();
-                        Toast.makeText(ResetPasswordActivity.this,"Sent to your email. Please Check" , Toast.LENGTH_SHORT).show();
-                    }catch (UserNotLoggedInException e){
-
-                    }
+                    userDataDaoHelper.sendResetPasswordEmail(emailAddress_ET.getText().toString());
+                    Toast.makeText(ResetPasswordActivity.this,"Sent to your email. Please Check" , Toast.LENGTH_SHORT).show();
+                    finish();
 
                 }
             }
@@ -69,5 +84,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

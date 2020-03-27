@@ -166,6 +166,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        if (!userDataDaoHelper.isLoggedIn()){
+            bookmarkToggle_IMGBTN.setVisibility(View.INVISIBLE);
+            submitReview_IMGBTN.setVisibility(View.INVISIBLE);
+        }
+
         // User selects this button to bookmark a carpark
         bookmarkToggle_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,7 +271,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 Carpark carpark = (Carpark) networkCallResult;
                 carparkNumber_TV.setText(carpark.carparkNo);
                 carparkAddress_TV.setText(carpark.carparkName);
-                capacity_TV.setText(Integer.toString(carpark.carDetails.capacity));
+                try{
+                    capacity_TV.setText(Integer.toString(carpark.carDetails.capacity));
+                }catch(Exception e){
+                    capacity_TV.setText("");
+                }
+
                 ArrayList<Carpark.CarparkCarDetails.CarparkPriceJson> allPrices = carpark.carDetails.prices;
                 Carpark.CarparkCarDetails.CarparkPriceJson prices = allPrices.get(0);
                 String description = prices.description;
