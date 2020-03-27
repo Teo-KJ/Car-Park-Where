@@ -41,6 +41,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -382,6 +383,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         makeBitmap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style));
+
 
         carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
             @Override
