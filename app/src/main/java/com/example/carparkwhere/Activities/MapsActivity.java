@@ -1,9 +1,12 @@
 package com.example.carparkwhere.Activities;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
+<<<<<<< Updated upstream
 import android.app.TimePickerDialog;
+=======
+import android.content.Context;
+>>>>>>> Stashed changes
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,19 +17,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
+<<<<<<< Updated upstream
 import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.DatePickerFragment;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.RecyclerAdapter;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.TimePickerFragment;
+=======
+import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.ListMapAdapter;
+>>>>>>> Stashed changes
 import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
 import com.example.carparkwhere.ModelObjects.Carpark;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
@@ -49,32 +52,28 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+<<<<<<< Updated upstream
 import org.w3c.dom.Text;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+=======
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ListMapAdapter.UserListRecyclerClickListener {
+>>>>>>> Stashed changes
 
     Location currentLocation;
     private GoogleMap googleMap;
@@ -98,12 +97,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker currentMarker;
     private ImageButton starBTN;
     private CarparkDao carparkDaoHelper;
+<<<<<<< Updated upstream
     TextView date_TV, time_TV;
     String selectedDate = identifyDate(), selectedTime = identifyTime();
+=======
+    private UserDataDao userDataDaoHelper;
+>>>>>>> Stashed changes
     RecyclerView recyclerView;
     BookmarkAdaptor recyclerAdapter;
     List<BookmarkedCarpark> bookmarkedCarparks;
-    ImageButton settingsButton_IMGBTN;
+    ImageButton settingsButton_IMGBTN, tutorial_IMGBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,21 +219,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        date_TV = findViewById(R.id.dateText);
-        time_TV = findViewById(R.id.timeText);
-        date_TV.setText(identifyDate());
-        time_TV.setText(identifyTime());
-
-        date_TV.setOnClickListener(view -> {
-            DialogFragment datePicker = new DatePickerFragment();
-            datePicker.show(getSupportFragmentManager(), "date picker");
-
-        });
-        time_TV.setOnClickListener(view -> {
-            DialogFragment timePicker = new TimePickerFragment();
-            timePicker.show(getSupportFragmentManager(), "time picker");
-        });
-
         expandableView();
         if(mMarkerMap.isEmpty()==true) {
             Log.d("ccb", "Empty");
@@ -238,18 +226,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else {
             Log.d("ccb", "EmptyNot");
         }
+
+        tutorial_IMGBTN = findViewById(R.id.tutorialButton);
+        tutorial_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openHelpDialog();
+            }
+        });
     }
 
-    private String identifyDate (){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = new Date();
-        return formatter.format(date);
-    }
-
-    private String identifyTime (){
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        Date date = new Date();
-        return formatter.format(date);
+    // Function to open up the help dialogue
+    public void openHelpDialog() {
+        Dialog help = new Dialog(MapsActivity.this);
+        help.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        help.setContentView(R.layout.maps_activity_tutorial);
+        help.show();
     }
 
     private void makeBitmap() {
@@ -293,8 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    public void expandableView()
-    {
+    public void expandableView() {
         recyclerView = findViewById(R.id.recyclerView);
         // setting LinearLayout
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); //this also can be done in XML
@@ -320,8 +311,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-
-
         carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -340,32 +329,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if(carparks.get(counter).carDetails.liveAvailability!=null && carparks.get(counter).carDetails.capacity!=null )
                         {
                             fullness = carparks.get(counter).carDetails.liveAvailability.doubleValue() / carparks.get(counter).carDetails.capacity.doubleValue();
-                            if(fullness>=0.7 && fullness<=1)
-                            {
+                            if(fullness>=0.7 && fullness<=1) {
                                 Marker marker =googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(greenParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
-                            else if(fullness>=0.4 && fullness<0.7)
-                            {
+                            else if(fullness>=0.4 && fullness<0.7) {
                                 Marker marker =googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(yellowParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
-                            else if(fullness>0&& fullness<0.4)
-                            {
+                            else if(fullness>0&& fullness<0.4) {
                                 Marker marker =googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(redParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
-                            else
-                            {
+                            else {
                                 Marker marker =googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(greyParking)));
@@ -373,8 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
                         }
-                        else
-                        {
+                        else {
                             Marker marker =googleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                     .icon(BitmapDescriptorFactory.fromBitmap(blackParking)));
@@ -384,7 +368,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                        // mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                         Log.d("ccb", "0");
-
                     }
 
                 }else{
@@ -397,13 +380,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 int counter =0;
                 for (String name : sortedDistanceMap.keySet())
                 {
-                    if (counter<=10)
-                    {
+                    if (counter<=10) {
                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
                         counter++;
                     }
-                    else
-                    {
+                    else {
                         break;
                     }
                 }
@@ -442,7 +423,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 intent.putExtra("Lat", latitude);
                 intent.putExtra("Lng", longnitude);
                 startActivity(intent);
-
                 return false;
             }
         });
@@ -457,15 +437,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 bookmarkedCarparks.clear();
                 int counter =0;
-                for (String name : sortedDistanceMap.keySet())
-                {
-                    if (counter<=10)
-                    {
+                for (String name : sortedDistanceMap.keySet()) {
+                    if (counter<=10) {
                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
                         counter++;
                     }
-                    else
-                    {
+                    else {
                         break;
                     }
                 }
@@ -489,39 +466,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     // Function to open up the dialogue reminding user to switch on location
-    public void openDialog() {
+    public void switchOnLocDialog() {
         Dialog help = new Dialog(MapsActivity.this);
         help.requestWindowFeature(Window.FEATURE_NO_TITLE);
         help.setContentView(R.layout.switch_on_location);
         help.show();
     }
 
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String currentDateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(calendar.getTime());
-        date_TV.setText(currentDateString);
-        selectedDate = currentDateString;
-    }
-
-
-    @Override
-    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-        Calendar time = Calendar.getInstance();
-        time.set(Calendar.HOUR_OF_DAY, hour);
-        time.set(Calendar.MINUTE, minute);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-        String currentTimeString = simpleDateFormat.format(time.getTime());
-        time_TV.setText(currentTimeString);
-        selectedTime = currentTimeString;
-    }
-
     private void initRecyclerView() {
         recyclerAdapter = new BookmarkAdaptor(bookmarkedCarparks,this);
         recyclerView.setAdapter(recyclerAdapter);
+<<<<<<< Updated upstream
+=======
+        /*Intent intent = getIntent();
+
+        try {
+            double latitude = intent.getDoubleExtra("Lat", 0.0);
+            double longitude = intent.getDoubleExtra("Lng", 0.0);
+            LatLng latLng = new LatLng(latitude, longitude);
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        }
+        catch(Exception e) {
+            //  Block of code to handle errors
+        }*/
+    }
+>>>>>>> Stashed changes
 
     }
 }
