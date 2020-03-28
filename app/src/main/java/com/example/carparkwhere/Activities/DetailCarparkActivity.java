@@ -171,7 +171,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 if (isSuccessful){
                     Integer liveAvailability = (Integer) networkCallResult;
-                    System.out.println(liveAvailability);
                     liveAvailaibility_TV.setText(liveAvailability + "");
                 }
             }
@@ -306,8 +305,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         spinner = findViewById(R.id.daysDropdownBox);
-        for (int i=0; i<7; i++)
-            if (i==identifyDay()) day=i;
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -316,10 +313,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        spinner.setSelection(day);
+        spinner.setSelection(identifyDay());
 
         // Selected day on dropdown box
-        final int finalDay = day;
+        final int finalDay = identifyDay();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -341,30 +338,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.getAxisRight().setDrawLabels(false);
         barChart.setDescription("");
 
-        /*Calendar currentDateAndTime = getCurrentDateAndTime();
-        year = Integer.toString(currentDateAndTime.get(Calendar.YEAR));
-        month = Integer.toString(currentDateAndTime.get(Calendar.MONTH));
-        dateDay = Integer.toString(currentDateAndTime.get(Calendar.DAY_OF_MONTH));
-        hour = Integer.toString(currentDateAndTime.get(Calendar.HOUR));
-        minute = Integer.toString(currentDateAndTime.get(Calendar.MINUTE));*/
-
-        /*for (int i=0; i<10; i++) {
-            carparkDaoHelper.getCarparkAvailabilityPredictionByDateTime(str, year, month, dateDay, hour, minute, new Response.Listener() {
-                @Override
-                public void onResponse(Object response) {
-                    JSONObject jsonObject = (JSONObject) response;
-                    try {
-                        int predictedLots = jsonObject.getInt("predictedAvailability");
-                        timeAdvice_TV.append(predictedLots + "\n");
-                        allSuggestedTimes.add(predictedLots);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, error -> error.printStackTrace());
-            minute += 5;
-        }*/
     }
 
     //   Function for Progress bar to load carpark detail
@@ -379,8 +352,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
 
     // Function to identify the day of the week
     private int identifyDay (){
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        return calendar.get(Calendar.DAY_OF_WEEK) % 7-2;
+        Date today = getCurrentTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        return (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
     }
 
     // Function to open up the help dialogue
@@ -431,7 +406,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 for (String time: allSuggestedTimes){
                     stringBuilder.append(time + "\n");
                 }
-                if (allSuggestedTimes.size()==0) timeAdvice_TV.setText("Carpark is estimated to be less than 50% full at the moment.");
+                if (allSuggestedTimes.size()==0) timeAdvice_TV.setText("None");
                 else timeAdvice_TV.setText(stringBuilder);
             }
 
@@ -487,9 +462,5 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    public Calendar getCurrentDateAndTime(){
-        return Calendar.getInstance(TimeZone.getDefault());
     }
 }

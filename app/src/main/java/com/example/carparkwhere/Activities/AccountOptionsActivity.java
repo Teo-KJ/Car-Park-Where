@@ -30,9 +30,7 @@ public class AccountOptionsActivity extends AppCompatActivity {
     Button viewResetPassword_BTN;
     Button viewDeactivateAccount_BTN;
 
-
     private UserDataDao userDataDaoHelper;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +84,7 @@ public class AccountOptionsActivity extends AppCompatActivity {
         viewUserReviews_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(AccountOptionsActivity.this, UserReviewsActivity.class));
             }
         });
 

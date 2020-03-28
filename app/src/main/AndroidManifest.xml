@@ -38,6 +38,7 @@
         <activity android:name=".Activities.AccountOptionsActivity" />
         <activity android:name=".Activities.SignUpActivity" />
         <activity android:name=".Activities.UserBookmarksActivity" />
+        <activity android:name=".Activities.UserReviewsActivity" />
         <activity android:name=".Activities.StartupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
