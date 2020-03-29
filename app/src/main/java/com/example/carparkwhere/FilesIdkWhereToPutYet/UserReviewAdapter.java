@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.content.Context;
@@ -15,8 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.carparkwhere.Activities.DetailCarparkActivity;
+import com.example.carparkwhere.Activities.SubmitReviewActivity;
 import com.example.carparkwhere.ModelObjects.Review;
 import com.example.carparkwhere.R;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -42,8 +47,20 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.Vi
         //this changes the text
         Review user_reviews = userReviews.get(position);
         holder.textView.setText(user_reviews.getCarparkId());
+        holder.carparkName.setText(user_reviews.getCarparkName());
         holder.userComments.setText(user_reviews.getComment()); //here need get the user comments
-        //holder.userRating.setRating(user_reviews.getRating()); //here need find number of stars need change Rating to float
+        holder.userRating.setRating(user_reviews.getRating().floatValue()); //here need find number of stars need change Rating to float
+        holder.reviewDate.setText(user_reviews.getDateString());
+
+        holder.baseLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("as","Going to submit review page");
+                Intent intent = new Intent(view.getContext(), SubmitReviewActivity.class);
+                intent.putExtra("carparkid",user_reviews.getCarparkId());
+                view.getContext().startActivity(intent);
+            }
+        });
     }
     //number of items in the view
     @Override
@@ -54,7 +71,10 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.Vi
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         TextView userComments;
+        TextView reviewDate;
+        TextView carparkName;
         RatingBar userRating;
+        LinearLayout baseLinearLayout;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -62,6 +82,9 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.Vi
             userComments = itemView.findViewById(R.id.userReview);
             textView = itemView.findViewById(R.id.carpark_id);
             userRating = itemView.findViewById(R.id.ratingBar);
+            reviewDate = itemView.findViewById(R.id.reviewDate);
+            carparkName = itemView.findViewById(R.id.carpark_name);
+            baseLinearLayout = itemView.findViewById(R.id.baseLinearLayout);
         }
 
 //         userComments.setOnClickListener(new View.OnClickListener(){

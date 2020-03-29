@@ -2,42 +2,156 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/carpark_id"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/baseLinearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="0dp"
+        >
 
-    <TextView
-        android:id="@+id/userReview"
-        android:layout_width="369dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carpark_id" />
+        <!--android:background="#333333"-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp">
+
+            <!--android:textColor="#ffffff"-->
+            <TextView
+                android:id="@+id/carpark_id"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:text="Someguy"
+                android:background="#00000000"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:id="@+id/carpark_name"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:textSize="12sp"
+                android:text="Someguy"
+                android:background="#00000000"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="normal"
+                android:textColor="#000000"/>
+
+
+        </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:isIndicator="true"
+            android:paddingStart="0dp"
+            android:layout_marginTop="-7dp"
+            android:layout_marginLeft="16dp"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp"
+            android:theme="@style/RatingBar"
+            android:scaleX="0.35"
+            android:scaleY="0.35" />
+        <!--android:background="#555555"-->
+        <!--android:textColor="#eeeeee"-->
+
+        <TextView
+            android:id="@+id/reviewDate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="-20dp"
+            android:layout_marginLeft="18dp"
+            android:text="2010/10/02"
+            />
+
+        <TextView
+            android:id="@+id/userReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:paddingLeft="20dp"
+            android:layout_marginLeft="3dp"
+            android:paddingTop="0dp"
+            android:layout_marginTop="-20dp"
+            android:textSize="16sp"
+            android:background="#00000000"
+            android:text="Parking lot is quite empty on weekdays mornings. Otherwise too crowded on the weekends. Good location"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/quantum_grey900"
+            />
+
+        <ListView
+            android:id="@+id/divider10"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="?android:attr/listDivider"/>
+
+    </LinearLayout>
+
+    <!--<TextView-->
+        <!--android:id="@+id/carpark_id"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:text="TextView"-->
+        <!--android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/userReview"-->
+        <!--android:layout_width="369dp"-->
+        <!--android:layout_height="26dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:text="TextView"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/ratingBar" />-->
+
+    <!--<RatingBar-->
+        <!--android:id="@+id/ratingBar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/carpark_id" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

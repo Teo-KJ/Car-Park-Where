@@ -11,6 +11,7 @@ public class Review {
     private String userEmail;
     private Double userRating;
     private String carparkId;
+    private String carparkName;
     private String userDisplayName;
     private String userComment;
     private String _id;
@@ -24,7 +25,7 @@ public class Review {
         this.userDisplayName = userDisplayName;
         this._id = null;
         this.date = date;
-
+        this.carparkName = "";
     }
 
     //getters setters
@@ -33,6 +34,14 @@ public class Review {
     }
     public String getUserEmail(){
         return this.userEmail;
+    }
+
+    public String getCarparkName() {
+        return carparkName;
+    }
+
+    public void setCarparkName(String carparkName) {
+        this.carparkName = carparkName;
     }
 
     public String getUserDisplayName() {
