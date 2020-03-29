@@ -20,6 +20,7 @@ import com.example.carparkwhere.FilesIdkWhereToPutYet.CarparkReviewsAdapter;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
 import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
 import com.example.carparkwhere.ModelObjects.Review;
 import com.example.carparkwhere.R;
 
@@ -37,6 +38,7 @@ public class CarparkReviewsActivity extends AppCompatActivity {
     protected ArrayList<Review> reviews = new ArrayList<Review>();
     private String carparkId;
     private ReviewDao reviewDaoHelper;
+    private RecyclerView reviews_RV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         bar.openOptionsMenu();
         bar.setTitle("Reviews for Carpark " + carparkId);
 
-        final RecyclerView reviews_RV = (RecyclerView) findViewById(R.id.reviews_RV);
+        reviews_RV = (RecyclerView) findViewById(R.id.reviews_RV);
 
 
         reviewDaoHelper.getCarparkAverageRating(carparkId, new NetworkCallEventListener() {
@@ -79,53 +81,58 @@ public class CarparkReviewsActivity extends AppCompatActivity {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 nDialog.dismiss();
-                if (isSuccessful){
+                if (isSuccessful) {
                     reviews = (ArrayList<Review>) networkCallResult;
-                    final CarparkReviewsAdapter adapter = new CarparkReviewsAdapter(reviews);
-
-                    reviews_RV.setLayoutManager(new LinearLayoutManager(CarparkReviewsActivity.this));
-                    reviews_RV.setAdapter(adapter);
-
-                    Integer maxnum = 0;
-                    Integer star1Num = 0;
-                    Integer star2Num = 0;
-                    Integer star3Num = 0;
-                    Integer star4Num = 0;
-                    Integer star5Num = 0;
-
-                    for (Review review: reviews){
-                        int reviewRating = (int) Math.floor(review.getRating());
-                        if (reviewRating == 1){
-                            star1Num += 1;
-                            maxnum = Math.max(maxnum,star1Num);
-                        }else if (reviewRating == 2){
-                            star2Num += 1;
-                            maxnum = Math.max(maxnum,star2Num);
-                        }else if (reviewRating == 3){
-                            star3Num += 1;
-                            maxnum = Math.max(maxnum,star3Num);
-                        }else if (reviewRating == 4){
-                            star4Num += 1;
-                            maxnum = Math.max(maxnum,star4Num);
-                        }else if (reviewRating == 5){
-                            star5Num += 1;
-                            maxnum = Math.max(maxnum,star5Num);
-                        }
-                    }
-
-                    if (reviews.size() != 0){
-                        progressBar1.setProgress(Math.round((star1Num.floatValue() / maxnum.floatValue()) * 100));
-                        progressBar2.setProgress(Math.round((star2Num.floatValue() / maxnum.floatValue()) * 100));
-                        progressBar3.setProgress(Math.round((star3Num.floatValue() / maxnum.floatValue()) * 100));
-                        progressBar4.setProgress(Math.round((star4Num.floatValue() / maxnum.floatValue()) * 100));
-                        progressBar5.setProgress(Math.round((star5Num.floatValue() / maxnum.floatValue()) * 100));
-
-                        totalReviewCountText.setText("(" + (star1Num + star2Num + star3Num + star4Num + star5Num) + ")");
-                    }
-
+                    setupRecyclerList();
                 }
             }
         });
+
+    }
+
+    private void setupRecyclerList(){
+        mAdapter = new CarparkReviewsAdapter(reviews);
+
+        reviews_RV.setLayoutManager(new LinearLayoutManager(CarparkReviewsActivity.this));
+        reviews_RV.setAdapter(mAdapter);
+
+        Integer maxnum = 0;
+        Integer star1Num = 0;
+        Integer star2Num = 0;
+        Integer star3Num = 0;
+        Integer star4Num = 0;
+        Integer star5Num = 0;
+
+        for (Review review: reviews){
+            int reviewRating = (int) Math.floor(review.getRating());
+            if (reviewRating == 1){
+                star1Num += 1;
+                maxnum = Math.max(maxnum,star1Num);
+            }else if (reviewRating == 2){
+                star2Num += 1;
+                maxnum = Math.max(maxnum,star2Num);
+            }else if (reviewRating == 3){
+                star3Num += 1;
+                maxnum = Math.max(maxnum,star3Num);
+            }else if (reviewRating == 4){
+                star4Num += 1;
+                maxnum = Math.max(maxnum,star4Num);
+            }else if (reviewRating == 5){
+                star5Num += 1;
+                maxnum = Math.max(maxnum,star5Num);
+            }
+        }
+
+        if (reviews.size() != 0){
+            progressBar1.setProgress(Math.round((star1Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar2.setProgress(Math.round((star2Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar3.setProgress(Math.round((star3Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar4.setProgress(Math.round((star4Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar5.setProgress(Math.round((star5Num.floatValue() / maxnum.floatValue()) * 100));
+
+            totalReviewCountText.setText("(" + (star1Num + star2Num + star3Num + star4Num + star5Num) + ")");
+        }
+
 
     }
 
@@ -147,6 +154,20 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         nDialog.setIndeterminate(false);
         nDialog.setCancelable(true);
         nDialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reviewDaoHelper.getCarparkReviewsByCarparkID(carparkId, new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    reviews = (ArrayList<Review>) networkCallResult;
+                    setupRecyclerList();
+                }
+            }
+        });
     }
 
 }
