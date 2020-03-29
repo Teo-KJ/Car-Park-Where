@@ -52,17 +52,17 @@
             android:id="@+id/reviewRating_RBAR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:theme="@style/RatingBar"
+            android:layout_gravity="center_horizontal"
             android:numStars="5" />
-
+        <!--android:background="#51C0C0C0"-->
         <EditText
             android:id="@+id/reviewComment_ET"
             android:layout_width="match_parent"
-            android:layout_height="257dp"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:background="#51C0C0C0"
-            android:ems="10"
-            android:padding="16dp"
-            android:gravity="start|top"
+            android:backgroundTint="@color/quantum_grey300"
+            android:hint="Share details of this carpark"
             android:inputType="textMultiLine" />
 
         <LinearLayout
@@ -73,18 +73,18 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/reviewSave_BTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save" />
-
-            <Button
                 android:id="@+id/reviewDelete_BTN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Delete" />
+                android:text="delete" />
+
+            <Button
+                android:id="@+id/reviewSave_BTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="post" />
 
         </LinearLayout>
 
