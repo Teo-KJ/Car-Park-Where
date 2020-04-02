@@ -1,6 +1,5 @@
 package com.example.carparkwhere.Activities;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
@@ -9,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +20,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.example.carparkwhere.DAO.DAOImplementations.BookmarkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
@@ -39,20 +36,14 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 public class DetailCarparkActivity extends AppCompatActivity {
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV, capacity_TV;
@@ -68,6 +59,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private BookmarkDao bookmarkDaoHelper;
     private UserDataDao userDataDaoHelper;
     float carparkCapacity;
+    int finalDay = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,7 +297,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         spinner = findViewById(R.id.daysDropdownBox);
-
+        finalDay = identifyDay();
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.daysInWeek, android.R.layout.simple_spinner_item);
@@ -313,10 +305,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        spinner.setSelection(identifyDay());
+        spinner.setSelection(finalDay);
 
         // Selected day on dropdown box
-        final int finalDay = identifyDay();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -355,6 +346,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         Date today = getCurrentTime();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(today);
+        System.out.println((calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7);
         return (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
     }
 
