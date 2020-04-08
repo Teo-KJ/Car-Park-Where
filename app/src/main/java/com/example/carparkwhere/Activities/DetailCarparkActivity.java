@@ -1,3 +1,10 @@
+/**
+ * This Java class is used to generate the carpark details when
+ * the user intends to view based on individual carparks.
+ * @author Kai Jie, Swee Sen
+ * @version 1.0
+ */
+
 package com.example.carparkwhere.Activities;
 
 import androidx.appcompat.app.ActionBar;
@@ -46,20 +53,29 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DetailCarparkActivity extends AppCompatActivity {
+    // Variables to generate the various details in texts.
     private TextView parkingRates_TV, carparkNumber_TV, carparkAddress_TV, timeAdvice_TV, averageRating_TV, totalReviews_TV, liveAvailaibility_TV, capacity_TV;
+    // Buttons for the various features.
     private ImageButton bookmarkToggle_IMGBTN, submitReview_IMGBTN, backDetailCarparkActivity_IMGBTN, tutorial_IMGBTN, detailDirection_IMGBTN;
+    // Rating bar for the average rating of the carpark.
     public RatingBar averageRatingInStars;
+    // Progress dialogue for the user to understand the page is still loading.
     private ProgressDialog nDialog;
+    // Bar chart to show the visualisation of lots in the day.
     private BarChart barChart;
+    // Dropdown box for the user to choose the date.
     private Spinner spinner;
     private ArrayList<String> userBookmarkCarparks;
+    // Condition if the user has bookmarked the particular carpark.
     private boolean userBookmarkedThis = false;
     private CarparkDao carparkDaoHelper;
     private ReviewDao reviewDaoHelper;
     private BookmarkDao bookmarkDaoHelper;
     private UserDataDao userDataDaoHelper;
+    // Carpark lot capacity.
     float carparkCapacity;
-    int finalDay = 3;
+    // Current day of the week.
+    int currentDay = identifyDay();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,7 +230,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        // With server interface manager get average ratings of the carpark and display it
+        /**
+         * With server interface manager get average ratings of the carpark and display it.
+         */
         reviewDaoHelper.getCarparkAverageRating(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -229,21 +247,22 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        // Get the directions to the carpark from the current location
-        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                double latitude = intent.getDoubleExtra("Lat", 0.0);
-                double longitude = intent.getDoubleExtra("Lng", 0.0);
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
-            }
+        /**
+         * Get the directions to the carpark from the current location.
+         */
+        detailDirection_IMGBTN.setOnClickListener(v -> {
+            Intent intent = getIntent();
+            double latitude = intent.getDoubleExtra("Lat", 0.0);
+            double longitude = intent.getDoubleExtra("Lng", 0.0);
+            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
         });
       
-        // Get the number of reviews for the specific carpark
+        /**
+         * Get the number of reviews for the particular carpark.
+         */
         reviewDaoHelper.getCarparkReviewsCount(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -254,13 +273,14 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 }
             }
         });
-        totalReviews_TV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
-                intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
-                startActivity(intent);
-            }
+
+        /**
+         * View all the reviews made for the particular carpark.
+         */
+        totalReviews_TV.setOnClickListener(view -> {
+            Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
+            intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
+            startActivity(intent);
         });
 
         //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
@@ -297,7 +317,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
 
         spinner = findViewById(R.id.daysDropdownBox);
-        finalDay = identifyDay();
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.daysInWeek, android.R.layout.simple_spinner_item);
@@ -305,13 +324,14 @@ public class DetailCarparkActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        spinner.setSelection(finalDay);
+        spinner.setSelection(currentDay);
 
         // Selected day on dropdown box
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                int difference = i - finalDay;
+                int difference = i - currentDay;
                 getAvailabilityPredictionData(difference, str);
             }
 
@@ -331,7 +351,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
 
     }
 
-    //   Function for Progress bar to load carpark detail
+    /**
+     * Function for Progress bar to load carpark detail
+     * @param message is the string of words to be displayed while loading the page.
+     */
     private void presentProgressDialog(String message){
         nDialog = new ProgressDialog(DetailCarparkActivity.this);
         nDialog.setMessage("Loading..");
@@ -341,7 +364,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
         nDialog.show();
     }
 
-    // Function to identify the day of the week
+    /**
+     * Function to identify the day of the week
+     * @return The current day of the week in integer.
+     */
     private int identifyDay (){
         Date today = getCurrentTime();
         Calendar calendar = Calendar.getInstance();
@@ -350,7 +376,9 @@ public class DetailCarparkActivity extends AppCompatActivity {
         return (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
     }
 
-    // Function to open up the help dialogue
+    /**
+     * Function to open up the help dialogue.
+     */
     public void openDialog() {
         Dialog help = new Dialog(DetailCarparkActivity.this);
         help.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -358,7 +386,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
         help.show();
     }
 
-    // With ServerInterfaceManager, get the predicted number of carpark lots.
+    /**
+     * This function gets the predicted number of carpark lots.
+     * @param increment is the integer where the number from current day of week has been incremented by.
+     * @param carparkNumber is the unique carpark number.
+     */
     private void getAvailabilityPredictionData(Integer increment, String carparkNumber){
         carparkDaoHelper.getCarparkWholeDayPredictedAvailability(carparkNumber, increment, new Response.Listener() {
             @Override
@@ -405,6 +437,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
         }, error -> error.printStackTrace());
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -415,6 +452,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This function converts the date in Date object to a String object.
+     * @param time
+     * @return date in String
+     * @throws ParseException
+     */
     private Date convertTimeString (String time) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         String currentDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
@@ -422,10 +465,17 @@ public class DetailCarparkActivity extends AppCompatActivity {
         return formatter.parse(date);
     }
 
+    /**
+     * This function is to get the current time.
+     * @return the current date in Data object.
+     */
     private Date getCurrentTime(){
         return java.util.Calendar.getInstance().getTime();
     }
 
+    /**
+     * 
+     */
     @Override
     protected void onResume() {
         super.onResume();
