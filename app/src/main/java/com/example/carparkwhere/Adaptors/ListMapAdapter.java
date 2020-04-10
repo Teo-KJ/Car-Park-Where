@@ -1,4 +1,4 @@
-package com.example.carparkwhere.FilesIdkWhereToPutYet;
+package com.example.carparkwhere.Adaptors;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.carparkwhere.Activities.DetailCarparkActivity;
-import com.example.carparkwhere.Activities.MapsActivity;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
-import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
-import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
+import com.example.carparkwhere.Entities.BookmarkedCarpark;
+import com.example.carparkwhere.Entities.Carpark;
 import com.example.carparkwhere.R;
-import com.google.api.Distribution;
 
 import java.util.List;
 

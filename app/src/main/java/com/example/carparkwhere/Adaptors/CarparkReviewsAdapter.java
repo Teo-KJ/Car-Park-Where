@@ -1,8 +1,7 @@
-package com.example.carparkwhere.FilesIdkWhereToPutYet;
+package com.example.carparkwhere.Adaptors;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.carparkwhere.Activities.SubmitReviewActivity;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
-import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.Exceptions.UserNotLoggedInException;
+import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;

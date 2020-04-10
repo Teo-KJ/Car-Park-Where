@@ -11,7 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.DAO.DAOInterfaces.BookmarkDao;
 import com.example.carparkwhere.R;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -9,19 +9,15 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.carparkwhere.FilesIdkWhereToPutYet.CarparkReviewsAdapter;
+import com.example.carparkwhere.Adaptors.CarparkReviewsAdapter;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
-import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
+import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;

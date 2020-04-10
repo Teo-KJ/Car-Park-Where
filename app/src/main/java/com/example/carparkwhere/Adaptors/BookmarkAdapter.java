@@ -1,13 +1,11 @@
-package com.example.carparkwhere.FilesIdkWhereToPutYet;
+package com.example.carparkwhere.Adaptors;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,18 +15,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.carparkwhere.Activities.DetailCarparkActivity;
-import com.example.carparkwhere.Activities.SubmitReviewActivity;
-import com.example.carparkwhere.Activities.UserBookmarksActivity;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
-import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
-import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
+import com.example.carparkwhere.Entities.BookmarkedCarpark;
+import com.example.carparkwhere.Entities.Carpark;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHolder> {
+public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
     List<BookmarkedCarpark> bookmarkedCarparks;
 //    List<Carpark> carparks;
@@ -36,7 +33,7 @@ public class BookmarkAdaptor extends RecyclerView.Adapter<BookmarkAdaptor.ViewHo
     Context context;
     CarparkDao carparkDaoHelper;
 
-    public BookmarkAdaptor(List<BookmarkedCarpark> bookmarkedCarparks, Context context) {
+    public BookmarkAdapter(List<BookmarkedCarpark> bookmarkedCarparks, Context context) {
         this.bookmarkedCarparks = bookmarkedCarparks;
 //        this.carparks = carparks;
         this.context = context;

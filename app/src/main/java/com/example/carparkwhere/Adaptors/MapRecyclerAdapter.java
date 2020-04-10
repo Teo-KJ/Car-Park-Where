@@ -1,4 +1,4 @@
-package com.example.carparkwhere.FilesIdkWhereToPutYet;
+package com.example.carparkwhere.Adaptors;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,19 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
-import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.Entities.BookmarkedCarpark;
 import com.example.carparkwhere.R;
-import com.google.api.Distribution;
 
 import java.util.List;
 
-public class MapRecyclerAdaptor extends RecyclerView.Adapter<MapRecyclerAdaptor.ViewHolder> {
+public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.ViewHolder> {
     private static final String TAG = "RecyclerAdapter";
     int count = 0; //just for tutorial
     List<BookmarkedCarpark> bookmarkedCarparks;
 
-    public MapRecyclerAdaptor(List<BookmarkedCarpark> bookmarkedCarparks) {
+    public MapRecyclerAdapter(List<BookmarkedCarpark> bookmarkedCarparks) {
         this.bookmarkedCarparks = bookmarkedCarparks;
     }
 
