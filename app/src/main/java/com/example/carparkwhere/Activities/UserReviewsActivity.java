@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
@@ -20,11 +17,11 @@ import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.UserReviewAdapter;
-import com.example.carparkwhere.ModelObjects.Carpark;
-import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
+import com.example.carparkwhere.Exceptions.UserNotLoggedInException;
+import com.example.carparkwhere.Adaptors.UserReviewAdapter;
+import com.example.carparkwhere.Entities.Carpark;
+import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;

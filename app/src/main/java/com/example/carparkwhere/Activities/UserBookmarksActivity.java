@@ -17,11 +17,11 @@ import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.BookmarkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.BookmarkAdaptor;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
-import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
-import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.Adaptors.BookmarkAdapter;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
+import com.example.carparkwhere.Exceptions.UserNotLoggedInException;
+import com.example.carparkwhere.Entities.BookmarkedCarpark;
+import com.example.carparkwhere.Entities.Carpark;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class UserBookmarksActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    BookmarkAdaptor recyclerAdapter;
+    BookmarkAdapter recyclerAdapter;
     List<String> retrievefromFirebase;
     List<BookmarkedCarpark> bookmarkedCarparks;
     List<Carpark> carparks;
@@ -141,7 +141,7 @@ public class UserBookmarksActivity extends AppCompatActivity {
 
 
     private void initRecyclerView() {
-        recyclerAdapter = new BookmarkAdaptor(bookmarkedCarparks,this);
+        recyclerAdapter = new BookmarkAdapter(bookmarkedCarparks,this);
         recyclerView.setAdapter(recyclerAdapter);
     }
 

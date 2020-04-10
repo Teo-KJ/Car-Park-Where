@@ -9,10 +9,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
-import com.example.carparkwhere.ModelObjects.Carpark;
-import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.Entities.Carpark;
+import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 

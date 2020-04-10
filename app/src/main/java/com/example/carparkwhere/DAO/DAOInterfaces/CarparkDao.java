@@ -1,7 +1,7 @@
 package com.example.carparkwhere.DAO.DAOInterfaces;
 
 import com.android.volley.Response;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 
 public interface CarparkDao {
 

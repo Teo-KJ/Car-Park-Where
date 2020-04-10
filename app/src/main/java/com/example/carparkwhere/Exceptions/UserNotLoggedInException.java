@@ -1,4 +1,4 @@
-package com.example.carparkwhere.FilesIdkWhereToPutYet;
+package com.example.carparkwhere.Exceptions;
 
 public class UserNotLoggedInException extends Exception {
 

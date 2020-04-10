@@ -1,4 +1,4 @@
-package com.example.carparkwhere.ModelObjects;
+package com.example.carparkwhere.Entities;
 
 public class BookmarkedCarpark {
     private String carpark_id;
