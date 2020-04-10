@@ -1,4 +1,4 @@
-package com.example.carparkwhere.ModelObjects;
+package com.example.carparkwhere.Entities;
 
 import java.util.ArrayList;
 

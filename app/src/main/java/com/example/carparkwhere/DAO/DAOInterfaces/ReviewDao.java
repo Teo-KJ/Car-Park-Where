@@ -1,6 +1,6 @@
 package com.example.carparkwhere.DAO.DAOInterfaces;
-import com.example.carparkwhere.ModelObjects.Review;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.Entities.Review;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 
 
 public interface ReviewDao {

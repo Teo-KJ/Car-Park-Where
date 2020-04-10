@@ -1,27 +1,20 @@
-package com.example.carparkwhere.FilesIdkWhereToPutYet;
+package com.example.carparkwhere.Adaptors;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.carparkwhere.Activities.DetailCarparkActivity;
 import com.example.carparkwhere.Activities.SubmitReviewActivity;
-import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
