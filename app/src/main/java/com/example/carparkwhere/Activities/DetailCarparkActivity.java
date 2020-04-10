@@ -420,7 +420,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
                     try {
                         JSONObject predictions = jsonArray.getJSONObject(j);
                         String time = predictions.getString("time");
-                        float carparkPrediction = predictions.getInt("predictedAvailability");
+
+                        float carparkPrediction;
+                        if (j==0) carparkPrediction = 0;
+                        else carparkPrediction = predictions.getInt("predictedAvailability");
 
                         // Provide up to 5 suggested upcoming timings to park (counter = 5)
                         if ((convertTimeString(time).compareTo(getCurrentTime()) > 0) && (carparkPrediction / carparkCapacity >= 0.5) &&
