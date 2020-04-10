@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.carparkwhere.DAO.DAOImplementations.BookmarkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
@@ -77,6 +78,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
     // Current day of the week.
     int currentDay = identifyDay();
 
+    /**
+     * onCreate is used to initialise the activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -93,7 +98,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("");
 
-        int day = 0;
+        // Link variables with the items in XML file
         parkingRates_TV = findViewById(R.id.carparkPrices);
         carparkNumber_TV = findViewById(R.id.carparkNumber);
         carparkAddress_TV = findViewById(R.id.carparkAddress);
@@ -168,10 +173,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
                     }
                 }
             });
-        }catch (UserNotLoggedInException e){
+        }
+        catch (UserNotLoggedInException e){
 
         }
-
 
         // Getting the current Availability
         carparkDaoHelper.getCarparkLiveAvailability(getIntent().getStringExtra("CARPARK_ID"), new NetworkCallEventListener() {
@@ -184,6 +189,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
+        // Remove the visibility of the bookmark and submit review button for guest user
         if (!userDataDaoHelper.isLoggedIn()){
             bookmarkToggle_IMGBTN.setVisibility(View.INVISIBLE);
             submitReview_IMGBTN.setVisibility(View.INVISIBLE);
@@ -223,10 +229,10 @@ public class DetailCarparkActivity extends AppCompatActivity {
                             }
                         }
                     });
-                }catch (UserNotLoggedInException e){
+                }
+                catch (UserNotLoggedInException e){
 
                 }
-
             }
         });
 
@@ -250,14 +256,17 @@ public class DetailCarparkActivity extends AppCompatActivity {
         /**
          * Get the directions to the carpark from the current location.
          */
-        detailDirection_IMGBTN.setOnClickListener(v -> {
-            Intent intent = getIntent();
-            double latitude = intent.getDoubleExtra("Lat", 0.0);
-            double longitude = intent.getDoubleExtra("Lng", 0.0);
-            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            startActivity(mapIntent);
+        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                double latitude = intent.getDoubleExtra("Lat", 0.0);
+                double longitude = intent.getDoubleExtra("Lng", 0.0);
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
+            }
         });
       
         /**
@@ -277,13 +286,16 @@ public class DetailCarparkActivity extends AppCompatActivity {
         /**
          * View all the reviews made for the particular carpark.
          */
-        totalReviews_TV.setOnClickListener(view -> {
-            Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
-            intent.putExtra("carparkid",getIntent().getStringExtra("CARPARK_ID"));
-            startActivity(intent);
+        totalReviews_TV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailCarparkActivity.this, CarparkReviewsActivity.class);
+                intent.putExtra("carparkid", getIntent().getStringExtra("CARPARK_ID"));
+                startActivity(intent);
+            }
         });
 
-        //  With ServerInterfaceManager, get the carpark detail from the carpark details server.
+        //  With carparkDaoHelper, get the carpark detail from the carpark details server.
         Intent intent = getIntent();
         final String str = intent.getStringExtra("CARPARK_ID"); // Get the carpark number
         carparkDaoHelper.getCarparkDetailsByID(str, new NetworkCallEventListener() {
@@ -291,16 +303,18 @@ public class DetailCarparkActivity extends AppCompatActivity {
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 nDialog.dismiss();
                 Carpark carpark = (Carpark) networkCallResult;
+                // Get the carpark number and address
                 carparkNumber_TV.setText(carpark.carparkNo);
                 carparkAddress_TV.setText(carpark.carparkName);
                 try{
                     capacity_TV.setText(Integer.toString(carpark.carDetails.capacity));
                     carparkCapacity = carpark.carDetails.capacity;
-                    getAvailabilityPredictionData(1, str);
+                    //getAvailabilityPredictionData(1, str); // This is the line that caused the bug where day increased by 1!
                 }catch(Exception e){
                     capacity_TV.setText("");
                 }
 
+                // Get the carpark prices
                 ArrayList<Carpark.CarparkCarDetails.CarparkPriceJson> allPrices = carpark.carDetails.prices;
                 Carpark.CarparkCarDetails.CarparkPriceJson prices = allPrices.get(0);
                 String description = prices.description;
@@ -324,11 +338,11 @@ public class DetailCarparkActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        // Set the current dropdown box item to be the current day of the week
         spinner.setSelection(currentDay);
 
         // Selected day on dropdown box
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int difference = i - currentDay;
@@ -348,7 +362,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         barChart.getAxisLeft().setDrawLabels(false);
         barChart.getAxisRight().setDrawLabels(false);
         barChart.setDescription("");
-
     }
 
     /**
@@ -372,7 +385,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
         Date today = getCurrentTime();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(today);
-        System.out.println((calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7);
         return (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
     }
 
@@ -394,7 +406,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private void getAvailabilityPredictionData(Integer increment, String carparkNumber){
         carparkDaoHelper.getCarparkWholeDayPredictedAvailability(carparkNumber, increment, new Response.Listener() {
             @Override
-            public void onResponse(Object response){
+            // Get the JSON object of the carpark's details from the API
+            public void onResponse(Object response) {
                 JSONArray jsonArray = (JSONArray) response;
                 ArrayList<BarEntry> barEntries = new ArrayList<>();
                 ArrayList<String> allTimings = new ArrayList<String>();
@@ -402,14 +415,16 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 StringBuilder stringBuilder = new StringBuilder();
                 int counter = 5;
 
-                for (int j=0; j<jsonArray.length(); j++){
+                // Take all the predicted lots and its time from the API, then append to ArrayList for display
+                for (int j = 0; j < jsonArray.length(); j++) {
                     try {
                         JSONObject predictions = jsonArray.getJSONObject(j);
                         String time = predictions.getString("time");
                         float carparkPrediction = predictions.getInt("predictedAvailability");
 
-                        if ( (convertTimeString(time).compareTo(getCurrentTime())>0) && (carparkPrediction/carparkCapacity >= 0.5) &&
-                                (j<counter)){
+                        // Provide up to 5 suggested upcoming timings to park (counter = 5)
+                        if ((convertTimeString(time).compareTo(getCurrentTime()) > 0) && (carparkPrediction / carparkCapacity >= 0.5) &&
+                                (j < counter)) {
                             allSuggestedTimes.add(time);
                         }
 
@@ -420,6 +435,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                     }
                 }
 
+                // The bar chart visualisation of the entire day's predicted lots.
                 BarDataSet dataSet = new BarDataSet(barEntries, "Time");
                 BarData data = new BarData(allTimings, dataSet);
                 barChart.setData(data);
@@ -427,14 +443,21 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 barChart.invalidate();
                 barChart.refreshDrawableState();
 
-                for (String time: allSuggestedTimes){
+                // Provide suggested times to park from current time of accessing the app.
+                for (String time : allSuggestedTimes) {
                     stringBuilder.append(time + "\n");
                 }
-                if (allSuggestedTimes.size()==0) timeAdvice_TV.setText("None");
+                // If there is no suggested time to give, display as 'None'
+                if (allSuggestedTimes.size() == 0) timeAdvice_TV.setText("None");
                 else timeAdvice_TV.setText(stringBuilder);
             }
 
-        }, error -> error.printStackTrace());
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
     }
 
     /**
