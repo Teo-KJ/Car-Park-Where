@@ -64,20 +64,27 @@ public class ResetPasswordActivity extends AppCompatActivity {
         resetPasswordSubmit_BTN = findViewById(R.id.submitButton);
 
         // Submit button to confirm reset
-        resetPasswordSubmit_BTN.setOnClickListener(view -> {
-            if (emailAddress_ET.getText().toString().isEmpty()) // if no email address is provided by user
-                checkPassword_TV.setText("Enter email address.");
-            else {
-                checkPassword_TV.setText("");
-                userDataDaoHelper.sendResetPasswordEmail(emailAddress_ET.getText().toString());
-                Toast.makeText(ResetPasswordActivity.this,"Sent to your email. Please Check" , Toast.LENGTH_SHORT).show();
-                finish();
+        resetPasswordSubmit_BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (emailAddress_ET.getText().toString().isEmpty()) // if no email address is provided by user
+                    checkPassword_TV.setText("Enter email address.");
+                else {
+                    checkPassword_TV.setText("");
+                    userDataDaoHelper.sendResetPasswordEmail(emailAddress_ET.getText().toString());
+                    Toast.makeText(ResetPasswordActivity.this,"Sent to your email. Please Check" , Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
 
         // Cancel button
-        resetPasswordCancel_BTN.setOnClickListener(view -> finish());
-
+        resetPasswordCancel_BTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     /**
