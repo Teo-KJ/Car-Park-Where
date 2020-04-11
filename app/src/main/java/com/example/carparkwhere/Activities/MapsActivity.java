@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
@@ -51,6 +52,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -58,6 +60,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -67,34 +70,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ListMapAdapter.UserListRecyclerClickListener {
+    //Variable to store current location
+    private Location currentLocation;
 
-    Location currentLocation;
     private GoogleMap googleMap;
-    FusedLocationProviderClient fusedLocationProviderClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
-    ArrayList<Carpark> carparks = new ArrayList<Carpark>();
-    int height = 40;
-    int width = 40;
-    Bitmap greenParking;
-    Bitmap yellowParking;
-    Bitmap redParking;
-    Bitmap blackParking;
-    Bitmap greyParking;
-    PlacesClient placesClient;
-    String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
-    Map<String, String> mMarkerMap = new HashMap<>();
-    Map<String, Double> mDistanceMap = new HashMap<>();
-    Map<String, Double> mDistanceMapNew = new HashMap<>();
-    Map<String, Double> sortedDistanceMapNew = new HashMap<>();
-    Map<String, Double> sortedDistanceMap = new HashMap<>();
-    Marker currentMarker;
+    private ArrayList<Carpark> carparks = new ArrayList<Carpark>();
+    private int height = 40;
+    private int width = 40;
+    private Bitmap greenParking, yellowParking, redParking, blackParking, greyParking;
+    private PlacesClient placesClient;
+    private String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
+    private Map<String, String> mMarkerMap = new HashMap<>();
+    private Map<String, Double> mDistanceMap = new HashMap<>();
+    private Map<String, Double> mDistanceMapNew = new HashMap<>();
+    private Map<String, Double> sortedDistanceMapNew = new HashMap<>();
+    private Map<String, Double> sortedDistanceMap = new HashMap<>();
+    private Marker currentMarker;
     private ImageButton starBTN;
     private CarparkDao carparkDaoHelper;
     private UserDataDao userDataDaoHelper;
-    RecyclerView recyclerView;
-    ListMapAdapter recyclerAdapter;
-    List<BookmarkedCarpark> bookmarkedCarparks;
-    ImageButton settingsButton_IMGBTN, tutorial_IMGBTN;
+    private RecyclerView recyclerView;
+    private ListMapAdapter recyclerAdapter;
+    private List<BookmarkedCarpark> bookmarkedCarparks;
+    private ImageButton settingsButton_IMGBTN, tutorial_IMGBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +157,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         mark.setLongitude(carparks.get(counter).longitude);
                                         distance = searchedLocation.distanceTo(mark);
                                         mDistanceMapNew.put(carparks.get(counter).carparkNo, distance);
-                                        Log.d("ccb1", "knn");
                                     }
 
                                 } else {
@@ -180,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 recyclerAdapter.notifyDataSetChanged();
                                 initRecyclerView();
 
-                                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
+                                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
                                     carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
                                         @Override
                                         public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -239,11 +238,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         expandableView();
-        if (mMarkerMap.isEmpty() == true) {
-            Log.d("ccb", "Empty");
-        } else {
-            Log.d("ccb", "EmptyNot");
-        }
 
         tutorial_IMGBTN = findViewById(R.id.tutorialButton);
         tutorial_IMGBTN.setOnClickListener(new View.OnClickListener() {
@@ -283,22 +277,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 final Status status = result.getStatus();
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
-                        Log.i("knn", "All location settings are satisfied.");
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        Log.i("knn", "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-
                         try {
                             // Show the dialog by calling startResolutionForResult(), and check the result
                             // in onActivityResult().
                             status.startResolutionForResult(MapsActivity.this, 0x1);
 
                         } catch (IntentSender.SendIntentException e) {
-                            Log.i("knn", "PendingIntent unable to execute request.");
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        Log.i("knn", "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
                         break;
                 }
             }
@@ -341,14 +330,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(MapsActivity.this);
-                }
-
-                else
-                {
-                    Location NTU= new Location("");
+                } else {
+                    Location NTU = new Location("");
                     NTU.setLatitude(1.3483);
                     NTU.setLongitude(103.6831);
-                    currentLocation=NTU;
+                    currentLocation = NTU;
                     Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
                     assert supportMapFragment != null;
@@ -360,19 +346,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void expandableView() {
         recyclerView = findViewById(R.id.recyclerView);
-        // setting LinearLayout
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); //this also can be done in XML
-        //Making sure divider nice nice
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        //initialising data
-        //from this retrieve from firestore, add bookmark_carparks into bookmarkedCarparks
-        //constructor of bookmark_carparks is just takes in the carpark_id
-        //once done then can remove bottom hardcode
         bookmarkedCarparks = new ArrayList<>();
-        //bookmarkedCarparks.add(new BookmarkedCarpark("A81"));
-        //bookmarkedCarparks.add(new BookmarkedCarpark("NTU North Spine"));
-        //bookmarkedCarparks.add(new BookmarkedCarpark("NIE"));
         initRecyclerView();
     }
 
@@ -403,9 +380,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         distance = currentLocation.distanceTo(mark);
                         if (carparks.get(counter).carDetails.liveAvailability != null && carparks.get(counter).carDetails.capacity != null) {
                             fullness = carparks.get(counter).carDetails.liveAvailability.doubleValue() / carparks.get(counter).carDetails.capacity.doubleValue();
-                          
-                            if(fullness>=0.7 && fullness<=1) {
-                                Marker marker =googleMap.addMarker(new MarkerOptions()
+
+                            if (fullness >= 0.7 && fullness <= 1) {
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
                                         .icon(BitmapDescriptorFactory.fromBitmap(greenParking)));
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
@@ -432,7 +409,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 mMarkerMap.put(marker.getId(), carparks.get(counter).carparkNo);
                                 mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                             }
-                          
+
                         } else {
                             Marker marker = googleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
@@ -441,8 +418,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             mDistanceMap.put(carparks.get(counter).carparkNo, distance);
                         }
 
-                        // mDistanceMap.put(carparks.get(counter).carparkNo, distance);
-                        Log.d("ccb", "0");
                     }
 
                 } else {
@@ -465,7 +440,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
 
-                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
+                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
                     carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
                         @Override
                         public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -497,11 +472,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         int counter = 0;
 
-        mMarkerMap.forEach((k, v) -> Log.d("ccb", k));
-        //double carpar = mDistanceMap.get("A81");
-        //Log.d("ccb", Double.toString(carpar));
-
-        Log.d("ccb", Integer.toString(counter));
         sortedDistanceMap = mDistanceMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -543,7 +513,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 bookmarkedCarparks = new ArrayList<>();
 
                 System.out.println(bookmarkedCarparks);
-                int counter =0;
+                int counter = 0;
                 for (String name : sortedDistanceMap.keySet()) {
                     if (counter <= 10) {
                         bookmarkedCarparks.add(new BookmarkedCarpark(name));
@@ -553,7 +523,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
 
-                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
+                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
                     carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
                         @Override
                         public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -579,74 +549,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     });
 
                 }
-
                 recyclerAdapter.notifyDataSetChanged();
-
-//                carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
-//                    @RequiresApi(api = Build.VERSION_CODES.N)
-//                    @Override
-//                    public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-//                        if (isSuccessful) {
-//                            carparks = (ArrayList<Carpark>) networkCallResult;
-//                            double distance;
-//                            Location mark = new Location("");
-//                            for (int counter = 0; counter < carparks.size(); counter++) {
-//                                mark.setLatitude(carparks.get(counter).latitude);
-//                                mark.setLongitude(carparks.get(counter).longitude);
-//                                distance = currentLocation.distanceTo(mark);
-//                                mDistanceMapNew.put(carparks.get(counter).carparkNo, distance);
-//                                Log.d("ccb1", "knn");
-//                            }
-//
-//                        } else {
-//                            //deal with the error message, maybe toast or something
-//                        }
-//                        sortedDistanceMapNew = mDistanceMapNew.entrySet()
-//                                .stream()
-//                                .sorted(Map.Entry.comparingByValue())
-//                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-//                        int counter = 0;
-//
-//                        for (String name : sortedDistanceMapNew.keySet()) {
-//                            if (counter <= 10) {
-//                                bookmarkedCarparks.add(new BookmarkedCarpark(name));
-//                                counter++;
-//                            } else {
-//                                break;
-//                            }
-//                        }
-//                        recyclerAdapter.notifyDataSetChanged();
-//                        initRecyclerView();
-//
-////                        for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks){
-////                            carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
-////                                @Override
-////                                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-////                                    if (isSuccessful) {
-////                                        Carpark carpark = (Carpark) networkCallResult;
-////                                        bookmarkedCarpark.setCarparkName(carpark.carparkName);
-////                                        recyclerAdapter.notifyDataSetChanged();
-////                                    }
-////
-////                                }
-////                            });
-////
-////                            carparkDaoHelper.getCarparkLiveAvailability(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
-////                                @Override
-////                                public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-////                                    if (isSuccessful) {
-////                                        Integer availability = (Integer) networkCallResult;
-////                                        bookmarkedCarpark.setAvailability(availability.toString());
-////                                        recyclerAdapter.notifyDataSetChanged();
-////                                    }
-////
-////                                }
-////                            });
-////
-////                        }
-//                    }
-//                });
-
                 return true;
             }
         });
@@ -664,30 +567,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    // Function to open up the dialogue reminding user to switch on location
-    public void switchOnLocDialog() {
-        Dialog help = new Dialog(MapsActivity.this);
-        help.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        help.setContentView(R.layout.switch_on_location);
-        help.show();
-    }
 
     private void initRecyclerView() {
         recyclerAdapter = new ListMapAdapter(bookmarkedCarparks, this, this);
         recyclerView.setAdapter(recyclerAdapter);
-
-        /*Intent intent = getIntent();
-
-        try {
-            double latitude = intent.getDoubleExtra("Lat", 0.0);
-            double longitude = intent.getDoubleExtra("Lng", 0.0);
-            LatLng latLng = new LatLng(latitude, longitude);
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        }
-        catch(Exception e) {
-            //  Block of code to handle errors
-        }*/
     }
 
     @Override
