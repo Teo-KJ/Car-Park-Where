@@ -22,6 +22,12 @@ import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 
+/*
+ * This class implements the CarparkReviewsAdapter. This is used to adapt the given input data to the RecyclerView.
+ * This class uses the item_carparkreviews.xml for the user interface.
+ *
+ * @author Tay Jaslyn
+ * */
 public class CarparkReviewsAdapter extends
         RecyclerView.Adapter<CarparkReviewsAdapter.ViewHolder> {
 
@@ -88,6 +94,7 @@ public class CarparkReviewsAdapter extends
         return mReviews.size();
     }
 
+    //Linking user interface of each row in the RecyclerView.
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView itemTitle_TV;
         private RatingBar itemRating_RBAR;

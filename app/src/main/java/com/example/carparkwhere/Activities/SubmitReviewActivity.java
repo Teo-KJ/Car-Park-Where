@@ -32,6 +32,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/*
+* This class implements the SubmitReview Activity. This is used to handle the interactions of the user with the user interface.
+*
+* @author Tay Jaslyn
+* */
+
+
 public class SubmitReviewActivity extends AppCompatActivity {
 
     RatingBar reviewRating_RBAR;
@@ -69,6 +76,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("Submit Review for Carpark " + carparkId);
 
+
         carparkDaoHelper.getCarparkDetailsByID(carparkId, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -80,6 +88,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
         });
 
 
+        //set back button
         reviewBack_IMGBTN = findViewById(R.id.reviewBack_IMGBTN);
         reviewBack_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +97,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
             }
         });
 
+        //save review
         final Button reviewSave_BTN = findViewById(R.id.reviewSave_BTN);
         reviewSave_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +106,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
             }
         });
 
+        //delete review
         reviewDelete_BTN = findViewById(R.id.reviewDelete_BTN);
         reviewDelete_BTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +115,7 @@ public class SubmitReviewActivity extends AppCompatActivity {
             }
         });
         reviewDelete_BTN.setVisibility(View.INVISIBLE);
+
 
         try{
             reviewDaoHelper.getCarparkReviewsByUserEmail(userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {

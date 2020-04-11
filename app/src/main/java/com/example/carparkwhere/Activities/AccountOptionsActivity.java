@@ -18,6 +18,11 @@ import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.Exceptions.UserNotLoggedInException;
 import com.example.carparkwhere.R;
 
+/*
+ * This class implements the AccountOptionsActivity. This is used to handle the interactions of the user with the user interface.
+ *
+ * @author Tay Jaslyn
+ * */
 public class AccountOptionsActivity extends AppCompatActivity {
 
     private TextView accountEmailTitle_TV;
@@ -44,6 +49,7 @@ public class AccountOptionsActivity extends AppCompatActivity {
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle("Settings");
 
+        //initialize buttons from the user interface.
         backAccountOptionsActivity_IMGBTN = findViewById(R.id.backAccountOptionsActivity_IMGBTN);
         viewUserBookmarks_BTN = findViewById(R.id.viewUserBookmarks_BTN);
         accountEmailTitle_TV = findViewById(R.id.accountEmailTitle_TV);
@@ -64,6 +70,7 @@ public class AccountOptionsActivity extends AppCompatActivity {
 
 
 
+        //set back button.
         backAccountOptionsActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

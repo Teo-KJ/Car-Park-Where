@@ -22,6 +22,12 @@ import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 
+/*
+ * This class implements the CarparkReviews Activity. This is used to handle the interactions of the user with the user interface.
+ * This allows the user to view all the reviews of a specific carpark.
+ *
+ * @author Tay Jaslyn
+ * */
 public class CarparkReviewsActivity extends AppCompatActivity {
 
     private static final int DATASET_COUNT = 5;

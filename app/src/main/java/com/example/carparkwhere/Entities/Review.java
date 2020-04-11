@@ -3,6 +3,11 @@ package com.example.carparkwhere.Entities;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/*
+ * This class implements the Review entity with the attributes userEmail, userRating, carparkId, carparkName, userDisplayName, userComment, _id and date.
+ *
+ * @author Tay Jaslyn
+ * */
 public class Review {
 
     private String userEmail;
