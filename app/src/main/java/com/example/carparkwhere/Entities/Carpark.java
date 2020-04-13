@@ -4,13 +4,22 @@ import java.util.ArrayList;
 
 public class Carpark {
 
+    /*
+     * Constructor for details of a single carpark
+     */
     public class CarparkCarDetails {
 
+        /*
+         * Price and description of a single carpark, originally in JSON as it was taken from the API.
+         */
         public class CarparkPriceJson{
             public String price;
             public String description;
         }
 
+        /**
+         * Predicted availability of a single carpark
+         */
         public class PredictedAvailabilityJson{
             public String time;
             public Integer predictedAvailability;
@@ -25,7 +34,9 @@ public class Carpark {
 
     }
 
-
+    /*
+     * Constructor for price and description of a single carpark
+     */
     public class CarparkPrices {
 
         public String description;
@@ -45,7 +56,6 @@ public class Carpark {
         }
     }
 
-
     public String carparkNo;
     public Double latitude;
     public Double longitude;
@@ -56,6 +66,9 @@ public class Carpark {
     public ArrayList<CarparkPrices> carparkPrices;
     public Integer liveAvailability;
 
+    /*
+     * Constructor for the complete carpark information and availability
+     */
     public Carpark(String carparkNo, Double latitude, Double longitude, String parkingSystem, Boolean isURANotHDB, String carparkName,
                    CarparkCarDetails carDetails){
         this.carparkNo = carparkNo;
