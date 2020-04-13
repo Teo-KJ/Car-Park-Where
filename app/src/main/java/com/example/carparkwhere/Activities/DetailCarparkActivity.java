@@ -143,20 +143,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
             }
         });
 
-        // Provide the directions to the carpark based on the user's current location.
-        detailDirection_IMGBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getIntent();
-                double latitude = intent.getDoubleExtra("Lat", 0.0);
-                double longitude = intent.getDoubleExtra("Lng", 0.0);
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + latitude + "," + longitude);
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
-            }
-        });
-
         // Getting the user bookmarks, so that the user bookmarked carpark is saved under his/her profile
         try{
             bookmarkDaoHelper.getUserBookmarkCarparkIds(userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {
@@ -268,7 +254,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 startActivity(mapIntent);
             }
         });
-      
+
         /**
          * Get the number of reviews for the particular carpark.
          */
