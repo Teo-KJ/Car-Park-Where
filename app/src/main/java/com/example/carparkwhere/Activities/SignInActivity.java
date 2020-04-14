@@ -213,7 +213,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     /**
-     * This function helps to setup the functionality of the reset password button 
+     * This function helps to setup the functionality of the reset password button
      */
 
     private void setupResetPasswordButton(){
