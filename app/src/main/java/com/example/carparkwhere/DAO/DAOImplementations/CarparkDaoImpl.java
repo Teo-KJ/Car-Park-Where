@@ -210,32 +210,5 @@ public class CarparkDaoImpl implements CarparkDao {
     }
 
 
-    //return type: ArrayList<Review>
-    //note that empty array is still considered as success
-    /**
-     * This function returns all the reviews of the specified carparks
-     * @param carparkID the carpark id of the specified carpark
-     * @param networkCallEventListener The network call event listener used to handle request response
-     */
-    public void getCarparkReviewsByCarparkID(String carparkID, final NetworkCallEventListener networkCallEventListener){
-        mQueue = Volley.newRequestQueue(context);
-        String url = context.getResources().getString(R.string.serverUrl)  + "/client/reviews/bycarpark/" + carparkID;
-        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Gson gson = new Gson();
-                ArrayList<Review> reviews = gson.fromJson(response.toString(),new TypeToken<ArrayList<Review>>(){}.getType());
-                networkCallEventListener.onComplete(reviews,true,null);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println(error.getMessage());
-                networkCallEventListener.onComplete(new ArrayList<Review>(),false,error.getMessage());
-            }
-        });
-        mQueue.add(request);
-    }
-
 
 }
