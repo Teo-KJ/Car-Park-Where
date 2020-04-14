@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -70,32 +69,57 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ListMapAdapter.UserListRecyclerClickListener {
-    //Variable to store current location
+    //Variable that stores current location
     private Location currentLocation;
-
+    //Variable that stores instance of Google Map in this class
     private GoogleMap googleMap;
+    //Variable that stores fused location provider client
     private FusedLocationProviderClient fusedLocationProviderClient;
+    //Variable that stores request code value
     private static final int REQUEST_CODE = 101;
+    //Arraylist that stores carpark variables
     private ArrayList<Carpark> carparks = new ArrayList<Carpark>();
+    //Variables that stores bitmap dimension
     private int height = 40;
     private int width = 40;
+    //Variables that store bitmaps of carpark icons
     private Bitmap greenParking, yellowParking, redParking, blackParking, greyParking;
+    //Client that exposes the Places API
     private PlacesClient placesClient;
+    //API key of Maps API
     private String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
+    //HashMap that stores all the markers and the respective carpark IDs
     private Map<String, String> mMarkerMap = new HashMap<>();
+    //HashMap that stores all the distance from chosen location and the respective carpark ID
     private Map<String, Double> mDistanceMap = new HashMap<>();
+    //Another HashMap that stores all the distance from chosen location and the respective carpark ID
     private Map<String, Double> mDistanceMapNew = new HashMap<>();
-    private Map<String, Double> sortedDistanceMapNew = new HashMap<>();
+    //HashMap that stores sorted version of mDistanceMap
     private Map<String, Double> sortedDistanceMap = new HashMap<>();
+    //HashMap that stores sorted version of mDistanceMapNew
+    private Map<String, Double> sortedDistanceMapNew = new HashMap<>();
+    //Variable that stores the current marker
     private Marker currentMarker;
+    //Button for the bookmark option
     private ImageButton starBTN;
+    //Variable that calls the carpark dao helper
     private CarparkDao carparkDaoHelper;
+    //Variable that calls the user data dao helper
     private UserDataDao userDataDaoHelper;
+    //Variable that calls the recycler view to display nearby carparks
     private RecyclerView recyclerView;
+    //Recycler Adapter that help creates the recycler view
     private ListMapAdapter recyclerAdapter;
-    private List<BookmarkedCarpark> bookmarkedCarparks;
+    //List reused from book marked carparks to store nearby carparks
+    private List<BookmarkedCarpark> nearbyCarparks;
+    //Buttons for settings icon and tutorial icon
     private ImageButton settingsButton_IMGBTN, tutorial_IMGBTN;
 
+
+    /**
+     * onCreate is used to initialise the activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         displayLocationSettingsRequest(this);
@@ -140,8 +164,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         Toast.makeText(MapsActivity.this, "" + latLng.latitude, Toast.LENGTH_SHORT).show();
 
-                        bookmarkedCarparks.clear();
-                        bookmarkedCarparks = new ArrayList<>();
+                        nearbyCarparks.clear();
+                        nearbyCarparks = new ArrayList<>();
 
                         carparkDaoHelper.getAllCarparkEntireFullDetails(new NetworkCallEventListener() {
                             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -167,10 +191,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .sorted(Map.Entry.comparingByValue())
                                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
                                 int counter = 0;
-                                bookmarkedCarparks = new ArrayList<>();
+                                nearbyCarparks = new ArrayList<>();
                                 for (String name : sortedDistanceMapNew.keySet()) {
                                     if (counter <= 10) {
-                                        bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                                        nearbyCarparks.add(new BookmarkedCarpark(name));
                                         counter++;
                                     } else {
                                         break;
@@ -179,7 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 recyclerAdapter.notifyDataSetChanged();
                                 initRecyclerView();
 
-                                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
+                                for (BookmarkedCarpark bookmarkedCarpark : nearbyCarparks) {
                                     carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
                                         @Override
                                         public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -248,7 +272,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    // Function to open up the help dialogue
+    /**
+     * Function to open up the help dialogue
+     */
+
     public void openHelpDialog() {
         Dialog help = new Dialog(MapsActivity.this);
         help.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -256,6 +283,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         help.show();
     }
 
+    /**
+     * Function to ask user to turn on GPS
+     * @param context to state the context the prompt need to be opened in
+     */
     private void displayLocationSettingsRequest(Context context) {
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API).build();
@@ -294,6 +325,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    /**
+     * Function that converts all the carpark icons into bitmap
+     */
     private void makeBitmap() {
         BitmapDrawable g = (BitmapDrawable) getResources().getDrawable(R.drawable.green_car);
         BitmapDrawable y = (BitmapDrawable) getResources().getDrawable(R.drawable.yellow_car);
@@ -313,6 +347,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    /**
+     * Function to fetch current user location
+     */
     private void fetchLocation() {
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -344,15 +381,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    /**
+     * Function to start expandable view
+     */
     public void expandableView() {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); //this also can be done in XML
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        bookmarkedCarparks = new ArrayList<>();
+        nearbyCarparks = new ArrayList<>();
         initRecyclerView();
     }
 
+    /**
+     * Function to initialize Google Map
+     * @param googleMaps stores the instance of Google Map in this class
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onMapReady(GoogleMap googleMaps) {
@@ -429,10 +473,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
                 int counter = 0;
-                bookmarkedCarparks = new ArrayList<>();
+                nearbyCarparks = new ArrayList<>();
                 for (String name : sortedDistanceMap.keySet()) {
                     if (counter <= 10) {
-                        bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                        nearbyCarparks.add(new BookmarkedCarpark(name));
                         counter++;
                     } else {
                         break;
@@ -440,7 +484,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
 
-                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
+                for (BookmarkedCarpark bookmarkedCarpark : nearbyCarparks) {
                     carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
                         @Override
                         public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -505,25 +549,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     currentMarker.remove();
                 }
                 fetchLocation();
-                bookmarkedCarparks.clear();
+                nearbyCarparks.clear();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
-                bookmarkedCarparks.clear();
-                bookmarkedCarparks = new ArrayList<>();
+                nearbyCarparks.clear();
+                nearbyCarparks = new ArrayList<>();
 
-                System.out.println(bookmarkedCarparks);
+                System.out.println(nearbyCarparks);
                 int counter = 0;
                 for (String name : sortedDistanceMap.keySet()) {
                     if (counter <= 10) {
-                        bookmarkedCarparks.add(new BookmarkedCarpark(name));
+                        nearbyCarparks.add(new BookmarkedCarpark(name));
                         counter++;
                     } else
                         break;
                 }
 
 
-                for (BookmarkedCarpark bookmarkedCarpark : bookmarkedCarparks) {
+                for (BookmarkedCarpark bookmarkedCarpark : nearbyCarparks) {
                     carparkDaoHelper.getCarparkDetailsByID(bookmarkedCarpark.getCarparkID(), new NetworkCallEventListener() {
                         @Override
                         public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
@@ -555,27 +599,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    fetchLocation();
-                }
-                break;
-        }
-    }
-
-
+    
+    /**
+     * Function to initialize expandable view
+     */
     private void initRecyclerView() {
-        recyclerAdapter = new ListMapAdapter(bookmarkedCarparks, this, this);
+        recyclerAdapter = new ListMapAdapter(nearbyCarparks, this, this);
         recyclerView.setAdapter(recyclerAdapter);
     }
 
+    /**
+     * Function that that zooms to the specific carpark when pressed on the expandable view
+     * @param position states which specific list item the user pressed
+     */
     @Override
     public void onUserClicked(int position) {
-        String name = bookmarkedCarparks.get(position).getCarparkID();
+        String name = nearbyCarparks.get(position).getCarparkID();
         carparkDaoHelper.getCarparkDetailsByID(name, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
