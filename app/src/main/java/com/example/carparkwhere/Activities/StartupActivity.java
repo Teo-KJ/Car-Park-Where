@@ -13,6 +13,10 @@ import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 import com.example.carparkwhere.R;
 
+
+/**
+ * This class is used as splash screen / startup screen
+ */
 public class StartupActivity extends AppCompatActivity {
 
     int SPLASH_TIME = 1500; //This is 3 seconds
