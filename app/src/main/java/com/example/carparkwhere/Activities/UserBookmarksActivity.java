@@ -128,14 +128,6 @@ public class UserBookmarksActivity extends AppCompatActivity {
         }catch (UserNotLoggedInException e){
             e.printStackTrace();
         }
-
-
-
-
-//        bookmarkedCarparks.add(new BookmarkedCarpark("A81"));
-//        bookmarkedCarparks.add(new BookmarkedCarpark("NTU North Spine"));
-//        bookmarkedCarparks.add(new BookmarkedCarpark("NIE"));
-//        initRecyclerView();
     }
 
 

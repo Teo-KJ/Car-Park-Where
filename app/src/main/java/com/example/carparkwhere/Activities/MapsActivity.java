@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
@@ -50,6 +51,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,12 +59,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+/**
+ * This class implements the Maps Activity. This is used to handle the main interface of displaying map, carparks, nearby carparks, and searches.
+ * @author Li Wei-Ting
+ */
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ListMapAdapter.UserListRecyclerClickListener {
     //Variable that stores current location
@@ -114,6 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * onCreate is used to initialise the activity.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -136,15 +145,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final AutocompleteSupportFragment autocompleteSupportFragment =
                 (AutocompleteSupportFragment)
                         getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        autocompleteSupportFragment.setCountry("SG");
-
         autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS));
+        //limit search results to Singapore
         autocompleteSupportFragment.setCountry("SG");
         autocompleteSupportFragment.setOnPlaceSelectedListener(
                 new PlaceSelectionListener() {
                     @Override
                     public void onPlaceSelected(Place place) {
                         LatLng latLng = place.getLatLng();
+                        //if there is already a current location marker, remove it
                         if (currentMarker != null) {
                             currentMarker.remove();
                         }
@@ -281,6 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Function to ask user to turn on GPS
+     *
      * @param context to state the context the prompt need to be opened in
      */
     private void displayLocationSettingsRequest(Context context) {
@@ -391,6 +401,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Function to initialize Google Map
+     *
      * @param googleMaps stores the instance of Google Map in this class
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -398,6 +409,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMaps) {
         googleMap = googleMaps;
         makeBitmap();
+        //Enable my location button
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style));
@@ -409,9 +421,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (isSuccessful) {
                     carparks = (ArrayList<Carpark>) networkCallResult;
                     double fullness;
-                    int availability = 100;
-                    int capacity;
-                    int total = 300;
                     double distance;
                     Location mark = new Location("");
                     for (int counter = 0; counter < carparks.size(); counter++) {
@@ -420,7 +429,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         distance = currentLocation.distanceTo(mark);
                         if (carparks.get(counter).carDetails.liveAvailability != null && carparks.get(counter).carDetails.capacity != null) {
                             fullness = carparks.get(counter).carDetails.liveAvailability.doubleValue() / carparks.get(counter).carDetails.capacity.doubleValue();
-
+                            //Logic deciding which color to use for carpark icon based on fullness
                             if (fullness >= 0.7 && fullness <= 1) {
                                 Marker marker = googleMap.addMarker(new MarkerOptions()
                                         .position(new LatLng(mark.getLatitude(), mark.getLongitude()))
@@ -461,8 +470,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
 
                 } else {
-                    //deal with the error message, maybe toast or something
+                    //Deal with the error message, maybe toast or something
                 }
+                //Sort mDistanceMap according to closeness to the point of reference
                 sortedDistanceMap = mDistanceMap.entrySet()
                         .stream()
                         .sorted(Map.Entry.comparingByValue())
@@ -510,19 +520,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 initRecyclerView();
             }
         });
-        int counter = 0;
 
-        sortedDistanceMap = mDistanceMap.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+
 
         LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Current Location");
-
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
+        //Handles the logic after pressing carpark icons
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -538,6 +544,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
+
+        //Handles logic after pressing my location button
         googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
@@ -595,7 +603,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
-    
+
     /**
      * Function to initialize expandable view
      */
@@ -606,6 +614,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * Function that that zooms to the specific carpark when pressed on the expandable view
+     *
      * @param position states which specific list item the user pressed
      */
     @Override
