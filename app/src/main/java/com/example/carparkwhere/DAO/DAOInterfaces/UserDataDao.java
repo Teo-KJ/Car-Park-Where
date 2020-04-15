@@ -9,6 +9,7 @@ import com.google.firebase.auth.AuthResult;
 
 /**
  * This is the data access object class for accessing information related to user information
+ * @author kohsweesen
  */
 public interface UserDataDao{
 

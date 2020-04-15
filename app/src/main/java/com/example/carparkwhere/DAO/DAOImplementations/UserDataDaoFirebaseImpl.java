@@ -17,6 +17,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 /**
  * This is the implementation class for UserDataDao. This is a firebase implementation
+ * @author kohsweesen
  */
 public class UserDataDaoFirebaseImpl implements UserDataDao {
 

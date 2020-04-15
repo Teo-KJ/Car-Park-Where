@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 /**
  * This is the implementation class of the CarparkDao
+ * @author kohsweesen
  */
 
 public class CarparkDaoImpl implements CarparkDao {

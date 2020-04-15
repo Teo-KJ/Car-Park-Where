@@ -21,6 +21,7 @@ import com.google.firebase.auth.AuthResult;
 
 /**
  * This is the sign up activity class
+ * @author kohsweesen
  */
 public class SignUpActivity extends AppCompatActivity {
 

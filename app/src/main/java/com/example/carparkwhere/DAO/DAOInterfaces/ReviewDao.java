@@ -5,6 +5,7 @@ import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 
 /**
  * This is the data access object class for accessing information related to reviews
+ * @author kohsweesen
  */
 public interface ReviewDao {
 
