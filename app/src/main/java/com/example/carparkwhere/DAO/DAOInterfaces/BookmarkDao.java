@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 /**
  * This is the data access object class for accessing bookmark information
+ * @author kohsweesen
  */
 public interface BookmarkDao {
     /**

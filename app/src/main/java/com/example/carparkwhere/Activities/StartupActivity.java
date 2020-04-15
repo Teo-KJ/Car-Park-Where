@@ -16,6 +16,7 @@ import com.example.carparkwhere.R;
 
 /**
  * This class is used as splash screen / startup screen
+ * @author kohsweesen
  */
 public class StartupActivity extends AppCompatActivity {
 

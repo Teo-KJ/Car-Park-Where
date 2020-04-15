@@ -25,6 +25,7 @@ import java.util.Map;
 
 /**
  * This is the implementation class of the ReviewDao class
+ * @author kohsweesen
  */
 public class ReviewDaoImpl implements ReviewDao {
 

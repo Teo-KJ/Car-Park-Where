@@ -25,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 
 /**
  * This is the activity for user to sign in
+ * @author kohsweesen
  */
 public class SignInActivity extends AppCompatActivity {
 
