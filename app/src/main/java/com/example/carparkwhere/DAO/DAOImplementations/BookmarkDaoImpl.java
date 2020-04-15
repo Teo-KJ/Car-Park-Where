@@ -11,24 +11,42 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.DAO.DAOInterfaces.BookmarkDao;
 import com.example.carparkwhere.R;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * This is the implementation class of the BookmarkDao
+ */
 public class BookmarkDaoImpl implements BookmarkDao {
 
+    /**
+     * Request queue to be used for network request using the Volley library
+     */
     private RequestQueue mQueue;
+    /**
+     * Context to be used for making network call
+     */
     private Context context;
 
+    /**
+     * The initialiser of the class
+     * @param context The context required for making network call
+     */
     public BookmarkDaoImpl(Context context){
         this.context = context;
     }
 
+    /**
+     * This function helps to save the user's bookmarks onto the database
+     * @param carparkIds the carpark ids of the bookmarks
+     * @param userEmail the user email address
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void saveUserCarparkBookmark(ArrayList<String> carparkIds, String userEmail, final NetworkCallEventListener networkCallEventListener){
         String URL = context.getResources().getString(R.string.serverUrl) + "/client/bookmarks/save";
         JSONObject jsonBody = new JSONObject();
@@ -67,6 +85,12 @@ public class BookmarkDaoImpl implements BookmarkDao {
     }
 
     //return type ArrayList<String>
+
+    /**
+     * This function returns all the bookmarks of a specified user
+     * @param userEmail the user's email address
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void getUserBookmarkCarparkIds(String userEmail, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = context.getResources().getString(R.string.serverUrl) + "/client/bookmarks/" + userEmail;

@@ -9,30 +9,38 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.example.carparkwhere.FilesIdkWhereToPutYet.CarparkReviewsAdapter;
+import com.example.carparkwhere.Adaptors.CarparkReviewsAdapter;
 import com.example.carparkwhere.DAO.DAOImplementations.ReviewDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
+import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 
+/*
+ * This class implements the CarparkReviews Activity. This is used to handle the interactions of the user with the user interface.
+ * This allows the user to view all the reviews of a specific carpark.
+ *
+ * @author Tay Jaslyn
+ * */
 public class CarparkReviewsActivity extends AppCompatActivity {
 
     private static final int DATASET_COUNT = 5;
     protected RecyclerView mRecyclerView;
     protected CarparkReviewsAdapter mAdapter;
+    private ProgressBar progressBar1,progressBar2,progressBar3,progressBar4,progressBar5;
+    private TextView totalReviewCountText,overallReviewAverage_TV;
     private ProgressDialog nDialog;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<Review> reviews = new ArrayList<Review>();
     private String carparkId;
     private ReviewDao reviewDaoHelper;
+    private RecyclerView reviews_RV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,13 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_carpark_reviews);
 
         reviewDaoHelper = new ReviewDaoImpl(this);
+        progressBar1 = findViewById(R.id.progress_bar_star1);
+        progressBar2 = findViewById(R.id.progress_bar_star2);
+        progressBar3 = findViewById(R.id.progress_bar_star3);
+        progressBar4 = findViewById(R.id.progress_bar_star4);
+        progressBar5 = findViewById(R.id.progress_bar_star5);
+        totalReviewCountText = findViewById(R.id.totalReviewCountText);
+        overallReviewAverage_TV = findViewById(R.id.overallReviewAverage_TV);
 
         presentProgressDialog("Loading Reviews");
 
@@ -47,53 +62,79 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
         bar.setDisplayHomeAsUpEnabled(true);
+        bar.openOptionsMenu();
         bar.setTitle("Reviews for Carpark " + carparkId);
 
-        ImageButton backCarparkReviewsActivity_IMGBTN = findViewById(R.id.backCarparkReviewsActivity_IMGBTN);
-        backCarparkReviewsActivity_IMGBTN.setOnClickListener(new View.OnClickListener() {
+        reviews_RV = (RecyclerView) findViewById(R.id.reviews_RV);
+
+
+        reviewDaoHelper.getCarparkAverageRating(carparkId, new NetworkCallEventListener() {
             @Override
-            public void onClick(View v) {
-                finish();
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    Double average = (Double) networkCallResult;
+                    Double rounded = Math.round(average.doubleValue() * 10) / 10.0;
+                    overallReviewAverage_TV.setText(rounded.toString());
+                }
             }
         });
-
-        final RecyclerView reviews_RV = (RecyclerView) findViewById(R.id.reviews_RV);
-        Review r1 = new Review("user001@email.com", 3.0,"001","Carpark was convenient to get to, but a bit too crowded on weekends.","user001",1);
-        Review r2 = new Review("user007@email.com", 5.0,"001","This is my favorite carpark man.","user007",2);
-        Review r3 = new Review("user008@email.com", 1.0,"001","Is this considered a carpark? I consider it a parked car.","user008",3);
-
-
-        reviews.add(r1);
-        reviews.add(r2);
-        reviews.add(r3);
-
-
-        //create adapter passing in the sample data
-//        final CarparkReviewsAdapter adapter = new CarparkReviewsAdapter(reviews);
-//
-//        reviews_RV.setLayoutManager(new LinearLayoutManager(this));
-//        reviews_RV.setAdapter(adapter);
-//        Log.d(Integer.toString(adapter.getItemCount()),"ADAPTER COUNT");
-
-
 
         reviewDaoHelper.getCarparkReviewsByCarparkID(carparkId, new NetworkCallEventListener() {
             @Override
             public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
                 nDialog.dismiss();
-                if (isSuccessful){
+                if (isSuccessful) {
                     reviews = (ArrayList<Review>) networkCallResult;
-                    final CarparkReviewsAdapter adapter = new CarparkReviewsAdapter(reviews);
-
-                    for (Review review: reviews){
-                        System.out.println(review.getDateString());
-                    }
-                    reviews_RV.setLayoutManager(new LinearLayoutManager(CarparkReviewsActivity.this));
-                    reviews_RV.setAdapter(adapter);
-                    Log.d(Integer.toString(adapter.getItemCount()),"ADAPTER COUNT");
+                    setupRecyclerList();
                 }
             }
         });
+
+    }
+
+    private void setupRecyclerList(){
+        mAdapter = new CarparkReviewsAdapter(reviews);
+
+        reviews_RV.setLayoutManager(new LinearLayoutManager(CarparkReviewsActivity.this));
+        reviews_RV.setAdapter(mAdapter);
+
+        Integer maxnum = 0;
+        Integer star1Num = 0;
+        Integer star2Num = 0;
+        Integer star3Num = 0;
+        Integer star4Num = 0;
+        Integer star5Num = 0;
+
+        for (Review review: reviews){
+            int reviewRating = (int) Math.floor(review.getRating());
+            if (reviewRating == 1){
+                star1Num += 1;
+                maxnum = Math.max(maxnum,star1Num);
+            }else if (reviewRating == 2){
+                star2Num += 1;
+                maxnum = Math.max(maxnum,star2Num);
+            }else if (reviewRating == 3){
+                star3Num += 1;
+                maxnum = Math.max(maxnum,star3Num);
+            }else if (reviewRating == 4){
+                star4Num += 1;
+                maxnum = Math.max(maxnum,star4Num);
+            }else if (reviewRating == 5){
+                star5Num += 1;
+                maxnum = Math.max(maxnum,star5Num);
+            }
+        }
+
+        if (reviews.size() != 0){
+            progressBar1.setProgress(Math.round((star1Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar2.setProgress(Math.round((star2Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar3.setProgress(Math.round((star3Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar4.setProgress(Math.round((star4Num.floatValue() / maxnum.floatValue()) * 100));
+            progressBar5.setProgress(Math.round((star5Num.floatValue() / maxnum.floatValue()) * 100));
+
+            totalReviewCountText.setText("(" + (star1Num + star2Num + star3Num + star4Num + star5Num) + ")");
+        }
+
 
     }
 
@@ -102,7 +143,7 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
-                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -115,6 +156,20 @@ public class CarparkReviewsActivity extends AppCompatActivity {
         nDialog.setIndeterminate(false);
         nDialog.setCancelable(true);
         nDialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reviewDaoHelper.getCarparkReviewsByCarparkID(carparkId, new NetworkCallEventListener() {
+            @Override
+            public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
+                if (isSuccessful){
+                    reviews = (ArrayList<Review>) networkCallResult;
+                    setupRecyclerList();
+                }
+            }
+        });
     }
 
 }

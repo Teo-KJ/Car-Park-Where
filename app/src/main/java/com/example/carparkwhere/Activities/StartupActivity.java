@@ -5,17 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
 
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 import com.example.carparkwhere.R;
-import com.google.android.gms.common.internal.FallbackServiceBroker;
 
+
+/**
+ * This class is used as splash screen / startup screen
+ */
 public class StartupActivity extends AppCompatActivity {
 
     int SPLASH_TIME = 1500; //This is 3 seconds

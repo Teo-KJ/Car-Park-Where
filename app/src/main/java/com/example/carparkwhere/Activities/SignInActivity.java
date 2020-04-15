@@ -16,26 +16,66 @@ import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.ExpandableView;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.Exceptions.UserNotLoggedInException;
 import com.example.carparkwhere.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
 
+/**
+ * This is the activity for user to sign in
+ */
 public class SignInActivity extends AppCompatActivity {
+
+    /**
+     * This editText is to input email address
+     */
     EditText emailAddressEditText;
+
+    /**
+     * This editText to input password
+     */
     EditText passwordEditText;
+
+    /**
+     * This button to sign in
+     */
     Button signInButton;
+
+    /**
+     * This button to sign up
+     */
     Button createAccountButton;
-    Button guessModeButton;
+
+    /**
+     * This button to enter the app as guest
+     */
+    Button guestModeButton;
+
+    /**
+     * This button to reset password
+     */
     Button resetPasswordButton;
+
+    /**
+     * This is the animation view in the activity
+     */
     LottieAnimationView animationView;
+
+    /**
+     * This is the progress dialog to be shown while waiting for network call result
+     */
     ProgressDialog nDialog;
 
+    /**
+     * The carparkDao class
+     */
     private CarparkDao carparkDaoHelper;
+
+    /**
+     * The userDao class
+     */
     private UserDataDao userDataDaoHelper;
 
 
@@ -47,24 +87,18 @@ public class SignInActivity extends AppCompatActivity {
         userDataDaoHelper = new UserDataDaoFirebaseImpl();
 
         getSupportActionBar().hide();
-        //checkIfUserIsAlreadySignIn();
+        checkIfUserIsAlreadySignIn();
         setupFindViewsByID();
         setupSignInButton();
         setupCreateAccountButton();
         setupAnimationView();
-        setupGuessModeButton();
+        setupGuestModeButton();
         setupResetPasswordButton();
-
-        /*Button testBTN1 = findViewById(R.id.testBTN1);
-        testBTN1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignInActivity.this, UserBookmarksActivity.class));
-            }
-        });*/
-
     }
 
+    /**
+     * This function helps to check if user is logged in. If user is logged in, then automatically go to next activity
+     */
     private void checkIfUserIsAlreadySignIn(){
         try{
             if ((userDataDaoHelper.isLoggedIn()) && (userDataDaoHelper.isEmailVerified())){
@@ -78,6 +112,10 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This function helps to present the progress dialog while waiting for network call result
+     * @param message the message to be shown in the progress dialog
+     */
     private void presentProgressDialog(String message){
         nDialog = new ProgressDialog(SignInActivity.this);
         nDialog.setMessage("Loading..");
@@ -87,20 +125,29 @@ public class SignInActivity extends AppCompatActivity {
         nDialog.show();
     }
 
+    /**
+     * This function helps to set up findviewbyid for all the ui elements
+     */
     private void setupFindViewsByID(){
         emailAddressEditText = findViewById(R.id.emailAddressSignInEditText);
         passwordEditText = findViewById(R.id.passwordSignInEditText);
         signInButton = findViewById(R.id.signInButton);
         createAccountButton = findViewById(R.id.createAccountButton);
-        guessModeButton = findViewById(R.id.guessModeButton);
+        guestModeButton = findViewById(R.id.guessModeButton);
         resetPasswordButton = findViewById(R.id.resetPasswordButton);
     }
 
+    /**
+     * This function helps to set the animation for the lottie animation view
+     */
     private void setupAnimationView(){
         animationView = findViewById(R.id.signInMainLottieAnimation);
         animationView.setAnimationFromUrl ("https://assets5.lottiefiles.com/packages/lf20_u3YlGl.json");
     }
 
+    /**
+     * This function helps to set up the functionality of the sign in button
+     */
     private void setupSignInButton(){
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +182,9 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This function helps to setup the functionality of the sign up button
+     */
     private void setupCreateAccountButton(){
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,8 +195,11 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    private void setupGuessModeButton(){
-        guessModeButton.setOnClickListener(new View.OnClickListener() {
+    /**
+     * This function helps to setup the functionality of the guest mode button
+     */
+    private void setupGuestModeButton(){
+        guestModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -158,6 +211,10 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * This function helps to setup the functionality of the reset password button
+     */
 
     private void setupResetPasswordButton(){
         resetPasswordButton.setOnClickListener(new View.OnClickListener() {

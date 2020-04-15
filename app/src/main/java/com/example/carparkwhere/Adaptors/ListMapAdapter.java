@@ -1,4 +1,4 @@
-package com.example.carparkwhere.FilesIdkWhereToPutYet;
+package com.example.carparkwhere.Adaptors;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,14 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.carparkwhere.Activities.DetailCarparkActivity;
-import com.example.carparkwhere.Activities.MapsActivity;
 import com.example.carparkwhere.DAO.DAOImplementations.CarparkDaoImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.CarparkDao;
-import com.example.carparkwhere.ModelObjects.BookmarkedCarpark;
-import com.example.carparkwhere.ModelObjects.Carpark;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
+import com.example.carparkwhere.Entities.BookmarkedCarpark;
+import com.example.carparkwhere.Entities.Carpark;
 import com.example.carparkwhere.R;
 
 import java.util.List;
@@ -57,6 +58,12 @@ public class ListMapAdapter extends RecyclerView.Adapter<ListMapAdapter.ViewHold
         holder.textView.setText(bookmarks.getCarparkID());
         boolean isExpanded = bookmarkedCarparks.get(position).isExpanded();
         holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.address_TV.setText(bookmarkedCarparks.get(position).getCarparkName());
+        String availabilityString = bookmarkedCarparks.get(position).getAvailability();
+        if (availabilityString.equals("")){
+            availabilityString = "-";
+        }
+        holder.liveAvailability_bookmark_TV.setText(availabilityString);
     }
     //number of items in the view
     @Override
@@ -65,10 +72,11 @@ public class ListMapAdapter extends RecyclerView.Adapter<ListMapAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView textView;
+        TextView textView,address_TV,liveAvailability_bookmark_TV;
         ImageButton direct,info;
         ConstraintLayout expandableLayout;
         UserListRecyclerClickListener mClickListener;
+        LinearLayout topLinearLayout;
 
         public ViewHolder(@NonNull View itemView, UserListRecyclerClickListener clickListener) {
             super(itemView);
@@ -77,9 +85,12 @@ public class ListMapAdapter extends RecyclerView.Adapter<ListMapAdapter.ViewHold
             direct = itemView.findViewById(R.id.btnDirection);
             info = itemView.findViewById(R.id.btnInformation);
             expandableLayout = itemView.findViewById(R.id.expandableLayout);
+            topLinearLayout = itemView.findViewById(R.id.topLinearLayout);
+            address_TV = itemView.findViewById(R.id.carparkAddress_TV);
+            liveAvailability_bookmark_TV = itemView.findViewById(R.id.liveAvailability_bookmark_TV);
             mClickListener = clickListener;
             itemView.setOnClickListener(this);
-            textView.setOnClickListener(new View.OnClickListener(){
+            topLinearLayout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     BookmarkedCarpark bookmark = bookmarkedCarparks.get(getAdapterPosition());

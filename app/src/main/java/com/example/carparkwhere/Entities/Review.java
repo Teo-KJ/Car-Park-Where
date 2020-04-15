@@ -1,16 +1,19 @@
-package com.example.carparkwhere.ModelObjects;
+package com.example.carparkwhere.Entities;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/*
+ * This class implements the Review entity with the attributes userEmail, userRating, carparkId, carparkName, userDisplayName, userComment, _id and date.
+ *
+ * @author Tay Jaslyn
+ * */
 public class Review {
 
     private String userEmail;
     private Double userRating;
     private String carparkId;
+    private String carparkName;
     private String userDisplayName;
     private String userComment;
     private String _id;
@@ -24,7 +27,7 @@ public class Review {
         this.userDisplayName = userDisplayName;
         this._id = null;
         this.date = date;
-
+        this.carparkName = "";
     }
 
     //getters setters
@@ -33,6 +36,14 @@ public class Review {
     }
     public String getUserEmail(){
         return this.userEmail;
+    }
+
+    public String getCarparkName() {
+        return carparkName;
+    }
+
+    public void setCarparkName(String carparkName) {
+        this.carparkName = carparkName;
     }
 
     public String getUserDisplayName() {
@@ -52,7 +63,7 @@ public class Review {
     public String getDateString() {
         long unixSeconds = this.date.longValue();
         Date date = new java.util.Date(unixSeconds*1000L);
-        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd-MM-yyyy • HH:mm");
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT"));
         String formattedDate = sdf.format(date);
         return formattedDate;

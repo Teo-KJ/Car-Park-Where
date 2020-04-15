@@ -11,24 +11,36 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carparkwhere.DAO.DAOInterfaces.ReviewDao;
-import com.example.carparkwhere.ModelObjects.Review;
+import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.NetworkCallEventListener;
+import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * This is the implementation class of the ReviewDao class
+ */
 public class ReviewDaoImpl implements ReviewDao {
 
+    /**
+     * This queue is used to make network call request using Volley
+     */
     private RequestQueue mQueue;
+    /**
+     * This is the context to be used for making network call request
+     */
     private Context context;
 
+    /**
+     * This is the initialiser for this class
+     * @param context the context to be passed in for making network call request
+     */
     public ReviewDaoImpl(Context context){
         this.context = context;
     }
@@ -36,6 +48,12 @@ public class ReviewDaoImpl implements ReviewDao {
 
     //return type: ArrayList<Review>
     //note that empty array is still considered as success
+
+    /**
+     * This function returns all the carpark reviews of a specified carpark
+     * @param carparkID the carpark id of the specified carpark
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void getCarparkReviewsByCarparkID(String carparkID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = context.getResources().getString(R.string.serverUrl) + "/client/reviews/bycarpark/" + carparkID;
@@ -57,6 +75,12 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     //Return type: ArrayList<Review>
+
+    /**
+     * This function returns all the carpark reviews made by a specified user
+     * @param userEmail the email address of the specified user
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void getCarparkReviewsByUserEmail(String userEmail, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = context.getResources().getString(R.string.serverUrl) + "/client/reviews/byuser/" + userEmail;
@@ -78,7 +102,11 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
 
-
+    /**
+     * This function helps to save a new review into the database
+     * @param review This is the review object to be saved into the database
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void saveNewCarparkReview(Review review, final NetworkCallEventListener networkCallEventListener){
 
         String URL = context.getResources().getString(R.string.serverUrl) + "/client/reviews/save/";
@@ -118,6 +146,12 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
 
+    /**
+     * This function helps to update a specified existing review with new values, such as updating comment or updating with new rating
+     * @param oldReviewID this is the review id of the review before modification
+     * @param newReview this is the new review object to be saved into the database
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void updateCarparkReviewWithNewValues(String oldReviewID ,Review newReview, final NetworkCallEventListener networkCallEventListener){
 
         String URL = context.getResources().getString(R.string.serverUrl) + "/client/reviews/" + oldReviewID;
@@ -154,6 +188,11 @@ public class ReviewDaoImpl implements ReviewDao {
         mQueue.add(request);
     }
 
+    /**
+     * This function deletes a specified carpark review by specifying the review id.
+     * @param reviewID The review id of the review to be deleted
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void deleteCarparkReviewByReviewID(String reviewID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = context.getResources().getString(R.string.serverUrl) + "/client/reviews/" + reviewID;
@@ -174,6 +213,12 @@ public class ReviewDaoImpl implements ReviewDao {
 
 
     //Return Type: Double
+
+    /**
+     * This function returns the average rating of the carpark.
+     * @param carparkID The carpark id of the specified carpark
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void getCarparkAverageRating(String carparkID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = context.getResources().getString(R.string.serverUrl) + "/client/reviews/averagerating/" + carparkID;
@@ -198,6 +243,12 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     //Return Type: Integer
+
+    /**
+     * This function returns the number of reviews of a specified carpark
+     * @param carparkID the carpark id of the specified carpark
+     * @param networkCallEventListener The network call event listener used to handle request response
+     */
     public void getCarparkReviewsCount(String carparkID, final NetworkCallEventListener networkCallEventListener){
         mQueue = Volley.newRequestQueue(context);
         String url = context.getResources().getString(R.string.serverUrl) + "/client/reviews/totalrating/" + carparkID;

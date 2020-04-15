@@ -12,12 +12,16 @@ import android.widget.Toast;
 
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
-import com.example.carparkwhere.FilesIdkWhereToPutYet.UserNotLoggedInException;
+import com.example.carparkwhere.Exceptions.UserNotLoggedInException;
 import com.example.carparkwhere.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
+
+/**
+ * This is the sign up activity class
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     EditText emailAddressSignUpEditText;
@@ -43,6 +47,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This function helps to present the progress dialog while waiting for network call results
+     * @param message the message to be shown in the progress dialog
+     */
     private void presentProgressDialog(String message){
         nDialog = new ProgressDialog(SignUpActivity.this);
         nDialog.setMessage("Loading..");
@@ -52,9 +60,11 @@ public class SignUpActivity extends AppCompatActivity {
         nDialog.show();
     }
 
+
+    /**
+     * This function helps to setup the functionality of the sign up button
+     */
     private void setupSignUpButton(){
-
-
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
