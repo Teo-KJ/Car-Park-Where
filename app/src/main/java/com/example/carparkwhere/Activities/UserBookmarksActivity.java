@@ -46,11 +46,12 @@ public class UserBookmarksActivity extends AppCompatActivity {
         userDataDaoHelper = new UserDataDaoFirebaseImpl();
         carparkDaoHelper = new CarparkDaoImpl(this);
 
+        //Setting top layout of activity
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
         bar.setDisplayHomeAsUpEnabled(true);
+        //Setting title of activity
         bar.setTitle("Bookmarks");
-
         try{
             bar.setTitle("Bookmarks for " + userDataDaoHelper.getDisplayName());
         }catch (UserNotLoggedInException e){
@@ -59,19 +60,15 @@ public class UserBookmarksActivity extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.recyclerView);
-        // setting LinearLayout
+        //setting LinearLayout
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); //this also can be done in XML
-        //Making sure divider nice nice
+        //Setting divider between each view
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
         //initialising data
-        retrievefromFirebase = new ArrayList<>();
-        //from this retrieve from firestore, add bookmark_carparks into bookmarkedCarparks
-        //constructor of bookmark_carparks is just takes in the carpark_id
-        //once done then can remove bottom hardcode
         bookmarkedCarparks = new ArrayList<>();
         carparks = new ArrayList<>();
-
+        //first retrieve bookmark carparks using userDataDao
         try{
             bookmarkDaoHelper.getUserBookmarkCarparkIds(userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {
                 @Override
@@ -84,7 +81,7 @@ public class UserBookmarksActivity extends AppCompatActivity {
                         }
 
                         initRecyclerView();
-
+                        //then for each bookmarked carpark, retrieve their information using carparkDao
                         for (String carparkId:carparkIds){
                             carparkDaoHelper.getCarparkDetailsByID(carparkId, new NetworkCallEventListener() {
                                 @Override
@@ -103,7 +100,7 @@ public class UserBookmarksActivity extends AppCompatActivity {
 
                                 }
                             });
-
+                            //lastly, retrieve the live availability to display on the activity
                             carparkDaoHelper.getCarparkLiveAvailability(carparkId, new NetworkCallEventListener() {
                                 @Override
                                 public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {

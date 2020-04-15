@@ -45,28 +45,22 @@ public class UserReviewsActivity extends AppCompatActivity {
         userDataDaoHelper = new UserDataDaoFirebaseImpl();
         carparkDaoHelper = new CarparkDaoImpl(this);
 
+        //Setting top layout
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#111111")));
         bar.setDisplayHomeAsUpEnabled(true);
+        //Setting title
         bar.setTitle("Your Past Reviews");
 
         recyclerView = findViewById(R.id.recyclerView);
         // setting LinearLayout
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); //this also can be done in XML
-        //Making sure divider nice nice
+        // setting divider between views
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
         //initialising data
-        // I changed userRating to a float
         userReviews = new ArrayList<>();
-        //can retrieve from firebase here
-//        Review first = new Review("jordon@email.com", 5.0,"NTU Northspine", "Brightly lit and clean", "Jordon",12);
-//        Review second = new Review("jordon@email.com", 4.0,"NIE", "Clean, little lots", "Jordon",12);
-//        Review third = new Review("jordon@email.com", 1.0,"Hall 7", "Bad, no food, nothing nearby", "Jordon",12);
-//        userReviews.add(first);
-//        userReviews.add(second);
-//        userReviews.add(third);
-
+        // getting user reviews using reviewDao by passing user's email
         try{
             reviewDaoHelper.getCarparkReviewsByUserEmail(userDataDaoHelper.getUserEmail(), new NetworkCallEventListener() {
                 @Override
@@ -84,7 +78,7 @@ public class UserReviewsActivity extends AppCompatActivity {
 
 
     }
-
+    //based on carpark id from review, information will be retrieved using carparkDao
     private void getCarparkName(){
         for (Review review:userReviews){
             carparkDaoHelper.getCarparkDetailsByID(review.getCarparkId(), new NetworkCallEventListener() {

@@ -22,6 +22,7 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.Vi
 
     List<Review> userReviews;
     Context context;
+    //UserReviewAdapter will be used for UserReviewsActivity
     public UserReviewAdapter(List<Review> userReviews){
         this.userReviews = userReviews;
     }
@@ -37,14 +38,15 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //this changes the text
+        //this changes the text and rating bar of the view
         Review user_reviews = userReviews.get(position);
         holder.textView.setText(user_reviews.getCarparkId());
         holder.carparkName.setText(user_reviews.getCarparkName());
-        holder.userComments.setText(user_reviews.getComment()); //here need get the user comments
-        holder.userRating.setRating(user_reviews.getRating().floatValue()); //here need find number of stars need change Rating to float
+        holder.userComments.setText(user_reviews.getComment()); 
+        holder.userRating.setRating(user_reviews.getRating().floatValue()); 
         holder.reviewDate.setText(user_reviews.getDateString());
 
+        //Onclick listener to direct the user to SubmitReviewActivity for user to update their review
         holder.baseLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +57,7 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.Vi
             }
         });
     }
-    //number of items in the view
+    //number of items in the view, determines number of recycler view created
     @Override
     public int getItemCount() {
         return userReviews.size();
@@ -79,25 +81,6 @@ public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.Vi
             carparkName = itemView.findViewById(R.id.carpark_name);
             baseLinearLayout = itemView.findViewById(R.id.baseLinearLayout);
         }
-
-//         userComments.setOnClickListener(new View.OnClickListener(){
-//                @Override
-//                public void onClick(View view){
-//                   Review review = userReviews.get(getAdapterPosition());
-//                   //reviewDAOhelper.getCarparkDetailsByID(review.get_id(), new NetworkCallEventListener() {
-//                        @Override
-//                        public <T> void onComplete(T networkCallResult, Boolean isSuccessful, String errorMessage) {
-//                            Review review = (Review) networkCallResult;
-//                            Review review = userReviews.get(getAdapterPosition());
-//                            //String text = bookmark.getCarparkID();
-//                            //System.out.println("Info "+text);
-//                            Intent intent = new Intent(context, SubmitReviewActivity.class);
-//                            intent.putExtra();
-//                            intent.putExtra();
-//                            intent.putExtra();
-//                            context.startActivity(intent);
-//                        }
-//                    });
 
 
     }
