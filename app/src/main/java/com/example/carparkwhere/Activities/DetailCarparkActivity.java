@@ -53,7 +53,12 @@ public class DetailCarparkActivity extends AppCompatActivity {
     private BarChart barChart;
     private Spinner spinner;
     private ArrayList<String> userBookmarkCarparks;
+<<<<<<< Updated upstream
+=======
+    // Condition to check if the user has bookmarked the particular carpark.
+>>>>>>> Stashed changes
     private boolean userBookmarkedThis = false;
+    // Data Access Objects helper classes
     private CarparkDao carparkDaoHelper;
     private ReviewDao reviewDaoHelper;
     private BookmarkDao bookmarkDaoHelper;
@@ -368,7 +373,8 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 ArrayList<String> allTimings = new ArrayList<String>();
                 ArrayList<String> allSuggestedTimes = new ArrayList<String>();
                 StringBuilder stringBuilder = new StringBuilder();
-                int counter = 5;
+                int counter = 5, secondCounter = 0;
+                float capacity = carparkCapacity;
 
                 for (int j=0; j<jsonArray.length(); j++){
                     try {
@@ -376,13 +382,28 @@ public class DetailCarparkActivity extends AppCompatActivity {
                         String time = predictions.getString("time");
                         float carparkPrediction = predictions.getInt("predictedAvailability");
 
+<<<<<<< Updated upstream
                         if ( (convertTimeString(time).compareTo(getCurrentTime())>0) && (carparkPrediction/carparkCapacity >= 0.5) &&
                                 (j<counter)){
+=======
+                        float carparkPrediction, availabilityProportion;
+                        if (j==0) carparkPrediction = 0;
+                        else carparkPrediction = predictions.getInt("predictedAvailability");
+
+                        // Provide up to 5 suggested upcoming timings to park (counter = 5)
+                        // secondCounter variable is used to ensure only up to 5 timings are relected to suggest parking timings
+                        availabilityProportion = carparkPrediction / capacity;
+                        if ((convertTimeString(time).compareTo(getCurrentTime()) > 0) && (availabilityProportion >= 0.5) &&
+                                (secondCounter < counter)) {
+>>>>>>> Stashed changes
                             allSuggestedTimes.add(time);
+                            secondCounter++;
                         }
 
+                        // Add all the prediction and its timing in an array list. Variable j serves as the index in the bar chart.
                         barEntries.add(new BarEntry(carparkPrediction, j));
                         allTimings.add(time);
+
                     } catch (JSONException | ParseException e) {
                         e.printStackTrace();
                     }
@@ -395,10 +416,20 @@ public class DetailCarparkActivity extends AppCompatActivity {
                 barChart.invalidate();
                 barChart.refreshDrawableState();
 
+<<<<<<< Updated upstream
                 for (String time: allSuggestedTimes){
                     stringBuilder.append(time + "\n");
                 }
                 if (allSuggestedTimes.size()==0) timeAdvice_TV.setText("None");
+=======
+                // Provide suggested times to park from current time of accessing the app.
+                // Use StringBuilder to join up the suggested times.
+                for (String time : allSuggestedTimes) {
+                    stringBuilder.append(time + "\n");
+                }
+                // If there is no suggested time to give, display as 'None', otherwise display the timings
+                if (allSuggestedTimes.size() == 0) timeAdvice_TV.setText("None");
+>>>>>>> Stashed changes
                 else timeAdvice_TV.setText(stringBuilder);
             }
 
