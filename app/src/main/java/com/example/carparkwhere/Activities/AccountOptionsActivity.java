@@ -21,7 +21,7 @@ import com.example.carparkwhere.R;
 /*
  * This class implements the AccountOptionsActivity. This is used to handle the interactions of the user with the user interface.
  *
- * @author Tay Jaslyn
+ * @author Tay Jaslyn, Koh Swee Sen
  * */
 public class AccountOptionsActivity extends AppCompatActivity {
 
