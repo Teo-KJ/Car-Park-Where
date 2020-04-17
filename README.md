@@ -16,11 +16,6 @@ This app is being developed by using various data from Singapore's public data p
 * [URA Carpark Availability API](https://www.ura.gov.sg/maps/api/#car-park-available-lots)
 * [URA Carpark Information](https://www.ura.gov.sg/maps/api/#car-park-list-and-rates)
 
-## Supporting Repositories
-In order to develop this application, our team also developed the backend. The following are the backend systems developed and its Github repositories.
-* Machine Learning for Carpark Availability Prediction ([Github](https://github.com/Teo-KJ/Machine-Learning-Model-for-Car-Park-Where))
-* 
-
 ## About *Car Park Where*
 Want to find a lot to park, but not sure where has sufficient lots? How about planning a trip and unsure if there are enough parking spaces? The app *Car Park Where* aims to provide information on carparking availability, both live and in other days, and the carparks itself. In addition, *Car Park Where* is also a platform for motorists to save frequently visited carparks and provide reviews on carparks for other users in the community.
 
