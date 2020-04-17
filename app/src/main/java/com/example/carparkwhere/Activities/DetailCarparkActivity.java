@@ -409,7 +409,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
                         JSONObject predictions = jsonArray.getJSONObject(j);
                         String time = predictions.getString("time");
 
-
                         float carparkPrediction, availabilityProportion;
                         if (j==0) carparkPrediction = 0;
                         else carparkPrediction = predictions.getInt("predictedAvailability");
