@@ -21,6 +21,7 @@ import java.util.Map;
 
 /**
  * This is the implementation class of the BookmarkDao
+ * @author kohsweesen
  */
 public class BookmarkDaoImpl implements BookmarkDao {
 

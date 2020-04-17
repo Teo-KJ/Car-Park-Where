@@ -28,14 +28,12 @@ import java.util.List;
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
     List<BookmarkedCarpark> bookmarkedCarparks;
-//    List<Carpark> carparks;
     ArrayList<String> availabilityStrings;
     Context context;
     CarparkDao carparkDaoHelper;
-
+    //BookmarkAdapter will be used in UserBookmarksActivity
     public BookmarkAdapter(List<BookmarkedCarpark> bookmarkedCarparks, Context context) {
         this.bookmarkedCarparks = bookmarkedCarparks;
-//        this.carparks = carparks;
         this.context = context;
         carparkDaoHelper = new CarparkDaoImpl(context);
     }
@@ -51,11 +49,14 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //this changes the text
+        //this changes the text of the viuw
         BookmarkedCarpark bookmarks = bookmarkedCarparks.get(position);
         holder.textView.setText(bookmarks.getCarparkID());
+        // isExpanded is changed via onclick listener coded below
+        // if is Expanded, expandable layout will be shown else it wil be invisible
         boolean isExpanded = bookmarkedCarparks.get(position).isExpanded();
         holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
         holder.address_TV.setText(bookmarkedCarparks.get(position).getCarparkName());
         String availabilityString = bookmarkedCarparks.get(position).getAvailability();
         if (availabilityString.equals("")){
@@ -63,7 +64,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
         }
         holder.liveAvailability_bookmark_TV.setText(availabilityString);
     }
-    //number of items in the view
+    //number of items in the view, determines number of recycler view created
     @Override
     public int getItemCount() {
         return bookmarkedCarparks.size();
@@ -86,7 +87,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             address_TV = itemView.findViewById(R.id.carparkAddress_TV);
             liveAvailability_bookmark_TV = itemView.findViewById(R.id.liveAvailability_bookmark_TV);
 
-
+            //Onclick listener to change boolean variable isExpanded
             topLinearLayout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
@@ -97,7 +98,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             });
 
 
-
+            //For directions button, linking to directions to carpark on google maps
             direct.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
@@ -117,6 +118,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                     });
                 }
             });
+            //For carpark information button, linking to DetailCarparkActivity by passing the carpark ID
             info.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){

@@ -6,6 +6,7 @@ import com.example.carparkwhere.Interfaces.NetworkCallEventListener;
 
 /**
  * This is the data access object class for accessing carpark related information
+ * @author kohsweesen
  */
 public interface CarparkDao {
 
