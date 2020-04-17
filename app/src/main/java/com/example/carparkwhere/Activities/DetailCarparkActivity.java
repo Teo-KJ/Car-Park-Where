@@ -457,11 +457,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     *
-     * @param item
-     * @return
-     */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -493,9 +489,7 @@ public class DetailCarparkActivity extends AppCompatActivity {
         return java.util.Calendar.getInstance().getTime();
     }
 
-    /**
-     * 
-     */
+    
     @Override
     protected void onResume() {
         super.onResume();
