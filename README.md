@@ -40,11 +40,12 @@ The following are main features of the application which will be elaborated belo
 ## Main Features
 
 ### Provide Nearby Carparks from Location
-<img width="50" alt="image" src=https://user-images.githubusercontent.com/48685014/79530042-d41cc780-80a0-11ea-90ce-caf407e2d12d.png>
+<img width="230" alt="image" src=https://user-images.githubusercontent.com/48685014/79530042-d41cc780-80a0-11ea-90ce-caf407e2d12d.png>
 
 When user uses phone current location feature or manually search an address of a location, the app returns a list of nearby carparks around the location for the user to select and choose from. 
 
 ### Provide Carpark Details
+<img width="230" alt="image" src=https://user-images.githubusercontent.com/48685014/79530257-68872a00-80a1-11ea-9083-30f4d3f848fc.png>
 
 User can see more detailed carpark information, with regards to its address, parking rates, full and live capacity, and the reviews made for the carpark.
 
