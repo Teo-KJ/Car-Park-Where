@@ -40,16 +40,17 @@ The following are main features of the application which will be elaborated belo
 ## Main Features
 
 ### Provide Nearby Carparks from Location
-<img width="230" alt="image" src=https://user-images.githubusercontent.com/48685014/79530042-d41cc780-80a0-11ea-90ce-caf407e2d12d.png>
+<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530042-d41cc780-80a0-11ea-90ce-caf407e2d12d.png>
 
 When user uses phone current location feature or manually search an address of a location, the app returns a list of nearby carparks around the location for the user to select and choose from. 
 
 ### Provide Carpark Details
-<img width="230" alt="image" src=https://user-images.githubusercontent.com/48685014/79530257-68872a00-80a1-11ea-9083-30f4d3f848fc.png>
+<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530257-68872a00-80a1-11ea-9083-30f4d3f848fc.png>
 
 User can see more detailed carpark information, with regards to its address, parking rates, full and live capacity, and the reviews made for the carpark.
 
 ### Directions to the Carpark
+<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530348-aa17d500-80a1-11ea-8350-5441ef866bcd.png> <img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530325-979d9b80-80a1-11ea-8db8-dd19c7dcc2fd.png>
 
 The user can check the directions to go to the carpark from the current location. This feature is supported by Google Maps, where user can also manually adjust the departure and arrival timings, and the source location at Google Maps.
 
