@@ -2,6 +2,12 @@ package com.example.carparkwhere.Entities;
 
 import java.util.ArrayList;
 
+/**
+ * The Carpark entity class.
+ * @author Teo Kai Jie
+ * @version 1.0
+ */
+
 public class Carpark {
 
     /*

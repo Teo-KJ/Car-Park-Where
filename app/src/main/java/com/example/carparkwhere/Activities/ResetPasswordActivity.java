@@ -19,7 +19,7 @@ import com.example.carparkwhere.R;
  * This Java class is used for user to enter email address
  * and reset the account password.
  *
- * @authors Kai Jie, Swee Sen
+ * @authors Teo Kai Jie
  * @version 1.0
  */
 
@@ -27,10 +27,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private UserDataDao userDataDaoHelper;
 
-    /**
-     * onCreate is used to initialise the activity.
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -49,7 +49,7 @@ import java.util.Date;
 /**
  * This Java class is used to generate the carpark details when
  * the user intends to view based on individual carparks.
- * @author Kai Jie, Swee Sen
+ * @author Teo Kai Jie
  * @version 1.0
  */
 
@@ -79,10 +79,6 @@ public class DetailCarparkActivity extends AppCompatActivity {
     // Current day of the week.
     int currentDay = identifyDay();
 
-    /**
-     * onCreate is used to initialise the activity.
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
