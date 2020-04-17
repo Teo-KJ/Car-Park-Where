@@ -1,10 +1,3 @@
-/**
- * This Java class is used to generate the carpark details when
- * the user intends to view based on individual carparks.
- * @author Kai Jie, Swee Sen
- * @version 1.0
- */
-
 package com.example.carparkwhere.Activities;
 
 import androidx.appcompat.app.ActionBar;
@@ -52,6 +45,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+/**
+ * This Java class is used to generate the carpark details when
+ * the user intends to view based on individual carparks.
+ * @author Kai Jie, Swee Sen
+ * @version 1.0
+ */
 
 public class DetailCarparkActivity extends AppCompatActivity {
     // Variables to generate the various details in texts.
