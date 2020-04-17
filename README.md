@@ -50,18 +50,21 @@ When user uses phone current location feature or manually search an address of a
 User can see more detailed carpark information, with regards to its address, parking rates, full and live capacity, and the reviews made for the carpark.
 
 ### Directions to the Carpark
-<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530348-aa17d500-80a1-11ea-8350-5441ef866bcd.png> <img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530325-979d9b80-80a1-11ea-8db8-dd19c7dcc2fd.png>
+<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530348-aa17d500-80a1-11ea-8350-5441ef866bcd.png>   <img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530429-df242780-80a1-11ea-897a-22401b784342.png>
 
 The user can check the directions to go to the carpark from the current location. This feature is supported by Google Maps, where user can also manually adjust the departure and arrival timings, and the source location at Google Maps.
 
 ### Get Predicted Carpark Availability
+<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530623-75f0e400-80a2-11ea-8f5d-b6311d75a85a.png>   <img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530630-7a1d0180-80a2-11ea-8084-8ecb6277f82f.png>
 
 With the machine learning model trained on historic carpark availability data, it is used to make predictions for the carpark at every 30 mins interval on every day of the week.
 
 ### User Carpark Bookmark
+<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530551-2d392b00-80a2-11ea-905f-e352598fbcdd.png>   <img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530561-36c29300-80a2-11ea-8c2c-b01bdb280084.png>
 
 Registered user may bookmark carparks that they deem to be frequently visited. The bookmark carparks feature in the app allows the user an ease of access to the carpark information, including the live availability, and the directions.
 
 ### Carpark Reviews
+<img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530603-5e196000-80a2-11ea-9afd-7f4b95079a8c.png>   <img width="260" alt="image" src=https://user-images.githubusercontent.com/48685014/79530606-62de1400-80a2-11ea-9c03-bea1e74f0ef4.png>
 
 Registered user may make reviews about carparks, including giving a rating of 1 to 5 stars on anything they feel of the carpark. Carpark reviews can be seen by all users, both registered users and users on guest mode, so that they can take into account their parking decisions and trip planning.
