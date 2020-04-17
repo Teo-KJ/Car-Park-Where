@@ -1,11 +1,3 @@
-/**
- * This Java class is used for user to enter email address
- * and reset the account password.
- *
- * @authors Kai Jie, Swee Sen
- * @version 1.0
- */
-
 package com.example.carparkwhere.Activities;
 
 import androidx.appcompat.app.ActionBar;
@@ -22,6 +14,14 @@ import android.widget.Toast;
 import com.example.carparkwhere.DAO.DAOImplementations.UserDataDaoFirebaseImpl;
 import com.example.carparkwhere.DAO.DAOInterfaces.UserDataDao;
 import com.example.carparkwhere.R;
+
+/**
+ * This Java class is used for user to enter email address
+ * and reset the account password.
+ *
+ * @authors Kai Jie, Swee Sen
+ * @version 1.0
+ */
 
 public class ResetPasswordActivity extends AppCompatActivity {
 
@@ -87,11 +87,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     *
-     * @param item
-     * @return
-     */
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
