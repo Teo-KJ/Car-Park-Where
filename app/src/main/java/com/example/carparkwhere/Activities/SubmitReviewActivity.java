@@ -35,7 +35,7 @@ import java.util.TimeZone;
 /*
 * This class implements the SubmitReview Activity. This is used to handle the interactions of the user with the user interface.
 *
-* @author Tay Jaslyn
+* @author Tay Jaslyn, Koh Swee Sen
 * */
 
 
