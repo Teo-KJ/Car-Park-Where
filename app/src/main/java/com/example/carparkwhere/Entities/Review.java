@@ -73,17 +73,5 @@ public class Review {
         return date;
     }
 
-    //    public void setCarPark(Carpark carpark){
-//        this.carpark = carpark;
-//    }
-//    public void setUser(RegisteredUser user){
-//        this.user = user;
-//    }
-//    public void setRating(int rating){
-//        this.userRating = rating;
-//    }
-//    public void setComments(String comments){
-//        this.userComments = comments;
-//    }
 
 }
