@@ -26,7 +26,11 @@ import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * This class implements the UserBookmarksActivity. This is used to handle the interactions of the user and their bookmarks.
+ *
+ * @author Pang Kia Le Jordon, Koh Swee Sen
+ * */
 public class UserBookmarksActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     BookmarkAdapter recyclerAdapter;

@@ -24,7 +24,11 @@ import com.example.carparkwhere.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * This class implements the BookmarksAdapter. This is used to adapt the given input data to the RecyclerView.
+ * This class uses the bookmark_carparks.xml for the user interface.
+ * @author Pang Kia Le Jordon, Koh Swee Sen
+ * */
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHolder> {
 
     List<BookmarkedCarpark> bookmarkedCarparks;

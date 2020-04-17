@@ -17,7 +17,11 @@ import com.example.carparkwhere.Entities.Review;
 import com.example.carparkwhere.R;
 
 import java.util.List;
-
+/*
+ * This class implements the UserReviewAdapter. This is used to adapt the given input data to the RecyclerView.
+ * This class uses the user_reviews.xml for the user interface.
+ * @author Pang Kia Le Jordon, Koh Swee Sen
+ * */
 public class UserReviewAdapter extends RecyclerView.Adapter<UserReviewAdapter.ViewHolder> {
 
     List<Review> userReviews;
