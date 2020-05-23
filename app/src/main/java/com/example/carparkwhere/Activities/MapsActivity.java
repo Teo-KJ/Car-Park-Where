@@ -91,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //Client that exposes the Places API
     private PlacesClient placesClient;
     //API key of Maps API
-    private String apiKey = "AIzaSyDl-riH0Iuqpm4dzMdEvGy_a6M1psWJOrs";
+    private String apiKey = "";
     //HashMap that stores all the markers and the respective carpark IDs
     private Map<String, String> mMarkerMap = new HashMap<>();
     //HashMap that stores all the distance from chosen location and the respective carpark ID
