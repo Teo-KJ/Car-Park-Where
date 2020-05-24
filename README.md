@@ -9,13 +9,6 @@ This project is jointly developed by the following members.
 * [Kevin](https://github.com/leady53)
 * [Jordon](https://github.com/jordpkl)
 
-## Data Support
-This app is being developed by using various data from Singapore's public data portal, [Data.gov.sg](Data.gov.sg). The following are links where the data are obtained from to support the development of this application.
-* [Data.gov.sg HDB Carpark Availability API](https://data.gov.sg/dataset/carpark-availability)
-* [Data.gov.sg HDB Carpark Information](https://data.gov.sg/dataset/hdb-carpark-information)
-* [URA Carpark Availability API](https://www.ura.gov.sg/maps/api/#car-park-available-lots)
-* [URA Carpark Information](https://www.ura.gov.sg/maps/api/#car-park-list-and-rates)
-
 ## About *Car Park Where*
 Want to find a lot to park, but not sure where has sufficient lots? How about planning a trip and unsure if there are enough parking spaces? The app *Car Park Where* aims to provide information on carparking availability, both live and in other days, and the carparks itself. In addition, *Car Park Where* is also a platform for motorists to save frequently visited carparks and provide reviews on carparks for other users in the community.
 
@@ -31,6 +24,17 @@ The following are main features of the application which will be elaborated belo
 * Get Predicted Carpark Availability
 * User Carpark Bookmark
 * Carpark Reviews
+
+## Data Support
+This app is being developed by using various data from Singapore's public data portal, [Data.gov.sg](Data.gov.sg). The following are links where the data are obtained from to support the development of this application.
+* [Data.gov.sg HDB Carpark Availability API](https://data.gov.sg/dataset/carpark-availability)
+* [Data.gov.sg HDB Carpark Information](https://data.gov.sg/dataset/hdb-carpark-information)
+* [URA Carpark Availability API](https://www.ura.gov.sg/maps/api/#car-park-available-lots)
+* [URA Carpark Information](https://www.ura.gov.sg/maps/api/#car-park-list-and-rates)
+
+## Other Repositories
+The following are the other repositories that have been developed to support *Car Park Where*.
+* [Machine Learning Model](https://github.com/Teo-KJ/Machine-Learning-Model-for-Car-Park-Where) - scikit-learn Decision Tree Regressor
 
 ## Main Features
 
